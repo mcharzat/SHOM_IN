@@ -1,14 +1,17 @@
 <template>
   <MapShom />
+  <NavBar />
 </template>
 
 <script>
 import MapShom from './components/MapShom.vue'
+import NavBar from './components/NavBar.vue'
 
 export default {
   name: 'App',
   components: {
-    MapShom
+    MapShom,
+    NavBar,
   }
 }
 </script>
