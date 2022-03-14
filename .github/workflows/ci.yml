@@ -1,0 +1,75 @@
+name: CI
+on:
+  push:
+    branches:
+      - 'main'
+      - 'dev'
+    tags:
+      - '*'
+  pull_request:
+    branches:
+      - '*'
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16.x'
+      - run: npm install
+      - run: npm run build
+      - uses: montudor/action-zip@v1
+        with:
+          args: zip -qq -r interface.zip dist
+      - uses: actions/upload-artifact@v2
+        with:
+          name: interface.zip
+          path: ./interface.zip
+
+  tests:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16.x'
+      - run: npm install
+      - run: npm run tests
+
+  release:
+    needs: [ tests ]
+
+    runs-on: ubuntu-20.04
+    if: github.repository == 'mcharzat/SHOM_IN' && contains(github.ref, 'refs/tags/')
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/download-artifact@v2
+        with:
+          name: interface.zip
+          path: ./
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./interface.zip
+          asset_name: interface.zip
+          asset_content_type: application/zip
+      
