@@ -4,12 +4,15 @@
       <div id="logo"><img src="../assets/logo.png"></div>
       <div id="name">Nom du site</div>
     </div>
-    <div class=navBarRight> 
+    <div class=navBarMiddle> 
         <label for="login">Login:</label>
         <input type=text id=login name=login>
         <label for="pwd">Mdp:</label>
         <input type=password id=pwd name=pwd>
-        <button>OK</button>
+        <button id=okButton>OK</button>
+    </div>
+    <div class=navBarRight>
+        <button id=helpButton title='Aide'>?</button>
     </div>
 </nav>
 </template>
@@ -40,7 +43,6 @@
     height: 50px;
     width: 400px;
     display: flex;
-    border: 1px red solid;
   }
   #logo{
     margin : auto 20px;
@@ -56,27 +58,44 @@
   }
 
 
-  .navBarRight{
+  .navBarMiddle{
     position: fixed;
-    right: 25px;
+    right: 150px;
     height: 50px;
     display: flex;
-    border: 1px green solid;
   }
-  .navBarRight label{
+  .navBarMiddle label{
     margin : auto 0;
     color: white;
     font-size: 20px;
   }
-  .navBarRight input{
+  .navBarMiddle input{
     margin : auto 10px;
     height: 30px;
   }
-    .navBarRight button{
+  #okButton{
     margin : auto 10px;
     height: 30px;
     background: white;
     text-color: #076E8C;
+  }
+
+
+
+  .navBarRight{
+    position: fixed;
+    right: 0px;
+    height: 50px;
+    display: flex;
+  }
+  #helpButton{
+    margin : auto 10px;
+    height: 40px;
+    width: 40px;
+    font-size:30px;
+    background: white;
+    text-color: #076E8C;
+    border-radius: 50%;
   }
 
 </style>
