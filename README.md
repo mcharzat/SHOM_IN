@@ -12,8 +12,6 @@ npm run serve
 
 ### Compiles and run the tests
 ```
-npm i jest --save-dev
-
 npm run tests
 ```
 

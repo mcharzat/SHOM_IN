@@ -1,4 +1,4 @@
-const sum =  require("../src/main.js");
+const sum =  require("../../src/main.js");
 
 describe("Test de la fonction principale", () => {
     test("Display message", () => {
