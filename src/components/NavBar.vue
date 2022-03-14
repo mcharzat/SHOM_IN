@@ -32,7 +32,6 @@
     height: 50px;
     margin: 0 auto;
     background: #076E8C;
-    opacity: 80%;
     padding: 10px;
     display: flex;
   }
@@ -45,7 +44,7 @@
     display: flex;
   }
   #logo{
-    margin : auto 20px;
+    margin : auto 10px;
   }
   #logo img{
     height: 50px;
@@ -54,7 +53,7 @@
   #name{
     color: white;
     font-size: 40px;
-    margin : auto 0;
+    margin : auto 10px;
   }
 
 
