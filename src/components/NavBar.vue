@@ -5,11 +5,12 @@
       <div id="name">Nom du site</div>
     </div>
     <div class=navBarMiddle> 
-        <label for="login">Login:</label>
+        <label id="loginLabel" for="login">Login:</label>
         <input type=text id=login name=login>
-        <label for="pwd">Mdp:</label>
+        <label id="pwdLabel" for="pwd">Mdp:</label>
         <input type=password id=pwd name=pwd>
-        <button id=okButton>OK</button>
+        <button id=okButton >OK</button>
+        <p id=logged></p>
     </div>
     <div class=navBarRight>
         <button id=helpButton title='Aide'>?</button>
@@ -18,7 +19,32 @@
 </template>
 
 <script>
+  window.onload=init;
+  function init(){
+    const login = "login";
+    const pwd = "pwd";
+    
+    const bouton = document.getElementById('okButton');
+    bouton.addEventListener('click',getAuth);
 
+    function getAuth(){
+      var log = document.getElementById(login).value;
+      var pass = document.getElementById(pwd).value;
+      if (log==login && pass==pwd){
+        const navBar=document.querySelector('.navBarMiddle');
+        navBar.removeChild(document.getElementById('loginLabel'));
+        navBar.removeChild(document.getElementById('login'));
+        navBar.removeChild(document.getElementById('pwdLabel'));
+        navBar.removeChild(document.getElementById('pwd'));
+        navBar.removeChild(document.getElementById('okButton'));
+
+        document.getElementById('logged').innerHTML="Connecté en tant que : "+log;
+      }
+      else{
+        window.alert("Le login et/ou le mot de passe sont incorrects");
+      }
+    }
+  }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -77,6 +103,11 @@
     height: 30px;
     background: white;
     text-color: #076E8C;
+  }
+  .navBarMiddle p{
+    margin : auto 10px;
+    color: white;
+    font-size: 20px;
   }
 
 
