@@ -6,7 +6,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "tests": ""
+    "tests": "jest"
   },
   "dependencies": {
     "core-js": "^3.8.3",
@@ -20,7 +20,8 @@
     "@vue/cli-plugin-eslint": "~5.0.0",
     "@vue/cli-service": "~5.0.0",
     "eslint": "^7.32.0",
-    "eslint-plugin-vue": "^8.0.3"
+    "eslint-plugin-vue": "^8.0.3",
+    "jest": "^27.5.1"
   },
   "eslintConfig": {
     "root": true,
@@ -41,5 +42,24 @@
     "last 2 versions",
     "not dead",
     "not ie 11"
-  ]
+  ],
+  "description": "```\r npm install\r ```",
+  "main": "babel.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mcharzat/SHOM_IN.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mcharzat/SHOM_IN/issues"
+  },
+  "homepage": "https://github.com/mcharzat/SHOM_IN#readme",
+  "jest" : {
+    "collectCoverage" : false,
+    "transformIgnorePatterns": [
+      "node_modules/(?!vue-picture-input)"
+    ]
+  }
 }
