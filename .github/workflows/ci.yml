@@ -39,7 +39,7 @@ jobs:
       - run: npm run tests
 
   release:
-    needs: [ tests ]
+    needs: [ build, tests ]
 
     runs-on: ubuntu-20.04
     if: github.repository == 'mcharzat/SHOM_IN' && contains(github.ref, 'refs/tags/')
