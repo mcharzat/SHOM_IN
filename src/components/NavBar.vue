@@ -5,46 +5,48 @@
       <div id="name">Nom du site</div>
     </div>
     <div class=navBarMiddle> 
-        <label id="loginLabel" for="login">Login:</label>
-        <input type=text id=login name=login>
-        <label id="pwdLabel" for="pwd">Mdp:</label>
-        <input type=password id=pwd name=pwd>
-        <button id=okButton >OK</button>
-        <p id=logged></p>
+        <label for="login" :hidden="isLog">Login:</label>
+        <input type=text name=login v-model="login" :hidden="isLog">
+        <label for="pwd" :hidden="isLog">Mdp:</label>
+        <input type=password name=pwd v-model="pwd" :hidden="isLog">
+        <input id="okButton" type="submit" @click.prevent="getAuth" value="OK" :hidden="isLog">
+        <p :hidden="!isLog"> {{ messageLogger }}</p>
     </div>
     <div class=navBarRight>
-        <button id=helpButton title='Aide'>?</button>
+        <button id="helpButton" title='Aide' @click.prevent="displayHelp">?</button>
     </div>
 </nav>
 </template>
 
 <script>
-  window.onload=init;
-  function init(){
-    const login = "login";
-    const pwd = "pwd";
-    
-    const bouton = document.getElementById('okButton');
-    bouton.addEventListener('click',getAuth);
-
-    function getAuth(){
-      var log = document.getElementById(login).value;
-      var pass = document.getElementById(pwd).value;
-      if (log==login && pass==pwd){
-        const navBar=document.querySelector('.navBarMiddle');
-        navBar.removeChild(document.getElementById('loginLabel'));
-        navBar.removeChild(document.getElementById('login'));
-        navBar.removeChild(document.getElementById('pwdLabel'));
-        navBar.removeChild(document.getElementById('pwd'));
-        navBar.removeChild(document.getElementById('okButton'));
-
-        document.getElementById('logged').innerHTML="Connecté en tant que : "+log;
-      }
-      else{
-        window.alert("Le login et/ou le mot de passe sont incorrects");
-      }
+export default {
+  name: 'navBar',
+  data() {
+    return {
+      login: "login",
+      pwd: "pwd",
+      clientLog: false
+    }
+  },
+  mounted() {
+  },
+  methods: {
+    getAuth: function () {
+      this.clientLog = true;
+    },
+    displayHelp: function () {
+      
+    }
+  },
+  computed: {
+    messageLogger () {
+      return "Connecté en tant que : " + this.login;
+    },
+    isLog () {
+      return this.clientLog;
     }
   }
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -60,6 +62,7 @@
     background: #076E8C;
     padding: 10px;
     display: flex;
+    z-index: 10;
   }
 
 
