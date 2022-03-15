@@ -1,14 +1,19 @@
 <template>
-  <MapShom />
+  <div class="container">
+    <MapShom />
+    <SPARQLResearch />
+  </div>
 </template>
 
 <script>
 import MapShom from './components/MapShom.vue'
+import SPARQLResearch from './components/SPARQLResearch.vue'
 
 export default {
   name: 'App',
   components: {
-    MapShom
+    MapShom,
+    SPARQLResearch
   }
 }
 </script>
@@ -21,5 +26,9 @@ export default {
   text-align: center;
   color: #2c3e50;
   /*margin-top: 60px;*/
+}
+
+.container {
+  position: relative;
 }
 </style>
