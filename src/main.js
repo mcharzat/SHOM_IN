@@ -6,4 +6,4 @@ createApp(App).mount('#app')
 function sum(a, b) {
     return a + b;
 }
-module.exports = sum;
+export { sum };
