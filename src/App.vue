@@ -1,17 +1,22 @@
 <template>
-  <MapShom />
-  <NavBar />
+  <div class="container">
+    <NavBar />
+    <MapShom />
+    <SPARQLResearch />
+  </div>
 </template>
 
 <script>
-import MapShom from './components/MapShom.vue'
 import NavBar from './components/NavBar.vue'
+import MapShom from './components/MapShom.vue'
+import SPARQLResearch from './components/SPARQLResearch.vue'
 
 export default {
   name: 'App',
   components: {
-    MapShom,
     NavBar,
+    MapShom,
+    SPARQLResearch
   }
 }
 </script>
@@ -24,5 +29,11 @@ export default {
   text-align: center;
   color: #2c3e50;
   /*margin-top: 60px;*/
+}
+
+.container {
+  position: relative;
+  height: 100%;
+  width: 100%;
 }
 </style>

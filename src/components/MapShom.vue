@@ -1,7 +1,5 @@
 <template>
-  <div>
     <div id="map" class="map"></div>
-  </div>
 </template>
 
 <script>
@@ -12,7 +10,15 @@ export default {
   name: 'MapShom',
   mounted() {
     // Leaflet
-    const map = L.map('map').setView([51.505, -0.09], 7);
+    const map = L.map('map', {
+      zoomControl: false
+    }).setView([47.9759965,-5.2963814], 8);
+
+    L.control.zoom({
+      position: 'bottomright'
+    }).addTo(map);
+
+
     const tile = L.tileLayer.wms(
       'https://masterTSI:fx7Hvd7J2BZF%40C@shom.wms.geomod.fr/KARMOR_MAP_SERVICES/wms',
       {
