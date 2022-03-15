@@ -7,7 +7,7 @@
 
 <script>
 import MapShom from './components/MapShom.vue'
-import SPARQLResearch from './components/Research.vue'
+import SPARQLResearch from './components/SPARQLResearch.vue'
 
 export default {
   name: 'App',
