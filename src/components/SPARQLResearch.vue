@@ -19,7 +19,7 @@ export default {
 
 .research {
     position: absolute;
-    top: 70px;
+    top: 100px;
     left: 100px;
     z-index: 25;
     background-color:beige;

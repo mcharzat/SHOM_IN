@@ -1,17 +1,20 @@
 <template>
   <div class="container">
+    <NavBar />
     <MapShom />
     <SPARQLResearch />
   </div>
 </template>
 
 <script>
+import NavBar from './components/NavBar.vue'
 import MapShom from './components/MapShom.vue'
 import SPARQLResearch from './components/SPARQLResearch.vue'
 
 export default {
   name: 'App',
   components: {
+    NavBar,
     MapShom,
     SPARQLResearch
   }
