@@ -11,6 +11,7 @@
         <input type=password name=pwd v-model="pwd" :hidden="isLog">
         <input id="okButton" type="submit" @click.prevent="getAuth" value="OK" :hidden="isLog">
         <p :hidden="!isLog"> {{ messageLogger }}</p>
+        <input id="deconnexion" type="submit" @click.prevent="deconnect" value="Déconnexion" :hidden="!isLog">
     </div>
     <div class=navBarRight>
         <button id="helpButton" title='Aide' @click.prevent="displayHelp">?</button>
@@ -33,6 +34,9 @@ export default {
   methods: {
     getAuth: function () {
       this.clientLog = true;
+    },
+    deconnect: function () {
+      this.clientLog = false;
     },
     displayHelp: function () {
       
@@ -60,6 +64,7 @@ export default {
     height: 50px;
     margin: 0 auto;
     background: #076E8C;
+    opacity: 85%;
     padding: 10px;
     display: flex;
     z-index: 10;
@@ -111,6 +116,12 @@ export default {
     margin : auto 10px;
     color: white;
     font-size: 20px;
+  }
+  #deconnexion{
+    margin : auto 10px;
+    height: 30px;
+    background: white;
+    text-color: #076E8C;
   }
 
 
