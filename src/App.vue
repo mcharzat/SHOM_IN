@@ -3,6 +3,7 @@
     <NavBar />
     <MapShom />
     <SPARQLResearch />
+    <SwitchButton />
   </div>
 </template>
 
@@ -10,13 +11,15 @@
 import NavBar from './components/NavBar.vue'
 import MapShom from './components/MapShom.vue'
 import SPARQLResearch from './components/SPARQLResearch.vue'
+import SwitchButton from './components/SwitchButton.vue'
 
 export default {
   name: 'App',
   components: {
     NavBar,
     MapShom,
-    SPARQLResearch
+    SPARQLResearch,
+    SwitchButton
   }
 }
 </script>
