@@ -2,18 +2,21 @@
   <div class="container">
     <MapShom />
     <SPARQLResearch />
+    <SwitchButton />
   </div>
 </template>
 
 <script>
 import MapShom from './components/MapShom.vue'
 import SPARQLResearch from './components/SPARQLResearch.vue'
+import SwitchButton from './components/SwitchButton.vue'
 
 export default {
   name: 'App',
   components: {
     MapShom,
-    SPARQLResearch
+    SPARQLResearch,
+    SwitchButton
   }
 }
 </script>
