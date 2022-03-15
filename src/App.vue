@@ -28,7 +28,6 @@ export default {
     SwitchButton,
     LayerManager,
     PDFManager
-
   }
 }
 </script>
