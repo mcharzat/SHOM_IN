@@ -1,4 +1,4 @@
-const sum =  require("../../src/main.js");
+import { sum } from "../../src/main.js"
 
 describe("Test de la fonction principale", () => {
     test("Example - toBe", () => {
