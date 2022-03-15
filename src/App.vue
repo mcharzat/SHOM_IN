@@ -6,6 +6,7 @@
     <SwitchButton />
     <LayerManager />
     <PDFManager />
+
   </div>
 </template>
 
@@ -17,6 +18,7 @@ import SwitchButton from './components/SwitchButton.vue'
 import LayerManager from './components/LayerManager.vue'
 import PDFManager from './components/PDFManager.vue'
 
+
 export default {
   name: 'App',
   components: {
@@ -26,6 +28,7 @@ export default {
     SwitchButton,
     LayerManager,
     PDFManager
+
   }
 }
 </script>
