@@ -1,7 +1,7 @@
 <template>
     <div id="switchButton" class="switchButton">
         <div >
-            <button id='moveButton' onclick="alert('Hi user!')"> </button>
+            <button id='moveButton'> </button>
         </div>
         <div >
             <button id='selectButton'> </button>
@@ -13,6 +13,7 @@
 export default {
   name: 'SwitchButton',
 }
+
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
