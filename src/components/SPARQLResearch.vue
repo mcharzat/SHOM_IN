@@ -21,7 +21,7 @@ export default {
 <style scoped>
 #research {
   height: 100px;
-  width: 30%;
+  width: 50%;
 }
 
 .research {
