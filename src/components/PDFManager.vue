@@ -17,12 +17,15 @@ export default {
     this.pdfManager = document.getElementById('pdfManager');
     this.pdfManager.addEventListener("click", this.actionSidePanel);
     this.docSidePanel = document.getElementById("mySidepanel");
+    this.viewport_width = window.innerWidth;
   },
   methods : {
     actionSidePanel() {
       if (this.infSidePanel == false) {
         console.log('rangement du panel');
         this.docSidePanel.style.width = "250px";
+        this.docSidePanel.style.height = "800px";
+
         this.pdfManager.style.right = "250px";
         this.infSidePanel = true;
       } else {
@@ -64,7 +67,6 @@ export default {
 #mySidepanel {
   position: absolute;
   background-color: beige;
-  height: 100%;
   right: 0px;
   top : 70px;
   z-index: 1000;
