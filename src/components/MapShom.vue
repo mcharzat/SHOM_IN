@@ -1,5 +1,5 @@
 <template>
-    <div id="map" class="map"></div>
+    <div id="map" class="map" @mouseout.prevent="removeCoord"></div>
     <div id="mouseTracker">
         <p>{{ coordinate }}</p>
     </div>
@@ -14,6 +14,7 @@ export default {
   data() {
     return {
       userLocation: {},
+      onMap: true,
     }
   },
   mounted() {
@@ -35,19 +36,27 @@ export default {
       }
     );
     tile.addTo(map);
+    //Connexion à la fonction au déplacement de la souris
     map.on('mousemove', this.getUserPosition, this);
   },
   methods: {
     getUserPosition(pos) {
+      this.onMap=true;
       this.userLocation = {
-          lat: pos.latlng.lat.toFixed(10),
-          lng: pos.latlng.lng.toFixed(10),
-        };
-      }
+        lat: pos.latlng.lat.toFixed(10),
+        lng: pos.latlng.lng.toFixed(10),
+      };
+    },
+    removeCoord() {
+      this.onMap=false;
+    }
   },
   computed: {
     coordinate () {
-      return "( "+this.userLocation.lat+" , "+this.userLocation.lng+" )";
+      if (this.onMap){
+        return "( "+this.userLocation.lat+" , "+this.userLocation.lng+" )";
+      }
+      return "Mouse is not over map";
     }
   },
 }
