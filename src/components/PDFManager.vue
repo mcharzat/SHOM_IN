@@ -22,14 +22,12 @@ export default {
   methods : {
     actionSidePanel() {
       if (this.infSidePanel == false) {
-        console.log('rangement du panel');
         this.docSidePanel.style.width = "250px";
-        this.docSidePanel.style.height = "800px";
+        this.docSidePanel.style.height = "600px";
 
         this.pdfManager.style.right = "250px";
         this.infSidePanel = true;
       } else {
-        console.log('sortie du panel');
         this.docSidePanel.style.width = "0px";
         this.pdfManager.style.right = "0px";
         this.infSidePanel = false;
@@ -68,7 +66,7 @@ export default {
   position: absolute;
   background-color: beige;
   right: 0px;
-  top : 70px;
+  top : 100px;
   z-index: 1000;
 }
 </style>
