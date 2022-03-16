@@ -1,5 +1,5 @@
 <template>
-    <div id="map" class="map" ></div>
+    <div id="map" class="map"></div>
     <div id="mouseTracker">
         <p>{{ coordinate }}</p>
     </div>
@@ -13,7 +13,7 @@ export default {
   name: 'MapShom',
   data() {
     return {
-      coordinate: "Mouse is not over map"
+      userLocation: {},
     }
   },
   mounted() {
@@ -35,10 +35,19 @@ export default {
       }
     );
     tile.addTo(map);
+    map.on('mousemove', this.getUserPosition, this);
   },
   methods: {
-    getCoord: function (e) {
-      this.coordinate = e.latlng.toString();
+    getUserPosition(pos) {
+      this.userLocation = {
+          lat: pos.latlng.lat.toFixed(10),
+          lng: pos.latlng.lng.toFixed(10),
+        };
+      }
+  },
+  computed: {
+    coordinate () {
+      return "( "+this.userLocation.lat+" , "+this.userLocation.lng+" )";
     }
   },
 }
@@ -52,7 +61,7 @@ export default {
   z-index: 0;
 }
 #mouseTracker{
-  width:400px;
+  width:300px;
   height:35px;
   position: fixed;
   bottom: 0px;
