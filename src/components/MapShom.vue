@@ -13,11 +13,15 @@ export default {
     const map = L.map('map', {
       zoomControl: false
     }).setView([47.9759965,-5.2963814], 8);
+     
+    L.control.scale({
+      position: 'bottomright',
+      imperial: false
+    }).addTo(map);
 
     L.control.zoom({
       position: 'bottomright'
     }).addTo(map);
-
 
     const tile = L.tileLayer.wms(
       'https://masterTSI:fx7Hvd7J2BZF%40C@shom.wms.geomod.fr/KARMOR_MAP_SERVICES/wms',
