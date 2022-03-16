@@ -1,5 +1,8 @@
 <template>
-    <div id="map" class="map"></div>
+    <div id="map" class="map" @mouseout.prevent="removeCoord"></div>
+    <div id="mouseTracker">
+        <p>{{ coordinate }}</p>
+    </div>
 </template>
 
 <script>
@@ -8,6 +11,12 @@ import L from 'leaflet';
 
 export default {
   name: 'MapShom',
+  data() {
+    return {
+      userLocation: {},
+      onMap: false,
+    }
+  },
   mounted() {
     // Leaflet
     const map = L.map('map', {
@@ -31,15 +40,48 @@ export default {
       }
     );
     tile.addTo(map);
+    //Connexion à la fonction au déplacement de la souris
+    map.on('mousemove', this.getMousePosition, this);
+  },
+  methods: {
+    getMousePosition(pos) {
+      this.onMap=true;
+      this.userLocation = {
+        lat: pos.latlng.lat.toFixed(10),
+        lng: pos.latlng.lng.toFixed(10),
+      };
+    },
+    removeCoord() {
+      this.onMap=false;
+    }
+  },
+  computed: {
+    coordinate () {
+      if (this.onMap){
+        return "Lat : "+this.userLocation.lat+"\xa0\xa0\xa0 Lng : "+this.userLocation.lng;
+      }
+      return "Mouse is not over map";
+    }
   },
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-div {
+#map {
   height: 100%;
   width: 100%;
   z-index: 0;
+}
+#mouseTracker{
+  width:330px;
+  height:35px;
+  position: fixed;
+  bottom: 5px;
+  right: 100px;
+}
+#mouseTracker p{
+  background: white;
+  opacity: 85%;
 }
 </style>
