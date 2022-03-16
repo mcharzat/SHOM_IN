@@ -1,11 +1,5 @@
 <template>
-    <div id="switchButton" class="switchButton">
-        <div >
-            <button id='moveButton'> </button>
-        </div>
-        <div >
-            <button id='selectButton'> </button>
-        </div>
+    <div id="selectButton" class="selectButton">
     </div>
 </template>
 
@@ -13,43 +7,30 @@
 export default {
   name: 'SwitchButton',
 }
-
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-#switchButton {
+#selectButton {
     position : absolute;
     border : 2px solid rgba(0,0,0,0.2);
+    border-radius: 4px;
     right : 10px;
-    bottom : 91.5px;
+    bottom : 113.6px;
     z-index: 25;
     vertical-align: middle;
-}
 
-.switchButton {
-    float: right;
-    background-color:beige;
-}
-
-#selectButton{
     background: url(../assets/select.png);
-    background-size: contain;
+    background-size:90%;
     background-repeat: no-repeat;
-    height: 30px;
-    width: 30px;
-    cursor:  pointer;
-    /*z-index: 1000;*/
-}
+    background-color:#f4f4f4;
+    background-position: center center;
 
-#moveButton{
-    background: url(../assets/move.png);
-    background-size: contain;
-    background-repeat: no-repeat;
+
     height: 30px;
     width: 30px;
+
     cursor:  pointer;
-    /*z-index: 1000;*/
 }
 
 </style>
