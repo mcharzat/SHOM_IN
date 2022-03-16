@@ -14,7 +14,7 @@ export default {
   data() {
     return {
       userLocation: {},
-      onMap: true,
+      onMap: false,
     }
   },
   mounted() {
@@ -37,10 +37,10 @@ export default {
     );
     tile.addTo(map);
     //Connexion à la fonction au déplacement de la souris
-    map.on('mousemove', this.getUserPosition, this);
+    map.on('mousemove', this.getMousePosition, this);
   },
   methods: {
-    getUserPosition(pos) {
+    getMousePosition(pos) {
       this.onMap=true;
       this.userLocation = {
         lat: pos.latlng.lat.toFixed(10),
@@ -54,7 +54,7 @@ export default {
   computed: {
     coordinate () {
       if (this.onMap){
-        return "( "+this.userLocation.lat+" , "+this.userLocation.lng+" )";
+        return "Lat : "+this.userLocation.lat+"\xa0\xa0\xa0 Lng : "+this.userLocation.lng;
       }
       return "Mouse is not over map";
     }
@@ -70,10 +70,10 @@ export default {
   z-index: 0;
 }
 #mouseTracker{
-  width:300px;
+  width:330px;
   height:35px;
   position: fixed;
-  bottom: 0px;
+  bottom: 5px;
   right: 100px;
 }
 #mouseTracker p{
