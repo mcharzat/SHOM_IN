@@ -18,23 +18,22 @@ export default {
   mounted() {
     this.pdfManager = document.getElementById('pdfManager');
     this.pdfManager.addEventListener("click", this.actionSidePanel);
-    this.docSidePanel = document.getElementById("mySidepanel");
+    this.docSidePanel = document.getElementById("pdfSidepanel");
+    this.viewport_height = window.innerHeight;
   },
   methods : {
     actionSidePanel() {
       if (this.infSidePanel == false) {
-        console.log('rangement du panel');
         this.docSidePanel.style.width = "250px";
+        this.docSidePanel.style.height = "600px";
         this.pdfManager.style.right = "250px";
         this.infSidePanel = true;
       } else {
-        console.log('sortie du panel');
         this.docSidePanel.style.width = "0px";
         this.pdfManager.style.right = "5px";
         this.infSidePanel = false;
       }
     }
-
   }
 }
 
@@ -61,12 +60,11 @@ export default {
   box-shadow: 0 0 5px rgba(0,0,0,0.19), 0 0 5px rgba(0,0,0,0.19)
 }
 
-#mySidepanel {
+#pdfSidepanel {
   position: absolute;
   background-color: beige;
-  height: 100%;
   right: 0px;
-  top : 70px;
+  top : 100px;
   z-index: 1000;
 }
 </style>
