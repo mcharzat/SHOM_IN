@@ -1,40 +1,28 @@
 <template>
-    <button id="layerManager" class="layerManager" onclick='console.log("layerManager")'>
+    <button :class="{layerManager: true, layerManagerOpen: moveSidePanel}" @click="actionSidePanel">
       <img src="../assets/layers.png" height ="30" width="30"/>
     </button>
-    <div id='layerSidepanel'></div>
+    <div :class="{layerSidepanelOpen: moveSidePanel, layerSidepanel: true}"></div>
 </template>
 
 <script>
 export default {
   name: 'LayerManager',
-    data() {
+  data() {
     return {
       infSidePanel: false,
-      docSidePanel:null,
-      layerManager:null
     }
   },
-  mounted() {
-    this.layerManager = document.getElementById('layerManager');
-    this.layerManager.addEventListener("click", this.actionSidePanel);
-    this.docSidePanel = document.getElementById("layerSidepanel");
-    this.viewport_height = window.innerHeight;
+  computed : {
+    moveSidePanel() {
+      return this.infSidePanel;
+    }
   },
-  methods : {
+  methods: {
     actionSidePanel() {
-      if (this.infSidePanel == false) {
-        this.docSidePanel.style.width = "250px";
-        this.docSidePanel.style.height = "600px";
-        this.layerManager.style.left = "250px";
-        this.infSidePanel = true;
-      } else {
-        this.docSidePanel.style.width = "0px";
-        this.layerManager.style.left = "0px";
-        this.infSidePanel = false;
-      }
+      this.infSidePanel = !this.infSidePanel;
     }
-  }
+  },
 }
 </script>
 
@@ -59,11 +47,22 @@ export default {
     box-shadow: 0 0 5px rgba(0,0,0,0.19), 0 0 5px rgba(0,0,0,0.19)
 }
 
-#layerSidepanel {
+.layerManagerOpen {
+  left: calc(33% + 10px);
+}
+
+.layerSidepanel {
   position: absolute;
   background-color: beige;
   left: 0px;
   top : 100px;
   z-index: 1000;
+}
+
+.layerSidepanelOpen {
+  left: 5px;
+  width: 33%;
+  height: 100%;
+  max-height: calc(100% - 125px);
 }
 </style>
