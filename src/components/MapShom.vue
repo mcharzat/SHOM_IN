@@ -74,6 +74,7 @@ export default {
   width: 100%;
   z-index: 0;
 }
+
 #mouseTracker{
   width:330px;
   height:34px;
@@ -81,6 +82,7 @@ export default {
   bottom: 1px;
   right: 100px;
 }
+
 #mouseTracker p{
   background: white;
   opacity: 60%;
