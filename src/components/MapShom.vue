@@ -20,7 +20,8 @@ export default {
   mounted() {
     // Leaflet
     const map = L.map('map', {
-      zoomControl: false
+      zoomControl: false,
+      attributionControl: false
     }).setView([47.9759965,-5.2963814], 8);
      
     L.control.scale({
@@ -29,7 +30,7 @@ export default {
     }).addTo(map);
 
     L.control.zoom({
-      position: 'bottomright'
+      position: 'bottomright',
     }).addTo(map);
 
     const tile = L.tileLayer.wms(
@@ -67,7 +68,7 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style>
 #map {
   height: 100%;
   width: 100%;
@@ -75,13 +76,21 @@ export default {
 }
 #mouseTracker{
   width:330px;
-  height:35px;
+  height:34px;
   position: fixed;
-  bottom: 5px;
+  bottom: 1px;
   right: 100px;
 }
 #mouseTracker p{
   background: white;
-  opacity: 85%;
+  opacity: 60%;
+  padding: 2px;
+  height:12.5px;
+  font-size: 0.8em;
+}
+
+.leaflet-touch .leaflet-control-layers,
+.leaflet-touch .leaflet-bar {
+  border: 0 solid white;
 }
 </style>

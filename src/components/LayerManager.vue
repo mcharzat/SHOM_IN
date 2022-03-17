@@ -1,5 +1,7 @@
 <template>
-    <button id="layerManager" class="layerManager" onclick='console.log("layerManager")'></button>
+    <button id="layerManager" class="layerManager" onclick='console.log("layerManager")'>
+      <img src="../assets/layers.png" height ="30" width="30"/>
+    </button>
 </template>
 
 <script>
@@ -11,23 +13,21 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 #layerManager {
-  height: 100px;
-  width: 100px;
+  height: 50px;
+  width: 50px;
 }
 
 .layerManager {
     position: absolute;
     top: 100px;
-    left: 0px;
+    left: 5px;
     z-index: 25;
     
-    background: url(../assets/layers.png);
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-color:lightblue;
+    background-color:white;
 
     border:solid;
-    border-color: #076E8C;
-    border-width: 2.5px;
+    border-color: white;
+
+    box-shadow: 0 0 5px rgba(0,0,0,0.19), 0 0 5px rgba(0,0,0,0.19)
 }
 </style>

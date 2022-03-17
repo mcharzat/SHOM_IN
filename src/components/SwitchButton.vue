@@ -1,5 +1,6 @@
 <template>
     <div id="selectButton" class="selectButton">
+      <img src="../assets/select.png" height ="20" width="20"/>
     </div>
 </template>
 
@@ -13,24 +14,23 @@ export default {
 <style scoped>
 #selectButton {
     position : absolute;
-    border : 2px solid rgba(0,0,0,0.2);
-    border-radius: 4px;
+    border-radius: 2px;
     right : 10px;
-    bottom : 113.6px;
+    bottom : 96px;
     z-index: 25;
-    vertical-align: middle;
 
-    background: url(../assets/select.png);
-    background-size:90%;
-    background-repeat: no-repeat;
     background-color:#f4f4f4;
-    background-position: center center;
-
 
     height: 30px;
     width: 30px;
 
     cursor:  pointer;
+}
+
+.selectButton {
+    display:flex;
+    align-items: center;
+    justify-content: center;
 }
 
 </style>
