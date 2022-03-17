@@ -1,6 +1,6 @@
 <template>
     <button id="pdfManager" class="pdfManager"></button>
-    <div id='mySidepanel'></div>
+    <div id='pdfSidepanel'></div>
 </template>
 
 <script>
@@ -16,15 +16,14 @@ export default {
   mounted() {
     this.pdfManager = document.getElementById('pdfManager');
     this.pdfManager.addEventListener("click", this.actionSidePanel);
-    this.docSidePanel = document.getElementById("mySidepanel");
-    this.viewport_width = window.innerWidth;
+    this.docSidePanel = document.getElementById("pdfSidepanel");
+    this.viewport_height = window.innerHeight;
   },
   methods : {
     actionSidePanel() {
       if (this.infSidePanel == false) {
         this.docSidePanel.style.width = "250px";
         this.docSidePanel.style.height = "600px";
-
         this.pdfManager.style.right = "250px";
         this.infSidePanel = true;
       } else {
@@ -33,7 +32,6 @@ export default {
         this.infSidePanel = false;
       }
     }
-
   }
 }
 
@@ -62,7 +60,7 @@ export default {
   border-width: 2.5px;
 }
 
-#mySidepanel {
+#pdfSidepanel {
   position: absolute;
   background-color: beige;
   right: 0px;
