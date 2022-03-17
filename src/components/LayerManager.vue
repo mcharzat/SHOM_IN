@@ -2,6 +2,7 @@
     <button id="layerManager" class="layerManager" onclick='console.log("layerManager")'>
       <img src="../assets/layers.png" height ="30" width="30"/>
     </button>
+    <div id='layerSidepanel'></div>
 </template>
 
 <script>
