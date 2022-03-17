@@ -57,11 +57,6 @@ export default {
   box-shadow: 0 0 5px rgba(0,0,0,0.19), 0 0 5px rgba(0,0,0,0.19)
 }
 
-#research {
-  height: 100px;
-  width: 30%;
-}
-
 .research {
   position: absolute;
   height: 100px;
