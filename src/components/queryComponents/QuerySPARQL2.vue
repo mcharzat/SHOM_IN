@@ -31,7 +31,6 @@
 
 <script>
 import data from '../../../public/data/ontology_test.json'
-//import '../../../public/lib/sparnatural/sparnatural.js'
 import $ from 'jquery'
 import {Yasr,Yasqe} from '@triply/yasgui'
 
@@ -60,24 +59,19 @@ export default {
     let externalScript3 = document.createElement('script')
     externalScript3.setAttribute('src', 'https://cdn.jsdelivr.net/npm/@chenfengyuan/datepicker@1.0.9/dist/datepicker.min.js')
     document.head.appendChild(externalScript3)
-/*
-    let externalScript4 = document.createElement('script')
-    externalScript4.setAttribute('src', 'https://unpkg.com/@triply/yasgui/build/yasgui.min.js')
-    document.head.appendChild(externalScript4)
-*/
+
     let externalScript6 = document.createElement('script')
     externalScript6.setAttribute('src', 'https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js')
     externalScript2.setAttribute('integrity', 'sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49')
     document.head.appendChild(externalScript6)
 
-    
+    /*
     let externalScript5 = document.createElement('script')
     externalScript5.setAttribute('src', '../../../public/lib/sparnatural/sparnatural.js')
     externalScript5.setAttribute("type", "application/js")
-    externalScript5.setAttribute("defer", "defer")
-    document.head.appendChild(externalScript5)
+    document.head.appendChild(externalScript5)*/
       
-    $( document ).ready(function($) {          
+    $( document ).ready(function($) {
 
       this.sparnatural = $('#ui-search').Sparnatural({
         config: this.config,
