@@ -13,8 +13,6 @@ export default {
       infSidePanel: false,
     }
   },
-  mounted() {
-  },
   computed : {
     moveSidePanel() {
       return this.infSidePanel;
@@ -26,7 +24,6 @@ export default {
     }
   },
 }
-
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
