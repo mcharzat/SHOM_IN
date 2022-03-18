@@ -18,10 +18,15 @@
              <div id="yasqe"></div>
             </div>
           </div>
+          <div class="row">
+            <div class="col-md-12">
+             <div id="shareQuery">Lien direct vers la requête : <a href="" target="_blank">...</a></div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="row justify-content-center">
-        <div class="col-md-11">
+        <div class="col-md-12">
           <div id="yasr"></div>
         </div>
       </div>
@@ -45,52 +50,71 @@ export default {
   },
   mounted() {
     
-    let externalScript = document.createElement('script')
-    externalScript.setAttribute('src', 'https://code.jquery.com/jquery-3.3.1.min.js')
-    externalScript.setAttribute('crossorigin', 'anonymous')
-    document.head.appendChild(externalScript)
-
     let externalScript2 = document.createElement('script')
     externalScript2.setAttribute('src', 'https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js')
     externalScript2.setAttribute('integrity', 'sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy')
     externalScript2.setAttribute('crossorigin', 'anonymous')
     document.head.appendChild(externalScript2)
 
-    let externalScript3 = document.createElement('script')
-    externalScript3.setAttribute('src', 'https://cdn.jsdelivr.net/npm/@chenfengyuan/datepicker@1.0.9/dist/datepicker.min.js')
-    document.head.appendChild(externalScript3)
+    let externalScript = document.createElement('script')
+    externalScript.setAttribute('src', 'https://code.jquery.com/jquery-3.4.1.min.js')
+    externalScript.setAttribute('crossorigin', 'anonymous')
+    document.head.appendChild(externalScript)
 
     let externalScript6 = document.createElement('script')
     externalScript6.setAttribute('src', 'https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js')
-    externalScript2.setAttribute('integrity', 'sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49')
+    externalScript6.setAttribute('integrity', 'sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49')
     document.head.appendChild(externalScript6)
-
-    /*
+/*
+    let externalScript3 = document.createElement('script')
+    externalScript3.setAttribute('src', 'https://cdn.jsdelivr.net/npm/@chenfengyuan/datepicker@1.0.9/dist/datepicker.min.js')
+    document.head.appendChild(externalScript3)
+*/
+    
     let externalScript5 = document.createElement('script')
-    externalScript5.setAttribute('src', '../../../public/lib/sparnatural/sparnatural.js')
+    externalScript5.setAttribute('src', '../../../public/lib/sparnatural/src/sparnatural.js')
     externalScript5.setAttribute("type", "application/js")
-    document.head.appendChild(externalScript5)*/
+    document.head.appendChild(externalScript5)
       
-    $( document ).ready(function($) {
+    $( document ).ready(function($) {          
 
-      this.sparnatural = $('#ui-search').Sparnatural({
+      this.sparnatural = document.getElementById('ui-search').Sparnatural({
         config: this.config,
+        // config: "sparnatural-config.ttl",
         maxDepth: 4,
         addDistinct: true,
+        noTypeCriteriaForObjects: ["http://dbpedia.org/ontology/Artwork"],
         sendQueryOnFirstClassSelected: true,
         backgroundBaseColor: '2,184,117',
         autocomplete : null,
         list : null,
-        defaultEndpoint : "http://fr.dbpedia.org/sparql",
+        defaultEndpoint: "http://fr.dbpedia.org/sparql",
+        sparqlPrefixes : {
+          "dbpedia" : "http://dbpedia.org/ontology/"
+        },
+        localCacheDataTtl: 1000 * 60 * 60 * 24, // 24 hours in miiseconds
+        filterConfigOnEndpoint : false,
         onQueryUpdated: function(queryString) {
           queryString = this.semanticPostProcess(queryString);
-          queryString = this.rdfsLabelPostProcess(queryString);
-          queryString = this.isPrimaryTopicOfPostProcess(queryString);
-          queryString = this.orderByPostProcess(queryString);
+          // queryString = rdfsLabelPostProcess(queryString, queryJson);
+          // queryString = isPrimaryTopicOfPostProcess(queryString, queryJson);
+          // queryString = orderByPostProcess(queryString, queryJson);
+          $('#sparql code').html(queryString.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"));
           yasqe.setValue(queryString);
+          // yasqe.query();
+        },
+        tooltipConfig : {
+          delay: [800, 100],
+          duration: [100, 100],
+        },
+        // triggered when "play" button is clicked
+        onSubmit: function(form) {
+          // enable loader on button
+          form.sparnatural.enableLoading() ; 
+          // trigger the query from YasQE
           yasqe.query();
         }
-      })
+      });
     });
 
     const yasqe = new Yasqe(document.getElementById("yasqe"), {
@@ -98,18 +122,26 @@ export default {
       copyEndpointOnNewTab: false  
     });
 
-    const yasr = new Yasr(document.getElementById("yasr"), {});
+    const yasr = new Yasr(document.getElementById("yasr"), {
+      //this way, the URLs in the results are prettified using the defined prefixes in the query
+      getUsedPrefixes : yasqe.getPrefixesFromQuery,
+      "drawOutputSelector": false,
+      "drawDownloadIcon": false,
+      // avoid persistency side-effects
+      "persistency": { "prefix": false, "results": { "key": false }}
+    });
 
     // link yasqe and yasr
     yasqe.on("queryResponse", function(_yasqe, response, duration) {
       yasr.setResponse(response, duration);
+      this.sparnatural.disableLoading() ;
     });
   },
   methods: {
     prefixesPostProcess(queryString) {
       if(queryString.indexOf("rdf-schema#") == -1) {
-        queryString = queryString.replace("SELECT ", "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> \nSELECT ");
-      }         
+          queryString = queryString.replace("SELECT ", "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> \nSELECT ");
+      }       
       return queryString;
     },
     isPrimaryTopicOfPostProcess(queryString) {
@@ -127,8 +159,8 @@ export default {
     },
     semanticPostProcess(queryString) {
       queryString = this.prefixesPostProcess(queryString);
-      queryString = this.sparnatural.expandSparql(queryString);
-      return queryString;
+        queryString = this.sparnatural.expandSparql(queryString);
+        return queryString;
     },
   }
 }
@@ -139,16 +171,11 @@ export default {
 
   @import 'https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.9.0/css/all.min.css';
   @import 'https://unpkg.com/@triply/yasgui/build/yasgui.min.css';
-  @import '../../../public/lib/sparnatural/sparnatural.css';
-  @import 'https://cdn.jsdelivr.net/npm/@chenfengyuan/datepicker@1.0.9/dist/datepicker.min.css';
+  @import '../../../public/lib/sparnatural/src/assets/stylesheets/sparnatural.scss';
 
-  .yasqe {
-    margin-top: 1em;
-  }
+  .yasqe .CodeMirror { font-size: 0.8em; height: 380px; }
 
-  .yasgui .autocompleteWrapper {
-    pointer-events: none;
-    /* display: disabled !important; */
-    /* display: none !important; */
+  .yasr_header {
+    display: none;
   }
 </style>
