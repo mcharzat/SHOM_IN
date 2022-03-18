@@ -7,8 +7,10 @@ describe("SPARQLResearch.vue", () => {
     const wrapper = shallowMount(SPARQLResearch, {
       propsData: { widthPdf: msg }
     });
+    const researchButton = wrapper.find(".researchManager");
 
     expect(wrapper.vm.widthPdf).toEqual(msg);
+    expect(researchButton.attributes("class")).toContain("researchManagerOpen");
   });
 
   it("check click on button", async () => {
