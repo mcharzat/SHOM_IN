@@ -10,8 +10,8 @@
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint",
     "tests": "jest",
-    "tests:unit": "jest --testPathPattern=spec.[jt]s?(x)",
-    "tests:integration": "jest --testPathPattern=inte.spec.[jt]s?(x)"
+    "tests:unit": "jest --testPathPattern=spec.js",
+    "tests:integration": "jest --testPathPattern=inte.spec.js"
   },
   "main": "babel.config.js",
   "dependencies": {
