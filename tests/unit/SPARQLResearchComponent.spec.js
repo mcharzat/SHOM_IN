@@ -16,19 +16,18 @@ describe("SPARQLResearch.vue", () => {
   it("check click on button", async () => {
     const wrapper = shallowMount(SPARQLResearch);
     const researchDiv = wrapper.find(".research");
-    const dataDisplayed = wrapper.vm.isDisplayed;
 
-    expect(dataDisplayed).toBeTruthy;
-    expect(researchDiv.isVisible()).toBeTruthy;
-
-    await wrapper.find('button').trigger('click');
-
-    expect(dataDisplayed).toBeFalsy;
-    expect(researchDiv.isVisible()).toBeFalsy;
+    expect(wrapper.vm.isDisplayed).toBeTruthy();
+    expect(researchDiv.isVisible()).toBeTruthy();
 
     await wrapper.find('button').trigger('click');
 
-    expect(dataDisplayed).toBeTruthy;
-    expect(researchDiv.isVisible()).toBeTruthy;
+    expect(wrapper.vm.isDisplayed).toBeFalsy();
+    expect(researchDiv.isVisible()).toBeFalsy();
+
+    await wrapper.find('button').trigger('click');
+
+    expect(wrapper.vm.isDisplayed).toBeTruthy();
+    expect(researchDiv.isVisible()).toBeTruthy();
   });
 });
