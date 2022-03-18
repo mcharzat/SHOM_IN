@@ -3,6 +3,9 @@
     <NavBar />
     <MapShom />
     <SPARQLResearch />
+    <SwitchButton />
+    <LayerManager />
+    <PDFManager />
   </div>
 </template>
 
@@ -10,13 +13,19 @@
 import NavBar from './components/NavBar.vue'
 import MapShom from './components/MapShom.vue'
 import SPARQLResearch from './components/SPARQLResearch.vue'
+import SwitchButton from './components/SwitchButton.vue'
+import LayerManager from './components/LayerManager.vue'
+import PDFManager from './components/PDFManager.vue'
 
 export default {
   name: 'App',
   components: {
     NavBar,
     MapShom,
-    SPARQLResearch
+    SPARQLResearch,
+    SwitchButton,
+    LayerManager,
+    PDFManager
   }
 }
 </script>
