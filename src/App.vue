@@ -4,7 +4,7 @@
     <MapShom />
     <SwitchButton />
     <LayerManager />
-    <PDFManager />
+    <PDFManager @pdfOpenState="updatedPdfState"/>
     <SPARQLResearch 
       :widthPdf="widthPdf"
     />
@@ -23,7 +23,7 @@ export default {
   name: 'App',
   data() {
     return {
-      widthPdf: 0
+      widthPdf: false
     }
   },
   methods: {

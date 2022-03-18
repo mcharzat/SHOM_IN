@@ -3,7 +3,7 @@ import SPARQLResearch from "@/components/SPARQLResearch.vue";
 
 describe("SPARQLResearch.vue", () => {
   it("renders props.msg when passed", () => {
-    const msg = 15;
+    const msg = true;
     const wrapper = shallowMount(SPARQLResearch, {
       propsData: { widthPdf: msg }
     });

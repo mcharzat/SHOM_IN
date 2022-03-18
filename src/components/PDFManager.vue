@@ -8,6 +8,7 @@
 <script>
 export default {
   name: 'PDFManager',
+  emits: ['pdfOpenState'],
   data() {
     return {
       infSidePanel: false,
@@ -21,6 +22,7 @@ export default {
   methods: {
     actionSidePanel() {
       this.infSidePanel = !this.infSidePanel;
+      this.$emit('pdfOpenState', this.infSidePanel);
     }
   },
 }

@@ -11,18 +11,13 @@ export default {
   name: 'SPARQLResearch',
   props: {
     widthPdf:  {
-      type: Number,
-      default: 0
+      type: Boolean,
+      default: false
     },
   },
   data() {
     return {
       isDisplayed: true,
-    }
-  },
-  watch: { 
-    widthPdf: function(newVal, oldVal) {
-      console.log('Prop changed: ', newVal, ' | was: ', oldVal)
     }
   },
   computed : {
