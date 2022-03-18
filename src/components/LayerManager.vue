@@ -28,13 +28,11 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-#layerManager {
-  height: 50px;
-  width: 50px;
-}
 
 .layerManager {
     position: absolute;
+    height: 50px;
+    width: 50px;
     top: 100px;
     left: 5px;
     z-index: 25;
