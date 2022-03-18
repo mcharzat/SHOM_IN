@@ -1,21 +1,34 @@
-import { shallowMount } from "@vue/test-utils";
+import { shallowMount, mount } from "@vue/test-utils";
+import App from "@/App.vue"
 import SPARQLResearch from "@/components/SPARQLResearch.vue";
 import PDFManager from "@/components/PDFManager.vue";
 
 describe("SPARQLResearch.vue", () => {
-    it("False test", () => {
-        expect(false).not.toBeTruthy();
-    });
-    /*
     it("SPARQLResearch receive signal from PDFManager", async () => {
-        
-        const wrapperResearch = shallowMount(SPARQLResearch);
-        const wrapperPdf = shallowMount(PDFManager);
+        const wrapper = shallowMount(App, {
+            global: {
+                stubs: {
+                    SPARQLResearch: false,
+                    PDFManager: false
+                },
+            }
+        });
+        const wrapperResearch = wrapper.getComponent(SPARQLResearch);
+        const wrapperPdf = wrapper.getComponent(PDFManager);
+        const buttonResearch = wrapperResearch.find('.researchManager');
+        const buttonPdf = wrapperResearch.find('.pdfManager');
         
         expect(wrapperResearch.vm.widthPdf).toBeFalsy();
+        expect(buttonResearch.attributes('class')).not.toContain("researchManagerOpen");
 
-        await wrapperPdf.find('button').trigger('click');
+        await buttonPdf.trigger('click');
         
         expect(wrapperResearch.vm.widthPdf).toBeTruthy();
-    });*/
+        expect(buttonResearch.attributes('class')).toContain("researchManagerOpen");
+
+        await buttonPdf.trigger('click');
+
+        expect(wrapperResearch.vm.widthPdf).toBeFalsy();
+        expect(buttonResearch.attributes('class')).not.toContain("researchManagerOpen");
+    });
 });
