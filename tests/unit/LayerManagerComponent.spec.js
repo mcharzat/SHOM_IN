@@ -6,19 +6,18 @@ describe("LayerManager.vue", () => {
         const wrapper = shallowMount(layerManager);
         const button = wrapper.find('button');
         const panel = wrapper.find('.layerManager');
-        const variable = wrapper.vm.infSidePanel;
 
         expect(panel.attributes("class")).not.toContain("layerManagerOpen");
-        expect(variable).toBeFalsy;
+        expect(wrapper.vm.infSidePanel).toBeFalsy();
 
         await button.trigger('click');
 
         expect(panel.attributes("class")).toContain("layerManagerOpen");
-        expect(variable).toBeTruthy;
+        expect(wrapper.vm.infSidePanel).toBeTruthy();
 
         await button.trigger('click');
 
         expect(panel.attributes("class")).not.toContain("layerManagerOpen");
-        expect(variable).toBeFalsy;
+        expect(wrapper.vm.infSidePanel).toBeFalsy();
     });
 });
