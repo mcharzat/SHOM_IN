@@ -21,6 +21,9 @@ export default {
     // Leaflet
     const map = L.map('map', {
       zoomControl: false,
+      zoomSnap: 0.5,
+      zoomDelta: 1,
+      wheelPxPerZoomLevel: 150,
       attributionControl: false
     }).setView([47.9759965,-5.2963814], 8);
      
