@@ -6,9 +6,12 @@
 </template>
 
 <script>
+//import VueResizable from 'vue-resizable'
+
 export default {
   name: 'PDFManager',
   emits: ['pdfOpenState'],
+  //components: {VueResizable},
   data() {
     return {
       infSidePanel: false,
@@ -64,5 +67,8 @@ export default {
   width: 33%;
   height: 100%;
   max-height: calc(100% - 125px);
+  resize: horizontal;
+  overflow: auto;
+  direction: rtl;
 }
 </style>
