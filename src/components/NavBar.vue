@@ -63,8 +63,7 @@ export default {
     width: 100%;
     height: 50px;
     margin: 0 auto;
-    background: #076E8C;
-    opacity: 85%;
+    background: rgba(7, 110, 140,0.8);
     padding: 10px;
     display: flex;
     z-index: 10;

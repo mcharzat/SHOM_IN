@@ -9,7 +9,9 @@
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint",
-    "tests": "jest"
+    "tests": "jest",
+    "tests:unit": "jest --testPathPattern=spec.js",
+    "tests:integration": "jest --testPathPattern=inte.spec.js"
   },
   "main": "babel.config.js",
   "dependencies": {
@@ -82,7 +84,12 @@
     "transformIgnorePatterns": [
       "node_modules/(?!vue-picture-input)"
     ],
-    "preset": "@vue/cli-plugin-unit-jest"
+    "preset": "@vue/cli-plugin-unit-jest",
+    "testMatch": [
+      "**/tests/integration/**/*.inte.spec.[jt]s?(x)",
+      "**/tests/unit/**/*.spec.[jt]s?(x)",
+      "**/__tests__/*.[jt]s?(x)"
+    ]
   },
   "bugs": {
     "url": "https://github.com/mcharzat/SHOM_IN/issues"

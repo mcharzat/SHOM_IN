@@ -28,7 +28,7 @@ jobs:
           name: interface.zip
           path: ./interface.zip
 
-  tests:
+  tests_unitaires:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
@@ -36,10 +36,20 @@ jobs:
         with:
           node-version: '16.x'
       - run: npm install
-      - run: npm run tests
+      - run: npm run tests:unit
+
+  tests_integration:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16.x'
+      - run: npm install
+      - run: npm run tests:integration
 
   release:
-    needs: [ build, tests ]
+    needs: [ build, tests_unitaires, tests_integration ]
 
     runs-on: ubuntu-20.04
     if: github.repository == 'mcharzat/SHOM_IN' && contains(github.ref, 'refs/tags/')
