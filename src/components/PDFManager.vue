@@ -37,7 +37,7 @@ export default {
   width: 50px;
   top: 100px;
   right: 5px;
-  z-index: 25;
+  z-index: 30;
   
   background-color:white;
 

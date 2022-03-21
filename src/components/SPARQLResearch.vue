@@ -16,7 +16,7 @@ export default {
   name: 'SPARQLResearch',
   components: {
       QuerySPARQL
-    }
+  },
   props: {
     widthPdf:  {
       type: Boolean,
@@ -47,7 +47,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .researchManager {
-   position: absolute;
+  position: absolute;
   height: 50px;
   width: 50px;
   top: 155px;
