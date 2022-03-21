@@ -1,5 +1,5 @@
 <template>
-    <div id="map" class="map" @mouseout.prevent="removeCoord"></div>
+    <div class="map" @mouseout.prevent="removeCoord" ref="Shom_IN"></div>
     <div id="mouseTracker">
         <p>{{ coordinate }}</p>
     </div>
@@ -19,7 +19,7 @@ export default {
   },
   mounted() {
     // Leaflet
-    const map = L.map('map', {
+    const map = L.map(this.$refs['Shom_IN'], {
       zoomControl: false,
       zoomSnap: 0.5,
       zoomDelta: 1,
@@ -72,7 +72,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
-#map {
+.map {
   height: 100%;
   width: 100%;
   z-index: 0;
