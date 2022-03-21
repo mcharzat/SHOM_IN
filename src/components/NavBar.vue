@@ -38,6 +38,8 @@ export default {
       this.clientLog = true;
     },
     deconnect: function () {
+      this.login = "login";
+      this.pwd = "pwd";
       this.clientLog = false;
     },
     displayHelp: function () {
