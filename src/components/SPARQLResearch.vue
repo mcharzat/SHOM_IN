@@ -1,11 +1,9 @@
 <template>
-  <div>
-    <button :class="{researchManager: true, researchManagerOpen: moveButton}" @click="actionResearchPanel">
-      <img src="../assets/research.png" height ="35" width="35"/>
-    </button>
-    <div class="research" :hidden="!displayPanel">
-      <QuerySPARQL />
-    </div>
+  <button :class="{researchManager: true, researchManagerOpen: moveButton}" @click="actionResearchPanel">
+    <img src="../assets/research.png" height ="35" width="35"/>
+  </button>
+  <div class="research" :hidden="!displayPanel">
+    <QuerySPARQL />
   </div>
 </template>
 
