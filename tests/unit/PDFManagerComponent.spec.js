@@ -20,11 +20,11 @@ describe("PDFManager.vue", () => {
         expect(panel.attributes("class")).not.toContain("pdfManagerOpen");
         expect(wrapper.vm.infSidePanel).toBeFalsy();
     });
-/*
+
     it("emits a signal on click", async () => {
         const wrapper = shallowMount(pdfManager);
         await wrapper.find('button').trigger('click');
 
         expect(wrapper.emitted().pdfOpenState).toBeTruthy();
-    })*/
+    })
 });
