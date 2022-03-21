@@ -1,9 +1,10 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-empty */
 /* eslint-disable no-mixed-spaces-and-tabs */
 
-const tippy = require('tippy.js').default;
-var UiuxConfig = require("./UiuxConfig.js");
-import $ from 'jquery';
+import tippy from 'tippy.js'
+import UiuxConfig from './UiuxConfig.js';
+import $ from 'jquery-nice-select';
 
 export class HTMLComponent {
 
@@ -631,7 +632,7 @@ export class OptionsGroup extends GroupContenaire {
 			this.inputTypeComponent.init() ;
 			this.inputTypeComponent.cssClasses.IsOnEdit = true;
 
-			$(this.html).find('.input-val label').on('click', function(e) {
+			$(this.html).find('.input-val label').on('click', function() {
 				$(this).addClass('justClicked') ;
 			});
 			$(this.html).find('.input-val input').on('click', function(e) {

@@ -1,4 +1,4 @@
-import LocalDataStorage from 'LocalDataStorage'
+import LocalDataStorage from './LocalDataStorage'
 
 class LocalCacheData {
 

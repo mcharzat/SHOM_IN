@@ -2,7 +2,7 @@
 
 import RDFSpecificationProvider from './RDFSpecificationProvider.js'
 import JsonLdSpecificationProvider from './JsonLdSpecificationProvider.js'
-import $ from 'jquery'
+import $ from 'jquery-nice-select'
 
 export class SpecificationProviderFactory {
 

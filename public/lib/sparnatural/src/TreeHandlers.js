@@ -1,4 +1,5 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
+/* eslint-disable no-unused-vars */
 class StubTreeHandler {
 
 	constructor() {}

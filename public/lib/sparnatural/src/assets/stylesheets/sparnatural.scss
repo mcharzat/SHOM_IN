@@ -1,25 +1,36 @@
-@use "sass:math";
-
 @import "nice-select.css";
 @import "~easy-autocomplete/dist/easy-autocomplete.css";
 @import "~@chenfengyuan/datepicker/dist/datepicker.min.css";
 
-@import "themes.scss";
 
-
-$component-width: 1200px;
-$component-max-width: 90%;
 $height-components: 54px;
 $height-components-under: 48px;
 $height-components-hover: 35px;
 $margin-component: 30px;
 $margin-component-onEdit: 80px;
 $margin-children-li: 75px;
+
 $center-arrow-bd-width : 3px;
-$margin-left-reset: 20px;
 
+/* Color of the criteria arrows (orange) */
+$custom-red: rgb(250,136,3) ;
+/* Color of the "unselect" buttons in criterias */
+$custom-red-bold: rgb(182, 97, 0) ;
+/* Color of a selected value in a criteria */
+$custom-red-medium: rgb(255, 210, 157) ;
+$custom-red-light: rgb(255, 231, 203) ;
 
+/* Color of the options arrow (optional / negation) */
+$custom-green: rgb(107,215,171) ;
+/* Color of the options arrow when not selected */
+$custom-green-light: rgb(151,227,196) ;
 
+/* Color of the highlight of arrows */
+$custom-green-bold: rgb(2,184,117) ;
+
+$custom-silver: rgb(167,167,167) ;
+$custom-silver-light: rgb(230, 230, 230) ;
+$default-text-color: #666 ;
 
 @mixin triangle-before() {
 	padding-left: 20px;
@@ -29,8 +40,7 @@ $margin-left-reset: 20px;
 		height: 0;
 		line-height: 0;
 		padding: 0;
-		display: inline-block;
-		float:left;
+		display: inline-block;float:left;
 		border-style: solid;
 		border-width: 21px 0 21px 15px;
 		border-color: transparent transparent transparent transparent;
@@ -72,9 +82,7 @@ $margin-left-reset: 20px;
 		height: 0;
 		line-height: 0;
 		padding: 0;
-		display: inline-block;
-		float: right;
-		margin-right: 0;
+		display: inline-block;float: right;margin-right: 0;
 		border-style: solid;
 		border-width: 21px 0 21px 15px;
 		border-color: transparent transparent transparent $custom-red;
@@ -276,36 +284,11 @@ body {
 	section {
 		padding-top: 30px;
 	}
-	.reset-wrapper {
-		position: relative;
-		height: 0;
-		width: $component-width;
-		max-width: $component-max-width;
-		margin: 0 auto;
-		&>.reset-form {
-			position: absolute;
-			right: 0;
-			top: 0;
-			width: 54px;
-			height: 54px;
-			margin-top: 31px;
-			margin-bottom: 80px;
-			border: 1px solid #ddd;
-			border-radius: 5px;
-			background: #fff;
-			box-shadow: 0px 2px 3px 0px #cfcfcf;
-			a {
-				display: block;
-				margin: 5px;
-				cursor: pointer;
-			}
-		}
-	}
 	li.completed {
 		&>.CriteriaGroup {
 			margin-bottom: $margin-component;
 			&.onAddOrValue {
-				margin-bottom: calc($margin-component-onEdit / 2) + 10;
+				margin-bottom: $margin-component-onEdit/2 + 10;
 			}
 		}
 	}
@@ -326,7 +309,7 @@ body {
 		filter:progid:DXImageTransform.Microsoft.Shadow(color=#cfcfcf, Direction=180, Strength=3);
 
 		&.onAddOrValue {
-			margin-bottom: calc($margin-component-onEdit / 2);
+			margin-bottom: $margin-component-onEdit/2;
 		}
 		
 		&>div {
@@ -511,7 +494,7 @@ body {
 				display: none;
 				position: absolute;
 				top: 50%;
-				right: 18px;
+				right: 18px; //+9 pour retrait dans fleche
 				margin-top: -8px;
 				width: 16px;
 				height: 16px;
@@ -792,62 +775,6 @@ body {
 						}
 					}
 				}
-				.TreeWidget {
-					.treeBtnDisplay {
-						border: 1px solid #ddd;
-						border-radius: 5px;
-						background: #fff;
-						box-shadow: 0px 2px 3px 0px #cfcfcf;
-						padding: 5px;
-						line-height: 1;
-						z-index: 2;
-						cursor: pointer;
-						img {
-							height: 26px;
-						}
-					}
-					.treeLayer {
-						position: absolute;
-						top: 50%;
-						margin-top: -19px;
-						left: calc(100% + 48px);
-						border: 1px solid #ddd;
-						border-radius: 5px;
-						background: #fff;
-						box-shadow: 0px 2px 3px 0px #cfcfcf;
-						z-index: 1;
-						.treeDisplay {
-							overflow: auto;
-							max-height: 500px;
-							min-width: 275px;
-							padding: 10px 10px 5px;
-
-							&.jstree-default .jstree-disabled {
-								opacity: 0.5;
-							}
-						}
-						.treeActions {
-							border-top: 2px solid #ddd;
-							padding: 5px 10px;
-							text-align: right;
-							a {
-								border-radius: 5px;
-								color: #fff;
-								display: inline-block;
-								margin-left: 10px;
-								padding: 15px 5px;
-								line-height: 1;
-								cursor: pointer;
-							}
-							a.treeCancel {
-								background: #EE8D67;
-							}
-							a.treeSubmit {
-								background: #84C99E;
-							}
-						}
-					}
-				}
 				.button-add {
 					border: 3px solid $custom-red;
 					border-radius: 15px;
@@ -914,7 +841,7 @@ body {
 					margin: 0;
 				}
 				span.label-two-line {
-					line-height: calc($height-components-under / 2);
+					line-height: $height-components-under / 2;
 					line-height: 21px;
 				}
 				
@@ -982,8 +909,8 @@ body {
 				}
 			}
 			.ActionAnd {
-				left: math.div($margin-children-li - 45, 2);
-				top: calc($margin-component / 2);
+				left: ($margin-children-li - 45) /2;
+				top: $margin-component / 2;
 				line-height: 46px;
 				/*width: 46px;*/
 				text-align: center;
@@ -1105,135 +1032,15 @@ body {
 		.bg-wrapper {
 			
 		}
-		.submitSectionWrapper {
-			height: 41px;
-			background: $custom-green ;
-			.submitSection {
-				position: relative;
-				
-				width: 1200px;
-				max-width: 90%;
-				margin: 0 auto;
-				a {
-					position: absolute;
-					top: 14px;
-					right: 0;
-					width: 54px;
-					height: 54px;
-					padding: 10px;
-					padding-left: 12px;
-					border-radius: 5px;
-					background: $custom-green-bold;
-					box-shadow: 0px 2px 3px 0px #cfcfcf;
-					cursor: pointer;
-					z-index: 2;
-					svg {
-						display: block;
-						max-width:  34px;
-						height: 34px;
-						path {
-							fill:#FFFFFF;
-							width: auto;
-							height: auto;
-						}
-					}
-					svg.playLoader {
-						display: none;
-						max-width:  44px;
-						height: 44px;
-					}
-
-					&.submitDisable {
-						background: $custom-silver-light;
-						cursor: default;
-						svg {
-							path {
-								fill:$custom-silver;
-							}
-						}
-						&.loadingEnabled {
-							padding: 4px;
-							svg.playIcon {
-								display: none;
-							}
-							svg.playLoader {
-								display: block;
-								path {
-									fill:$custom-green-bold;
-								}
-								
-							}
-						}
-					}
-				}
-			}
-		}
 		.variablesSelection {
 			background: $custom-red-light;
-			margin-bottom: 22px;
-			border-top: 2px solid $custom-silver-line;
-			.linesWrapper {
-				/*display: none;*/
-				
-				height: 0;
-				overflow: hidden;
-			}
-			&.displayed {
-				.linesWrapper {
-					height: auto;
-				}
-				.VariableSelectorDisplay {
-					a {
-						margin-top: -22px;
-						transition: margin-top 0.700s ease;
-					}
-				}
-			}
-			.VariableSelectorDisplay {
-				background: $custom-red-medium;
-				height: 41px;
-				position: relative;
-				
-					a  {
-						position: absolute;
-						left: 50%;
-						display: block;
-						height: 44px;
-						width: 44px;
-						margin: 0 auto;
-						margin-top: 18px;
-						margin-left: -22px;
-						border-radius: 22px;
-						background: $custom-red-medium;
-						line-height: 1;
-						padding: 10px;
-						transition: margin-top 0.700s ease;
-						cursor: pointer;
-
-					.icon-arrow-top {
-						display: none;
-					}
-					.icon-arrow-bottom {
-						margin-top: 4px;
-						display: inline;
-					}
-				}
-			}
-
-			&.displayed .VariableSelectorDisplay a  {
-				.icon-arrow-top {
-					display: inline;
-				}
-				.icon-arrow-bottom {
-					display: none;
-				}
-			}
+			padding: 30px 0;
 			.line1, .line2 {
 				display: flex;
 				flex-direction: row;
 				flex-wrap: wrap;
-				width: $component-width;
-				max-width: $component-max-width;
+				width: 1200px				;
+				max-width: 90%;
 				margin: 0 auto;
 
 				border: 1px solid #ddd;
@@ -1248,7 +1055,6 @@ body {
 				border-radius: 5px 5px 0 0 ;
 				border-bottom: 0px solid transparent;
 				min-height: 61px;
-				margin-top: 41px;
 				.sortableItem {
 					padding: 10px;
 					display: inline-block;
@@ -1295,20 +1101,9 @@ body {
 					div {
 						line-height: 30px;
 					}
-
-					[contenteditable="true"]:active,
-					[contenteditable="true"]:focus{
-						border-color: #ccc;
-						border-radius: 4px;
-						border-style: solid;
-						border-width: 1px;
-						padding: 0 5px;
-						outline:none;
-					}
 				}
 			}
 			.line2 {
-				margin-bottom: 41px;
 				border-radius: 0 0 5px 5px;
 				justify-content: space-between;
 				border-top: 1px solid darkgray;
@@ -1423,8 +1218,8 @@ body {
 		}
 		ul.componentsListe {
 			padding: 0;
-			width: $component-width;
-			max-width: $component-max-width;
+			width: 1200px;
+			max-width: 90%;
 			margin: 0 auto;
 			&,
 			ul {
@@ -1502,14 +1297,6 @@ body {
 				display: block;
 				clear: both;
 				/*overflow: hidden;*/
-
-				/*first line*/
-				&[data-index="0"] {
-					width: calc(100% - #{$height-components} - #{$margin-left-reset});
-					&>ul {
-						width: calc(100% + #{$height-components} + #{$margin-left-reset});
-					}
-				}
 				
 				& li.groupe {
 					margin-left: $margin-children-li;
@@ -1896,7 +1683,7 @@ body {
 					display: block;
 					position: absolute;
 					left: 36px;
-					top: calc($height-components / 2) + $margin-component;
+					top: $height-components / 2 + $margin-component;
 					border-left: 3px solid $custom-red;
 					
 					span {

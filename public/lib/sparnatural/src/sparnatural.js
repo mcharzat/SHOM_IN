@@ -1,10 +1,11 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-mixed-spaces-and-tabs */
-/* eslint-disable no-undef */
-require("jstree/dist/themes/default/style.min.css");
+//require("jstree/dist/themes/default/style.min.css");
 
-require("./assets/stylesheets/sparnatural.scss");
+//require("./assets/stylesheets/sparnatural.scss");
 
-require("easy-autocomplete");
+//require("easy-autocomplete");
+require("../../sparnatural2/sparnatural.css");
 
 //
 
@@ -16,9 +17,7 @@ require("easy-autocomplete");
 // const datepicker = require("@chenfengyuan/datepicker") ;
 // const $$ = require('jquery');
 
-require("./assets/js/jquery-nice-select/jquery.nice-select.js");
-
-require('tippy.js/dist/tippy.css');
+require('tippy.js').default;
 
 //const removeIcon = require("./assets/icons/buttons/remove.png");
 
@@ -34,43 +33,44 @@ const i18nLabels = {
 
 //const tippy = require('tippy.js').default;
 
-require('tippy.js/dist/tippy.css');
+//import Sortable from 'sortablejs/modular/sortable.core.esm.js'
+import Sortable from 'sortablejs'
 
-const Sortable = require('sortablejs/modular/sortable.core.esm.js').Sortable;
+//import JsonLdSpecificationProvider from './JsonLdSpecificationProvider.js'
+//import RDFSpecificationProvider from './RDFSpecificationProvider.js'
+import FilteringSpecificationProvider from './FilteringSpecificationProvider.js'
+import SpecificationProviderFactory from './SpecificationProviderFactory.js'
 
-JsonLdSpecificationProvider = require("./JsonLdSpecificationProvider.js").JsonLdSpecificationProvider;
-SpecificationProviderFactory = require("./SpecificationProviderFactory.js").SpecificationProviderFactory;
-RDFSpecificationProvider = require("./RDFSpecificationProvider.js").RDFSpecificationProvider ;
-FilteringSpecificationProvider = require("./FilteringSpecificationProvider.js").FilteringSpecificationProvider ;
-SparqlBifContainsAutocompleteAndListHandler = require("./AutocompleteAndListHandlers.js").SparqlBifContainsAutocompleteAndListHandler;
-SimpleSparqlAutocompleteAndListHandler = require("./AutocompleteAndListHandlers.js").SimpleSparqlAutocompleteAndListHandler;
-RangeBasedAutocompleteAndListHandler = require("./AutocompleteAndListHandlers.js").RangeBasedAutocompleteAndListHandler;
-PropertyBasedAutocompleteAndListHandler = require("./AutocompleteAndListHandlers.js").PropertyBasedAutocompleteAndListHandler
-WikidataAutocompleteAndListHandler = require("./AutocompleteAndListHandlers.js").WikidataAutocompleteAndListHandler;
-UriOnlyListHandler = require("./AutocompleteAndListHandlers.js").UriOnlyListHandler;
-GraphDbLuceneConnectorSparqlAutocompleteAndListHandler = require("./AutocompleteAndListHandlers.js").GraphDbLuceneConnectorSparqlAutocompleteAndListHandler;
-SparqlTemplateListHandler = require("./AutocompleteAndListHandlers.js").SparqlTemplateListHandler;
-SparqlTemplateAutocompleteHandler = require("./AutocompleteAndListHandlers.js").SparqlTemplateAutocompleteHandler;
+import {/*SparqlBifContainsAutocompleteAndListHandler,
+	SimpleSparqlAutocompleteAndListHandler,
+	RangeBasedAutocompleteAndListHandler,
+	PropertyBasedAutocompleteAndListHandler,
+	WikidataAutocompleteAndListHandler,
+	UriOnlyListHandler,
+	GraphDbLuceneConnectorSparqlAutocompleteAndListHandler,*/
+	SparqlTemplateListHandler,
+	SparqlTemplateAutocompleteHandler
+} from './AutocompleteAndListHandlers.js'
 
-SparqlTreeHandler = require("./TreeHandlers.js").SparqlTreeHandler;
-StubTreeHandler = require("./TreeHandlers.js").StubTreeHandler;
+import {SparqlTreeHandler/*, StubTreeHandler*/} from './TreeHandlers.js'
+import SimpleStatisticsHandler from './StatisticsHandlers.js'
+//import LocalDataStorage from './LocalDataStorage.js'
+//import LocalCacheData from './LocalCacheData.js'
+import JSONQueryGenerator from './QueryGenerators.js'
+import {QuerySPARQLWriter, AbstractValue} from './Query.js'
+import SparnaturalComponents from './SparnaturalComponents.js'
 
-SimpleStatisticsHandler = require("./StatisticsHandlers.js").SimpleStatisticsHandler;
-
-LocalDataStorage = require("./LocalDataStorage.js").LocalDataStorage;
-LocalCacheData = require("./LocalCacheData.js").LocalCacheData;
-JSONQueryGenerator = require("./QueryGenerators.js").JSONQueryGenerator;
-
-QuerySPARQLWriter = require("./Query.js").QuerySPARQLWriter ;
-AbstractValue = require("./Query.js").AbstractValue ;
-
-SparnaturalComponents = require("./SparnaturalComponents.js");
-
-require("./Widgets.js");
+import {ListWidget, AutoCompleteWidget,
+	SearchWidget, TimeDatePickerWidget,
+	DatesWidget, NoWidget, BooleanWidget, TreeWidget
+} from './Widgets.js'
 
 var Config = require("./SparnaturalConfig.js");
 var Datasources = require("./SparnaturalConfigDatasources.js");
-UiuxConfig = require("./UiuxConfig.js");
+
+import UiuxConfig from './UiuxConfig.js'
+
+import jQuery from 'jquery'
 
 (function( $ ) {
 	
@@ -689,7 +689,7 @@ UiuxConfig = require("./UiuxConfig.js");
 		        }
 	    	);
 
-	    	items = specProvider.getAllSparnaturalClasses() ;
+	    	let items = specProvider.getAllSparnaturalClasses() ;
 			for (var key in items) {
 				var aClass = items[key];
 
@@ -1733,7 +1733,7 @@ UiuxConfig = require("./UiuxConfig.js");
 			    		{
 				            semanticPostProcess : function(sparql) {
 				            	// also add prefixes
-				                for (key in settings.sparqlPrefixes) {
+				                for (let key in settings.sparqlPrefixes) {
 							        sparql = sparql.replace("SELECT ", "PREFIX "+key+": <"+settings.sparqlPrefixes[key]+"> \nSELECT ");
 						    	}
 				                return theSpecProvider.expandSparql(sparql);
@@ -1787,7 +1787,7 @@ UiuxConfig = require("./UiuxConfig.js");
 			    		{
 				            semanticPostProcess : function(sparql) {
 				            	// also add prefixes
-				                for (key in settings.sparqlPrefixes) {
+				                for (let key in settings.sparqlPrefixes) {
 							        sparql = sparql.replace("SELECT ", "PREFIX "+key+": <"+settings.sparqlPrefixes[key]+"> \nSELECT ");
 						    	}
 				                return theSpecProvider.expandSparql(sparql);
@@ -1837,7 +1837,7 @@ UiuxConfig = require("./UiuxConfig.js");
 			    		{
 				            semanticPostProcess : function(sparql) {
 				            	// also add prefixes
-				                for (key in settings.sparqlPrefixes) {
+				                for (let key in settings.sparqlPrefixes) {
 							        sparql = sparql.replace("SELECT ", "PREFIX "+key+": <"+settings.sparqlPrefixes[key]+"> \nSELECT ");
 						    	}
 				                return theSpecProvider.expandSparql(sparql);
@@ -1928,7 +1928,7 @@ UiuxConfig = require("./UiuxConfig.js");
 						  {
 							  semanticPostProcess : function(sparql) {
 								  // also add prefixes
-								  for (key in settings.sparqlPrefixes) {
+								  for (let key in settings.sparqlPrefixes) {
 									  sparql = sparql.replace("SELECT ", "PREFIX "+key+": <"+settings.sparqlPrefixes[key]+"> \nSELECT ");
 								  }
 								  return theSpecProvider.expandSparql(sparql);
@@ -2092,12 +2092,14 @@ UiuxConfig = require("./UiuxConfig.js");
 	return this ;
 } // end of Sparnatural function
 
+
+/*
 Object.onArray = function (arrayTosearch, objectTocompare) {
-	var objectTocompare = objectTocompare ;
+	let objectTocompareBis = objectTocompare ;
 	var temp_return = false ;
 	$.each( arrayTosearch, function( key, val ) {
 		
-		if (Object.compare(val, objectTocompare)) {
+		if (Object.compare(val, objectTocompareBis)) {
 			temp_return = true;
 		}
 	}) ;
@@ -2106,7 +2108,7 @@ Object.onArray = function (arrayTosearch, objectTocompare) {
 
 Object.compare = function (obj1, obj2) {
 	//Loop through properties in object 1
-	for (var p in obj1) {
+	for (let p in obj1) {
 		//Check property exists on both objects
 		if (obj1.hasOwnProperty(p) !== obj2.hasOwnProperty(p)) return false;
  
@@ -2130,7 +2132,7 @@ Object.compare = function (obj1, obj2) {
 		if (typeof (obj1[p]) == 'undefined') return false;
 	}
 	return true;
-};
+};*/
 
 	
  

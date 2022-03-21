@@ -1,18 +1,13 @@
-var SparqlGenerator = require('sparqljs').Generator;
-// var SparqlParser = require('sparqljs').Parser;
+/* eslint-disable no-mixed-spaces-and-tabs */
 
-var Config = require('./SparnaturalConfig.js');
+var Config = require("./SparnaturalConfig.js");
 
-Query = require("./Query.js").Query ;
-QueryBranch = require("./Query.js").QueryBranch ;
-QueryLine = require("./Query.js").QueryLine ;
-URIValue = require("./Query.js").URIValue ;
-LiteralValue = require("./Query.js").LiteralValue ;
-DateTimeValue = require("./Query.js").DateTimeValue ;
-RegexValue = require("./Query.js").RegexValue ;
-LuceneQueryValue = require("./Query.js").LuceneQueryValue ;
-ExactStringValue = require("./Query.js").ExactStringValue ;
-BooleanValue = require("./Query.js").BooleanValue ;
+import {Query, QueryBranch, QueryLine, URIValue,
+	LiteralValue, DateTimeValue,
+	RegexValue, LuceneQueryValue,
+	ExactStringValue, BooleanValue} from './Query.js'
+
+import $ from 'jquery-nice-select'
 
 class JSONQueryGenerator {
 
@@ -37,7 +32,7 @@ class JSONQueryGenerator {
 					var branch = this.generateBranch(formObject, component, i, dependantDe);
 					query.branches.push(branch);
 				}			
-			} ;	
+			}
 
 			// console.log(query) ;
 			
@@ -47,7 +42,7 @@ class JSONQueryGenerator {
 		}		
 	}
 
-	generateBranch(formObject, component, i, dependantDe) {
+	generateBranch(formObject, component, i) {
 		var branch = new QueryBranch();
 					
 		var domainClass = component.CriteriaGroup.StartClassGroup.value_selected ;
@@ -80,7 +75,7 @@ class JSONQueryGenerator {
 			objectVariable
 		);
 
-		var values = component.CriteriaGroup.EndClassWidgetGroup.selectedValues;
+		//var values = component.CriteriaGroup.EndClassWidgetGroup.selectedValues;
 		// Set the values based on widget type
 		var _WidgetType = component.CriteriaGroup.EndClassWidgetGroup.inputTypeComponent.widgetType ;
 		if(component.CriteriaGroup.EndClassWidgetGroup.selectedValues.length > 0 ) {			
@@ -88,8 +83,8 @@ class JSONQueryGenerator {
 			  case Config.TREE_PROPERTY:
 			  case Config.LIST_PROPERTY:
 			  case Config.AUTOCOMPLETE_PROPERTY:
-			  	for (var key in component.CriteriaGroup.EndClassWidgetGroup.selectedValues) {				  	
-				  	var selectedValue = component.CriteriaGroup.EndClassWidgetGroup.selectedValues[key];
+			  	for (let key in component.CriteriaGroup.EndClassWidgetGroup.selectedValues) {				  	
+				  	let selectedValue = component.CriteriaGroup.EndClassWidgetGroup.selectedValues[key];
 				  	line.values.push(new URIValue(
 				  		selectedValue.uri,
 				  		selectedValue.label
@@ -97,9 +92,9 @@ class JSONQueryGenerator {
 				}
 			  	break;
 			  case Config.LITERAL_LIST_PROPERTY:
-				for (var key in component.CriteriaGroup.EndClassWidgetGroup.selectedValues) {
+				for (let key in component.CriteriaGroup.EndClassWidgetGroup.selectedValues) {
 					// TODO : we use the same key 'uri' but this is a literal
-				  	var selectedValue = component.CriteriaGroup.EndClassWidgetGroup.selectedValues[key];
+				  	let selectedValue = component.CriteriaGroup.EndClassWidgetGroup.selectedValues[key];
 				  	line.values.push(new LiteralValue(
 				  		selectedValue.uri,
 				  		selectedValue.label
@@ -119,15 +114,15 @@ class JSONQueryGenerator {
 				  line.values.push(new RegexValue(value, value));
 				  break;
 		 	  case Config.GRAPHDB_SEARCH_PROPERTY:
-		 	  	  var value = component.CriteriaGroup.EndClassWidgetGroup.selectedValues[0].search;
+		 	  	  value = component.CriteriaGroup.EndClassWidgetGroup.selectedValues[0].search;
 				  line.values.push(new LuceneQueryValue(value, value));
 				  break;
 			  case Config.STRING_EQUALS_PROPERTY:
-			  	  var value = component.CriteriaGroup.EndClassWidgetGroup.selectedValues[0].search;
+			  	  value = component.CriteriaGroup.EndClassWidgetGroup.selectedValues[0].search;
 				  line.values.push(new ExactStringValue(value, value));
 				  break;
 			  case Config.BOOLEAN_PROPERTY:
-			  	  var selectedValue = component.CriteriaGroup.EndClassWidgetGroup.selectedValues[0];
+			  	  selectedValue = component.CriteriaGroup.EndClassWidgetGroup.selectedValues[0];
 			  	  line.values.push(new BooleanValue(selectedValue.boolean, selectedValue.label));
 			  	  break;
 			  default:
@@ -167,7 +162,7 @@ class JSONQueryGenerator {
 				// we will have at least one component with a criteria
 				return true;
 			}			
-		} ;	
+		}	
 
 		// not enough criteria found.
 		return false;	
@@ -189,7 +184,7 @@ class JSONQueryGenerator {
 			
 		}
 
-		$(thisForm_.sparnatural.components).each(function(index) {			
+		$(thisForm_.sparnatural.components).each(function() {			
 			if (this.index == dep_id) {
 				dependant.element = this.CriteriaGroup ;
 			}

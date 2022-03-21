@@ -35,10 +35,11 @@
 </template>
 
 <script>
-import data from '../../../public/data/ontology_test.json'
-import $ from 'jquery'
+import data from '../../assets/data/ontology_test.json'
+//import $ from 'jquery'
+import $ from './../../../public/lib/sparnatural/src/sparnatural.js'
 import {Yasr,Yasqe} from '@triply/yasgui'
-
+console.log($);
 
 export default {
   name: 'QuerySPARQL',
@@ -55,11 +56,11 @@ export default {
     externalScript2.setAttribute('integrity', 'sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy')
     externalScript2.setAttribute('crossorigin', 'anonymous')
     document.head.appendChild(externalScript2)
-
+/*
     let externalScript = document.createElement('script')
     externalScript.setAttribute('src', 'https://code.jquery.com/jquery-3.4.1.min.js')
     externalScript.setAttribute('crossorigin', 'anonymous')
-    document.head.appendChild(externalScript)
+    document.head.appendChild(externalScript)*/
 
     let externalScript6 = document.createElement('script')
     externalScript6.setAttribute('src', 'https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js')
@@ -69,16 +70,16 @@ export default {
     let externalScript3 = document.createElement('script')
     externalScript3.setAttribute('src', 'https://cdn.jsdelivr.net/npm/@chenfengyuan/datepicker@1.0.9/dist/datepicker.min.js')
     document.head.appendChild(externalScript3)
-*/
+
     
     let externalScript5 = document.createElement('script')
     externalScript5.setAttribute('src', '../../../public/lib/sparnatural/src/sparnatural.js')
     externalScript5.setAttribute("type", "application/js")
-    document.head.appendChild(externalScript5)
+    document.head.appendChild(externalScript5)*/
       
     $( document ).ready(function($) {          
 
-      this.sparnatural = document.getElementById('ui-search').Sparnatural({
+      this.sparnatural = $('ui-search').Sparnatural({
         config: this.config,
         // config: "sparnatural-config.ttl",
         maxDepth: 4,
@@ -96,9 +97,6 @@ export default {
         filterConfigOnEndpoint : false,
         onQueryUpdated: function(queryString) {
           queryString = this.semanticPostProcess(queryString);
-          // queryString = rdfsLabelPostProcess(queryString, queryJson);
-          // queryString = isPrimaryTopicOfPostProcess(queryString, queryJson);
-          // queryString = orderByPostProcess(queryString, queryJson);
           $('#sparql code').html(queryString.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"));
           yasqe.setValue(queryString);
           // yasqe.query();
@@ -138,25 +136,6 @@ export default {
     });
   },
   methods: {
-    prefixesPostProcess(queryString) {
-      if(queryString.indexOf("rdf-schema#") == -1) {
-          queryString = queryString.replace("SELECT ", "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> \nSELECT ");
-      }       
-      return queryString;
-    },
-    isPrimaryTopicOfPostProcess(queryString) {
-      queryString = queryString.replace(new RegExp('}$'), "  ?this <http://xmlns.com/foaf/0.1/isPrimaryTopicOf> ?wikipedia \n}");
-      return queryString;
-    },
-    rdfsLabelPostProcess(queryString) {
-      queryString = queryString.replace(new RegExp('}$'), "  ?this rdfs:label ?label FILTER(lang(?label) = 'fr') \n}");
-      return queryString;
-    },
-    orderByPostProcess(queryString) {
-      queryString = queryString.replace(new RegExp('}$'), "}\nORDER BY ?label LIMIT 5000");
-      queryString = queryString.replace("SELECT DISTINCT ?this", "SELECT DISTINCT (STR(?label) AS ?nom) ?wikipedia ?this");
-      return queryString;
-    },
     semanticPostProcess(queryString) {
       queryString = this.prefixesPostProcess(queryString);
         queryString = this.sparnatural.expandSparql(queryString);
@@ -171,7 +150,7 @@ export default {
 
   @import 'https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.9.0/css/all.min.css';
   @import 'https://unpkg.com/@triply/yasgui/build/yasgui.min.css';
-  @import '../../../public/lib/sparnatural/src/assets/stylesheets/sparnatural.scss';
+  @import '../../../public/lib/sparnatural2/sparnatural.css';
 
   .yasqe .CodeMirror { font-size: 0.8em; height: 380px; }
 

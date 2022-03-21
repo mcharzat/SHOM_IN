@@ -51,7 +51,7 @@ class AbstractSparqlAutocompleteAndListHandler {
 		}
 	}
 
-	enableMatch(domain, property, range) {
+	enableMatch() {
 		return false;
 	}
 }
@@ -75,7 +75,7 @@ class SparqlTemplateListHandler extends AbstractSparqlAutocompleteAndListHandler
 	/**
 	 * Constructs the SPARQL query to use for autocomplete widget search.
 	 **/
-	_buildAutocompleteSparql(domain, property, range, key) {
+	_buildAutocompleteSparql() {
 		return null;
 	}
 
@@ -143,7 +143,7 @@ class SparqlTemplateAutocompleteHandler extends AbstractSparqlAutocompleteAndLis
 	/**
 	 * Constructs the SPARQL query to use for list widget search.
 	 **/
-	_buildListSparql(domain, property, range) {
+	_buildListSparql() {
 		return null;
 	}
 }
@@ -262,7 +262,7 @@ class UriOnlyListHandler extends SimpleSparqlAutocompleteAndListHandler {
 	/**
 	 * Constructs the SPARQL query to use for list widget search.
 	 **/
-	_buildListSparql(domain, property, range) {
+	_buildListSparql(domain, property) {
 		var sparql = `
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
@@ -501,7 +501,7 @@ class PropertyBasedAutocompleteAndListHandler extends RangeBasedAutocompleteAndL
 		super(defaultHandler, handlerByKeyMap);
 	}
 
-	_findHandler(domain, property, range) {
+	_findHandler(domain, property) {
 		if(this.handlerByKeyMap[property] != null) {
 			return this.handlerByKeyMap[property];
 		} else {

@@ -1,13 +1,11 @@
 <template>
     <div id="research" class="research">
-      <!-- <QuerySPARQL /> -->
       <QuerySPARQL />
     </div>
 </template>
 
 <script>
-//import QuerySPARQL from './queryComponents/QuerySPARQL.vue'
-import QuerySPARQL from './queryComponents/QuerySPARQL2.vue'
+import QuerySPARQL from './queryComponents/QuerySPARQL.vue'
 
 export default {
   name: 'SPARQLResearch',
@@ -29,6 +27,5 @@ export default {
     top: 100px;
     left: 100px;
     z-index: 25;
-    background-color:beige;
 }
 </style>

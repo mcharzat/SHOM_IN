@@ -1,6 +1,6 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 
-var Datasources = require("./SparnaturalConfigDatasources.js");
+import Datasources from './SparnaturalConfigDatasources.js';
 var Config = require("./SparnaturalConfig.js");
 
 var JsonLdSpecificationProvider = function(specs, lang) {

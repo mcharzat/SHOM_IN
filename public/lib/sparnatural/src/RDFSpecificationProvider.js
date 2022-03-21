@@ -1,11 +1,11 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 
-const factory = require('@rdfjs/data-model');
-const rdfParser = require("rdf-parse").default;
-//const rdfDereferencer = require("rdf-dereference").default;
+import factory from '@rdfjs/data-model'
+import rdfParser from 'rdf-parse'
 import {storeStream} from "rdf-store-stream";
-const N3 = require('n3');
-const Datasources = require("./SparnaturalConfigDatasources.js");
+
+import N3 from 'n3';
+import Datasources from './SparnaturalConfigDatasources.js';
 
 const RDF_NAMESPACE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
 const RDF = {
@@ -86,7 +86,7 @@ export class RDFSpecificationProvider {
     }
 
     getAllSparnaturalClasses() {
-    	var classes = this.getClassesInDomainOfAnyProperty();
+    	var classes = RDFSpecificationProvider.getClassesInDomainOfAnyProperty();
     	// copy initial array
     	var result = classes.slice();
     	// now look for all classes we can reach from this class list
@@ -424,7 +424,7 @@ export class RDFSpecificationProvider {
 		    }
 		}
 
-		return datasource;
+		return this.datasource;
 	}
 
 	/**

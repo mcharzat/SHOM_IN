@@ -1,8 +1,8 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable no-unused-vars */
 
-	const jstree = require('jstree').default;
-	const datepicker = require('@chenfengyuan/datepicker').default;
+	//const jstree = require('jstree').default;
+	//const datepicker = require('@chenfengyuan/datepicker').default;
 
 	import UiuxConfig from './UiuxConfig.js'
 	import $ from 'jquery'
@@ -778,3 +778,9 @@
 			return values ;
 		}
 	};
+
+	module.exports = {
+		DatesWidget: DatesWidget,
+		NoWidget: NoWidget,
+		TreeWidget: TreeWidget	
+	}

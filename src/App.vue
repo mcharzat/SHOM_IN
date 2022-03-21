@@ -17,7 +17,7 @@ export default {
     NavBar,
     MapShom,
     SPARQLResearch
-  }
+  },
 }
 </script>
 

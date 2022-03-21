@@ -1,7 +1,6 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-/* eslint-disable no-unused-vars */
-var SparqlGenerator = require('sparqljs').Generator;
 
+import SparqlGenerator from 'sparqljs';
 
 /**
  * A complete Sparnatural Query, that can be serialized to SPARQL, and can be reloaded in Sparnatural
@@ -50,9 +49,7 @@ export class QueryLine {
 		subjectType,
 		property,
 		objectType,
-		objectVariable,
-		i,
-		dependantType
+		objectVariable
 	) {
 		this.s = subjectVariable;
 		this.p = property;

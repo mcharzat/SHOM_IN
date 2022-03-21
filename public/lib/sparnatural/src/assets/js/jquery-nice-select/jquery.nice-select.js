@@ -1,12 +1,15 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-mixed-spaces-and-tabs */
 /*  jQuery Nice Select - v1.1.0
     https://github.com/hernansartorio/jquery-nice-select
     Made by Hernán Sartorio  */
 
-    import tippy from 'tippy.js';
+    import {tippy} from 'tippy.js'
+    import {jQuery} from 'jquery'
  
 (function($) {
 
-  $.fn.niceSelect = function(method,settings) {
+  $.fn.niceSelect = function(method,_settings) {
     
     // Methods
     if (typeof method == 'string') {      
@@ -80,11 +83,11 @@
         }
       }
     
-      var text = $selected.data('display') || icon+'<span class="label">'+$selected.html()+'</span>';
+      var text = $selected.data('display') || icon+'<span class="label">'+$selected.html()+'</span>';
         
       $dropdown.find('.current').html(text);
       
-      $options.each(function(i) {
+      $options.each(function(_i) {
         var $option = $(this);
         var display = $option.data('display');
         var icon = '' ;
@@ -114,7 +117,7 @@
     $(document).off('.nice_select');
     
     // Open/close
-    $(document).on('click.nice_select', '.nice-select', function(event) {
+    $(document).on('click.nice_select', '.nice-select', function(_event) {
       var $dropdown = $(this);
       var settings = $dropdown.prev('select')[0].sparnaturalSettings ;
   	  if ($dropdown.hasClass('open') ) {
@@ -149,7 +152,7 @@
     });*/
     
     // Option click
-    $(document).on('click.nice_select', '.nice-select .option:not(.disabled)', function(event) {
+    $(document).on('click.nice_select', '.nice-select .option:not(.disabled)', function(_event) {
       var $option = $(this);
       var $dropdown = $option.closest('.nice-select');
       

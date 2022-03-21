@@ -12,7 +12,7 @@ export default {
     // Leaflet
     const map = L.map('map', {
       zoomControl: false
-    }).setView([47.9759965,-5.2963814], 8);
+    }).setView([46.10370875, -7.7], 7);
 
     L.control.zoom({
       position: 'bottomright'
