@@ -1,6 +1,6 @@
 <template>
     <div class="map" @mouseout.prevent="removeCoord" ref="Shom_IN"></div>
-    <div id="mouseTracker">
+    <div class="mouseTracker">
         <p>{{ coordinate }}</p>
     </div>
 </template>
@@ -78,7 +78,7 @@ export default {
   z-index: 0;
 }
 
-#mouseTracker{
+.mouseTracker{
   width:330px;
   height:34px;
   position: fixed;
@@ -86,7 +86,7 @@ export default {
   right: 100px;
 }
 
-#mouseTracker p{
+.mouseTracker p{
   background: white;
   opacity: 60%;
   padding: 2px;
