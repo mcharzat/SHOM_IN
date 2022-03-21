@@ -2,10 +2,12 @@
   <div class="container">
     <NavBar />
     <MapShom />
-    <SPARQLResearch />
     <SwitchButton />
     <LayerManager />
-    <PDFManager />
+    <PDFManager @pdfOpenState="updatedPdfState"/>
+    <SPARQLResearch 
+      :widthPdf="widthPdf"
+    />
   </div>
 </template>
 
@@ -19,6 +21,16 @@ import PDFManager from './components/PDFManager.vue'
 
 export default {
   name: 'App',
+  data() {
+    return {
+      widthPdf: false
+    }
+  },
+  methods: {
+    updatedPdfState: function(width) {
+      this.widthPdf = width;
+    }
+  },
   components: {
     NavBar,
     MapShom,
