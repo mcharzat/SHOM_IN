@@ -28,7 +28,8 @@
     "sparqljs": "^3.5.1",
     "streamify-string": "^1.0.1",
     "tippy.js": "^6.3.7",
-    "vue": "^3.2.13"
+    "vue": "^3.2.13",
+    "vue-pdf": "^4.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
