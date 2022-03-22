@@ -3,17 +3,18 @@
       <img src="../assets/texte.png" height ="30" width="30"/>
     </button>
     <div :class="{pdfSidepanelOpen: moveSidePanel, pdfSidepanel: true}">
-      <pdf src="..assets/C22.pdf"></pdf>
+      <PDF />
     </div>
 </template>
 
 <script>
-import pdf from 'vue-pdf'
+import PDF from './pdfComponents/PDF.vue'
+
 export default {
   name: 'PDFManager',
   emits: ['pdfOpenState'],
   components: {
-    pdf
+      PDF
   },
   data() {
     return {
