@@ -1,28 +1,19 @@
 <template>
   <div>
-    <h1>File</h1>
-
-    <PDFViewer
-      :source="url"
-      @download="handleDownload"
-    />
+    <vue-pdf-embed :source="source1" />
   </div>
 </template>
 
 <script>
-import PDFViewer from 'pdf-viewer-vue'
-
-// OR THE FOLLOWING IMPORT FOR VUE 2
-// import PDFViewer from 'pdf-viewer-vue/dist/vue2-pdf-viewer'
+import VuePdfEmbed from 'vue-pdf-embed'
 
 export default {
   components: {
-    PDFViewer,
+    VuePdfEmbed,
   },
-
   data() {
     return {
-      url: '../../assets/C22.pdf',
+      source1: 'C22.pdf',
     }
   },
 }
