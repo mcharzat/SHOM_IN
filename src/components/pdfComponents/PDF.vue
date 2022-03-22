@@ -1,5 +1,5 @@
 <template>
-  <pdf src="./path/to/static/relativity.pdf"></pdf>
+  <pdf src="../../assets/C22.pdf"></pdf>
 </template>
 
 <script>
