@@ -2,13 +2,19 @@
   <button :class="{researchManager: true, researchManagerOpen: moveButton}" @click="actionResearchPanel">
     <img src="../assets/research.png" height ="35" width="35"/>
   </button>
-  <div class="research" :hidden="!displayPanel"></div>
+  <div class="research" :hidden="!displayPanel">
+    <QuerySPARQL />
+  </div>
 </template>
 
 <script>
+import QuerySPARQL from './queryComponents/QuerySPARQL.vue'
 
 export default {
   name: 'SPARQLResearch',
+  components: {
+      QuerySPARQL
+  },
   props: {
     widthPdf:  {
       type: Boolean,
@@ -39,7 +45,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .researchManager {
-   position: absolute;
+  position: absolute;
   height: 50px;
   width: 50px;
   top: 155px;
@@ -55,11 +61,10 @@ export default {
 .research {
   position: absolute;
   height: 100px;
-  width: 30%;
+  width: 50%;
   top: 100px;
   left: 100px;
   z-index: 25;
-  background-color:beige;
 }
 
 .researchManagerOpen {

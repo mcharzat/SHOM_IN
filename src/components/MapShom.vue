@@ -25,7 +25,7 @@ export default {
       zoomDelta: 1,
       wheelPxPerZoomLevel: 150,
       attributionControl: false
-    }).setView([47.9759965,-5.2963814], 8);
+    }).setView([46.10370875, -7.7], 7);
      
     L.control.scale({
       position: 'bottomright',
