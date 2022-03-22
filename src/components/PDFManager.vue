@@ -57,6 +57,7 @@ export default {
   right: 0px;
   top : 100px;
   z-index: 1000;
+  width : 0px;
 }
 
 .pdfSidepanelOpen {
@@ -64,5 +65,8 @@ export default {
   width: 33%;
   height: 100%;
   max-height: calc(100% - 125px);
+  resize: horizontal;
+  overflow: auto;
+  direction: rtl;
 }
 </style>
