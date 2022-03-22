@@ -1,4 +1,4 @@
-import { shallowMount, mount } from "@vue/test-utils";
+import { shallowMount } from "@vue/test-utils";
 import App from "@/App.vue"
 import SPARQLResearch from "@/components/SPARQLResearch.vue";
 import PDFManager from "@/components/PDFManager.vue";
@@ -16,7 +16,7 @@ describe("SPARQLResearch.vue", () => {
         const wrapperResearch = wrapper.getComponent(SPARQLResearch);
         const wrapperPdf = wrapper.getComponent(PDFManager);
         const buttonResearch = wrapperResearch.find('.researchManager');
-        const buttonPdf = wrapperResearch.find('.pdfManager');
+        const buttonPdf = wrapperPdf.find('.pdfManager');
         
         expect(wrapperResearch.vm.widthPdf).toBeFalsy();
         expect(buttonResearch.attributes('class')).not.toContain("researchManagerOpen");

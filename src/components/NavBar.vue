@@ -1,20 +1,22 @@
 <template>
-  <nav id=navBar>
+  <nav class=navBar>
     <div class=navBarLeft>
-      <div id="logo"><img src="../assets/logo.png"></div>
-      <div id="name">Nom du site</div>
+      <div class="logo"><img src="../assets/logo.png"></div>
+      <div class="name">Nom du site</div>
     </div>
-    <div class=navBarMiddle> 
-        <label for="login" :hidden="isLog">Login:</label>
-        <input type=text name=login v-model="login" :hidden="isLog">
-        <label for="pwd" :hidden="isLog">Mdp:</label>
-        <input type=password name=pwd v-model="pwd" :hidden="isLog">
-        <input id="okButton" type="submit" @click.prevent="getAuth" value="OK" :hidden="isLog">
-        <p :hidden="!isLog"> {{ messageLogger }}</p>
-        <input id="deconnexion" type="submit" @click.prevent="deconnect" value="Déconnexion" :hidden="!isLog">
+    <div v-if="!isLog" class="navBarMiddle notLogged"> 
+        <label for="login">Login:</label>
+        <input type=text name=login v-model="login">
+        <label for="pwd">Mdp:</label>
+        <input type=password name=pwd v-model="pwd">
+        <input class="navBarButton" type="submit" @click.prevent="getAuth" value="OK">
+      </div>
+      <div v-else class="navBarMiddle logged">
+        <p> {{ messageLogger }}</p>
+        <input class="navBarButton" type="submit" @click.prevent="deconnect" value="Déconnexion">
     </div>
     <div class=navBarRight>
-        <button id="helpButton" title='Aide' @click.prevent="displayHelp">?</button>
+        <button class="navBarButton helpButton" title='Aide' @click.prevent="displayHelp">?</button>
     </div>
 </nav>
 </template>
@@ -36,6 +38,8 @@ export default {
       this.clientLog = true;
     },
     deconnect: function () {
+      this.login = "login";
+      this.pwd = "pwd";
       this.clientLog = false;
     },
     displayHelp: function () {
@@ -56,7 +60,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 
-  #navBar{
+  .navBar{
     position: fixed;
     top: 0;
     left: 0;
@@ -76,14 +80,14 @@ export default {
     width: 400px;
     display: flex;
   }
-  #logo{
+  .logo{
     margin : auto 10px;
   }
-  #logo img{
+  .logo img{
     height: 50px;
     width: auto;
   }
-  #name{
+  .name{
     color: white;
     font-size: 40px;
     margin : auto 10px;
@@ -96,33 +100,26 @@ export default {
     height: 50px;
     display: flex;
   }
-  .navBarMiddle label{
+  .notLogged label{
     margin : auto 0;
     color: white;
     font-size: 20px;
   }
-  .navBarMiddle input{
+  .notLogged input{
     margin : auto 10px;
     height: 30px;
   }
-  #okButton{
+  .navBarButton{
     margin : auto 10px;
     height: 30px;
     background: white;
     text-color: #076E8C;
   }
-  .navBarMiddle p{
+  .logged p{
     margin : auto 10px;
     color: white;
     font-size: 20px;
   }
-  #deconnexion{
-    margin : auto 10px;
-    height: 30px;
-    background: white;
-    text-color: #076E8C;
-  }
-
 
 
   .navBarRight{
@@ -131,13 +128,10 @@ export default {
     height: 50px;
     display: flex;
   }
-  #helpButton{
-    margin : auto 10px;
+  .helpButton{
     height: 40px;
     width: 40px;
     font-size:30px;
-    background: white;
-    text-color: #076E8C;
     border-radius: 50%;
   }
 

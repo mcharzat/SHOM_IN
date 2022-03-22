@@ -1,5 +1,5 @@
 <template>
-    <div id="selectButton" class="selectButton">
+    <div class="selectButton">
       <img src="../assets/select.png" height ="20" width="20"/>
     </div>
 </template>
@@ -12,7 +12,12 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-#selectButton {
+    
+.selectButton {
+    display:flex;
+    align-items: center;
+    justify-content: center;
+
     position : absolute;
     border-radius: 2px;
     right : 10px;
@@ -25,12 +30,6 @@ export default {
     width: 30px;
 
     cursor:  pointer;
-}
-
-.selectButton {
-    display:flex;
-    align-items: center;
-    justify-content: center;
 }
 
 </style>

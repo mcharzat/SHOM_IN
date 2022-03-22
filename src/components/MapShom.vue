@@ -1,6 +1,6 @@
 <template>
-    <div id="map" class="map" @mouseout.prevent="removeCoord"></div>
-    <div id="mouseTracker">
+    <div class="map" @mouseout.prevent="removeCoord" ref="Shom_IN"></div>
+    <div class="mouseTracker">
         <p>{{ coordinate }}</p>
     </div>
 </template>
@@ -19,8 +19,11 @@ export default {
   },
   mounted() {
     // Leaflet
-    const map = L.map('map', {
+    const map = L.map(this.$refs['Shom_IN'], {
       zoomControl: false,
+      zoomSnap: 0.5,
+      zoomDelta: 1,
+      wheelPxPerZoomLevel: 150,
       attributionControl: false
     }).setView([47.9759965,-5.2963814], 8);
      
@@ -69,13 +72,13 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
-#map {
+.map {
   height: 100%;
   width: 100%;
   z-index: 0;
 }
 
-#mouseTracker{
+.mouseTracker{
   width:330px;
   height:34px;
   position: fixed;
@@ -83,7 +86,7 @@ export default {
   right: 100px;
 }
 
-#mouseTracker p{
+.mouseTracker p{
   background: white;
   opacity: 60%;
   padding: 2px;
