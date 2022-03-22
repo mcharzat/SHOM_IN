@@ -7,7 +7,9 @@
 
 <script>
 import "leaflet/dist/leaflet.css";
-import L from 'leaflet';
+import "leaflet-draw/dist/leaflet.draw.css";
+import 'leaflet';
+import "leaflet-draw";
 
 export default {
   name: 'MapShom',
@@ -15,6 +17,7 @@ export default {
     return {
       userLocation: {},
       onMap: false,
+      selectionArea: "",
     }
   },
   mounted() {
@@ -26,7 +29,7 @@ export default {
       wheelPxPerZoomLevel: 150,
       attributionControl: false
     }).setView([46.10370875, -7.7], 7);
-     
+
     L.control.scale({
       position: 'bottomright',
       imperial: false
@@ -35,6 +38,31 @@ export default {
     L.control.zoom({
       position: 'bottomright',
     }).addTo(map);
+
+    const drawnItems = L.featureGroup().addTo(map);
+
+    L.drawLocal.draw.toolbar.buttons.rectangle = 'Select an area';
+    map.addControl(new L.Control.Draw({
+      position: "bottomright",
+      draw: {
+        polyline: false,
+        polygon: false,
+        marker: false,
+        circle: false, 
+        circlemarker:false
+      }
+    }));
+
+    map.on(L.Draw.Event.DRAWSTART, function () {
+      drawnItems.clearLayers();
+    });
+
+    map.on(L.Draw.Event.CREATED, function (event) {
+      const layer = event.layer;
+      this.selectionArea = layer.getBounds().toBBoxString();
+
+      drawnItems.addLayer(layer);
+    });
 
     const tile = L.tileLayer.wms(
       'https://masterTSI:fx7Hvd7J2BZF%40C@shom.wms.geomod.fr/KARMOR_MAP_SERVICES/wms',
@@ -97,5 +125,11 @@ export default {
 .leaflet-touch .leaflet-control-layers,
 .leaflet-touch .leaflet-bar {
   border: 0 solid white;
+}
+
+.leaflet-touch .leaflet-draw-toolbar .leaflet-draw-draw-rectangle {
+  background-size: 66%;
+  background-image: url("../assets/select.png");
+  background-position: 5px 5px;
 }
 </style>
