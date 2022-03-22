@@ -2,8 +2,8 @@
     <button :class="{pdfManager: true, pdfManagerOpen: moveSidePanel}" @click="actionSidePanel">
       <img src="../assets/texte.png" height ="30" width="30"/>
     </button>
-    <div :class="{pdfSidepanelOpen: moveSidePanel, pdfSidepanel: true}">
-      <PDF v-if="moveSidePanel" class="pdfContainer"/>
+    <div v-if="moveSidePanel" class="pdfSidepanelOpen">
+      <PDF class="pdfContainer"/>
     </div>
 </template>
 
@@ -58,19 +58,15 @@ export default {
   right: calc(36% + 10px);
 }
 
-.pdfSidepanel {
+.pdfSidepanelOpen {
   position: absolute;
   background-color: beige;
-  right: 0px;
-  top : 100px;
-  z-index: 1000;
-}
-
-.pdfSidepanelOpen {
   right: 5px;
   width: 36%;
   height: 100%;
   max-height: calc(100% - 125px);
+  top : 100px;
+  z-index: 1000;
 }
 
 .pdfContainer {
