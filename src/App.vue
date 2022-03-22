@@ -2,7 +2,6 @@
   <div class="container">
     <NavBar />
     <MapShom />
-    <SwitchButton />
     <LayerManager />
     <PDFManager @pdfOpenState="updatedPdfState"/>
     <SPARQLResearch 
@@ -15,7 +14,6 @@
 import NavBar from './components/NavBar.vue'
 import MapShom from './components/MapShom.vue'
 import SPARQLResearch from './components/SPARQLResearch.vue'
-import SwitchButton from './components/SwitchButton.vue'
 import LayerManager from './components/LayerManager.vue'
 import PDFManager from './components/PDFManager.vue'
 
@@ -35,7 +33,6 @@ export default {
     NavBar,
     MapShom,
     SPARQLResearch,
-    SwitchButton,
     LayerManager,
     PDFManager
   }
