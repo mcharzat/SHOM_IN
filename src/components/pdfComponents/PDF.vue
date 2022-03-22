@@ -1,29 +1,20 @@
 <template>
-  <div>
-    <h1>File</h1>
-
-    <PDFViewer
-      :source="url"
-      @download="handleDownload"
-    />
+  <div class="divSize">
+    <iframe class="divSize" frameborder="0" src="C22.pdf"></iframe>
   </div>
 </template>
 
 <script>
-import PDFViewer from 'pdf-viewer-vue'
-
-// OR THE FOLLOWING IMPORT FOR VUE 2
-// import PDFViewer from 'pdf-viewer-vue/dist/vue2-pdf-viewer'
 
 export default {
-  components: {
-    PDFViewer,
-  },
-
-  data() {
-    return {
-      url: '../../assets/C22.pdf',
-    }
-  },
+  name: "PDF"
 }
 </script>
+
+<style scoped>
+
+.divSize {
+  height: 100%;
+  width: 100%;
+}
+</style>

@@ -3,7 +3,7 @@
       <img src="../assets/texte.png" height ="30" width="30"/>
     </button>
     <div :class="{pdfSidepanelOpen: moveSidePanel, pdfSidepanel: true}">
-      <PDF />
+      <PDF v-if="moveSidePanel" class="pdfContainer"/>
     </div>
 </template>
 
@@ -14,7 +14,7 @@ export default {
   name: 'PDFManager',
   emits: ['pdfOpenState'],
   components: {
-      PDF
+    PDF,
   },
   data() {
     return {
@@ -55,7 +55,7 @@ export default {
 }
 
 .pdfManagerOpen {
-  right: calc(33% + 10px);
+  right: calc(36% + 10px);
 }
 
 .pdfSidepanel {
@@ -68,8 +68,13 @@ export default {
 
 .pdfSidepanelOpen {
   right: 5px;
-  width: 33%;
+  width: 36%;
   height: 100%;
   max-height: calc(100% - 125px);
+}
+
+.pdfContainer {
+  height: 100%;
+  width: 100%;
 }
 </style>

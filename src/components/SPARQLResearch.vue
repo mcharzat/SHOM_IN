@@ -68,6 +68,6 @@ export default {
 }
 
 .researchManagerOpen {
-  right: calc(33% + 10px)
+  right: calc(36% + 10px)
 }
 </style>
