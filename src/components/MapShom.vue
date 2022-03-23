@@ -1,18 +1,69 @@
 <template>
-  <div>
-    <div id="map" class="map"></div>
-  </div>
+    <div class="map" @mouseout.prevent="removeCoord" ref="Shom_IN"></div>
+    <div class="mouseTracker">
+        <p>{{ coordinate }}</p>
+    </div>
 </template>
 
 <script>
 import "leaflet/dist/leaflet.css";
-import L from 'leaflet';
+import "leaflet-draw/dist/leaflet.draw.css";
+import 'leaflet';
+import "leaflet-draw";
 
 export default {
   name: 'MapShom',
+  data() {
+    return {
+      userLocation: {},
+      onMap: false,
+      selectionArea: "",
+    }
+  },
   mounted() {
     // Leaflet
-    const map = L.map('map').setView([51.505, -0.09], 7);
+    const map = L.map(this.$refs['Shom_IN'], {
+      zoomControl: false,
+      zoomSnap: 0.5,
+      zoomDelta: 0.5,
+      wheelPxPerZoomLevel: 250,
+      attributionControl: false
+    }).setView([46.50370875, -10.5], 6.5);
+     
+    L.control.scale({
+      position: 'bottomright',
+      imperial: false
+    }).addTo(map);
+
+    L.control.zoom({
+      position: 'bottomright',
+    }).addTo(map);
+
+    const drawnItems = L.featureGroup().addTo(map);
+
+    L.drawLocal.draw.toolbar.buttons.rectangle = 'Select an area';
+    map.addControl(new L.Control.Draw({
+      position: "bottomright",
+      draw: {
+        polyline: false,
+        polygon: false,
+        marker: false,
+        circle: false, 
+        circlemarker:false
+      }
+    }));
+
+    map.on(L.Draw.Event.DRAWSTART, function () {
+      drawnItems.clearLayers();
+    });
+
+    map.on(L.Draw.Event.CREATED, function (event) {
+      const layer = event.layer;
+      this.selectionArea = layer.getBounds().toBBoxString();
+
+      drawnItems.addLayer(layer);
+    });
+
     const tile = L.tileLayer.wms(
       'https://masterTSI:fx7Hvd7J2BZF%40C@shom.wms.geomod.fr/KARMOR_MAP_SERVICES/wms',
       {
@@ -21,14 +72,64 @@ export default {
       }
     );
     tile.addTo(map);
+    //Connexion à la fonction au déplacement de la souris
+    map.on('mousemove', this.getMousePosition, this);
+  },
+  methods: {
+    getMousePosition(pos) {
+      this.onMap=true;
+      this.userLocation = {
+        lat: pos.latlng.lat.toFixed(10),
+        lng: pos.latlng.lng.toFixed(10),
+      };
+    },
+    removeCoord() {
+      this.onMap=false;
+    }
+  },
+  computed: {
+    coordinate () {
+      if (this.onMap){
+        return "Lat : "+this.userLocation.lat+"\xa0\xa0\xa0 Lng : "+this.userLocation.lng;
+      }
+      return "Mouse is not over map";
+    }
   },
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-#map {
-  height: 700px;
+<style>
+.map {
+  height: 100%;
   width: 100%;
+  z-index: 0;
+}
+
+.mouseTracker{
+  width:330px;
+  height:34px;
+  position: fixed;
+  bottom: 1px;
+  right: 100px;
+}
+
+.mouseTracker p{
+  background: white;
+  opacity: 60%;
+  padding: 2px;
+  height:12.5px;
+  font-size: 0.8em;
+}
+
+.leaflet-touch .leaflet-control-layers,
+.leaflet-touch .leaflet-bar {
+  border: 0 solid white;
+}
+
+.leaflet-touch .leaflet-draw-toolbar .leaflet-draw-draw-rectangle {
+  background-size: 66%;
+  background-image: url("../assets/select.png");
+  background-position: 5px 5px;
 }
 </style>

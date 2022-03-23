@@ -2,15 +2,33 @@
   "name": "shom_in",
   "version": "0.1.0",
   "private": true,
+  "description": "```\r npm install\r ```",
+  "author": "",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint",
-    "tests": ""
+    "tests": "jest",
+    "tests:unit": "jest --testPathPattern=unit",
+    "tests:integration": "jest --testPathPattern=integration"
   },
+  "main": "babel.config.js",
   "dependencies": {
+    "@chenfengyuan/datepicker": "^1.0.10",
+    "@rdfjs/data-model": "^2.0.0",
+    "@triply/yasgui": "^4.2.21",
     "core-js": "^3.8.3",
+    "jquery": "^3.6.0",
+    "jquery-nice-select": "^1.1.0",
     "leaflet": "^1.7.1",
+    "leaflet-draw": "^1.0.4",
+    "n3": "^1.14.0",
+    "rdf-parse": "^2.0.0",
+    "rdf-store-stream": "^1.3.0",
+    "sparqljs": "^3.5.1",
+    "streamify-string": "^1.0.1",
+    "tippy.js": "^6.3.7",
     "vue": "^3.2.13"
   },
   "devDependencies": {
@@ -18,14 +36,23 @@
     "@babel/eslint-parser": "^7.12.16",
     "@vue/cli-plugin-babel": "~5.0.0",
     "@vue/cli-plugin-eslint": "~5.0.0",
+    "@vue/cli-plugin-unit-jest": "~5.0.0",
     "@vue/cli-service": "~5.0.0",
+    "@vue/test-utils": "^2.0.0-0",
+    "@vue/vue3-jest": "^27.0.0-alpha.1",
+    "babel-jest": "^27.0.6",
     "eslint": "^7.32.0",
-    "eslint-plugin-vue": "^8.0.3"
+    "eslint-plugin-vue": "^8.0.3",
+    "jest": "^27.5.1"
   },
   "eslintConfig": {
+    "globals": {
+      "L": "readonly"
+    },
     "root": true,
     "env": {
-      "node": true
+      "node": true,
+      "jquery": true
     },
     "extends": [
       "plugin:vue/vue3-essential",
@@ -34,12 +61,48 @@
     "parserOptions": {
       "parser": "@babel/eslint-parser"
     },
-    "rules": {}
+    "rules": {},
+    "overrides": [
+      {
+        "files": [
+          "**/__tests__/*.{j,t}s?(x)",
+          "**/tests/unit/**/*.spec.{j,t}s?(x)"
+        ],
+        "env": {
+          "jest": true
+        }
+      }
+    ]
   },
   "browserslist": [
     "> 1%",
     "last 2 versions",
     "not dead",
     "not ie 11"
-  ]
+  ],
+  "jest": {
+    "collectCoverage": false,
+    "moduleNameMapper": {
+      "^.+\\.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2)$": "jest-transform-stub"
+    },
+    "transformIgnorePatterns": [
+      "node_modules/(?!vue-picture-input)"
+    ],
+    "preset": "@vue/cli-plugin-unit-jest",
+    "testMatch": [
+      "**/tests/integration/**/*.inte.spec.[jt]s?(x)",
+      "**/tests/unit/**/*.spec.[jt]s?(x)",
+      "**/__tests__/*.[jt]s?(x)"
+    ]
+  },
+  "bugs": {
+    "url": "https://github.com/mcharzat/SHOM_IN/issues"
+  },
+  "homepage": "https://github.com/mcharzat/SHOM_IN#readme",
+  "keywords": [],
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mcharzat/SHOM_IN.git"
+  }
 }
