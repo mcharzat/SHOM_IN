@@ -25,11 +25,11 @@ export default {
     const map = L.map(this.$refs['Shom_IN'], {
       zoomControl: false,
       zoomSnap: 0.5,
-      zoomDelta: 1,
-      wheelPxPerZoomLevel: 150,
+      zoomDelta: 0.5,
+      wheelPxPerZoomLevel: 250,
       attributionControl: false
-    }).setView([46.10370875, -7.7], 7);
-
+    }).setView([46.50370875, -10.5], 6.5);
+     
     L.control.scale({
       position: 'bottomright',
       imperial: false
