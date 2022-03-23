@@ -67,10 +67,14 @@ export default {
   max-height: calc(100% - 125px);
   top : 100px;
   z-index: 1000;
+  width : 0px;
 }
 
 .pdfContainer {
   height: 100%;
-  width: 100%;
+  max-height: calc(100% - 125px);
+  resize: horizontal;
+  overflow: auto;
+  direction: rtl;
 }
 </style>
