@@ -50,24 +50,23 @@ export default {
       selectionArea: "",
       layerManager : L.control.layers(),
       layersManaged : L.layerGroup(),
-      map: true,
     }
   },
   mounted() {
     // Leaflet
-    this.setupMap();
-    this.setupControls();
-    this.setupSelectArea();
+    const map = this.setupMap();
+    this.setupControls(map);
+    this.setupSelectArea(map);
 
     //exemple of removing a layer
     //this.layerManager.removeLayer(this.layersManaged.getLayer(this.tryDict["topo"]));
 
     //Connexion à la fonction au déplacement de la souris
-    this.map.on('mousemove', this.getMousePosition, this);
+    map.on('mousemove', this.getMousePosition, this);
   },
   methods: {
     setupMap() {
-      this.map = L.map(this.$refs['Shom_IN'], {
+      return L.map(this.$refs['Shom_IN'], {
         zoomControl: false,
         zoomSnap: 0.5,
         zoomDelta: 0.5,
@@ -75,21 +74,21 @@ export default {
         attributionControl: false
       }).setView([46.50370875, -10.5], 6.5);
     },
-    setupControls() {
+    setupControls(map) {
       L.control.scale({
         position: 'bottomright',
         imperial: false
-      }).addTo(this.map);
+      }).addTo(map);
 
       L.control.zoom({
         position: 'bottomright',
-      }).addTo(this.map);
+      }).addTo(map);
 
-      this.setupLayerControls();
+      this.setupLayerControls(map);
     },
-    setupLayerControls() {
+    setupLayerControls(map) {
       this.layerManager.setPosition("bottomleft");
-      this.layerManager.addTo(this.map);
+      this.layerManager.addTo(map);
 
       this.wmsLayers.forEach((layerName, i) => {
         const layer = L.tileLayer.wms(
@@ -100,7 +99,7 @@ export default {
           }
         );
         if (i == 0) {
-          layer.addTo(this.map);
+          layer.addTo(map);
         }
         if (i > 0) {
           this.layerManager.addOverlay(layer, this.wmsNames[i]);
@@ -109,11 +108,11 @@ export default {
         }
       });
     },
-    setupSelectArea() {
-      const drawnItems = L.featureGroup().addTo(this.map);
+    setupSelectArea(map) {
+      const drawnItems = L.featureGroup().addTo(map);
 
       L.drawLocal.draw.toolbar.buttons.rectangle = 'Select an area';
-      this.map.addControl(new L.Control.Draw({
+      map.addControl(new L.Control.Draw({
         position: "bottomright",
         draw: {
           polyline: false,
@@ -124,11 +123,11 @@ export default {
         }
       }));
 
-      this.map.on(L.Draw.Event.DRAWSTART, function () {
+      map.on(L.Draw.Event.DRAWSTART, () => {
         drawnItems.clearLayers();
       });
 
-      this.map.on(L.Draw.Event.CREATED, function (event) {
+      map.on(L.Draw.Event.CREATED, (event) => {
         const layer = event.layer;
         this.selectionArea = layer.getBounds().toBBoxString();
 
