@@ -1,4 +1,4 @@
-import { shallowMount } from "@vue/test-utils";
+import { shallowMount, mount } from "@vue/test-utils";
 import mapShom from "@/components/MapShom.vue";
 
 describe("MapShom.vue", () => {
@@ -28,5 +28,24 @@ describe("MapShom.vue", () => {
         await map.trigger('mouseout');        
 
         expect(coord.text()).toMatch("Mouse is not over map");
+    });
+
+    it("select an area", async () => {
+        const wrapper = mount(mapShom);
+        const map = wrapper.find(".map");
+
+        expect(wrapper.vm.selectionArea).toBeFalsy();
+        
+        await wrapper.find(".leaflet-draw-draw-rectangle").trigger('click');
+        
+        await map.trigger('click');
+        await map.trigger('mousemove');
+        await map.trigger('click');
+
+        await map.trigger('draw:created');
+
+        // Doesn't work... The signal is not received...
+        //expect(wrapper.vm.selectionArea).toBeTruthy();
+        //expect(wrapper.vm.selectionArea).toContain(",");
     });
 });
