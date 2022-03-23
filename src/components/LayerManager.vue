@@ -2,7 +2,7 @@
     <button :class="{layerManager: true, layerManagerOpen: moveSidePanel}" @click="actionSidePanel">
       <img src="../assets/layers.png" height ="30" width="30"/>
     </button>
-    <div :class="{layerSidepanelOpen: moveSidePanel, layerSidepanel: true}"></div>
+    <div v-if="moveSidePanel" class="layerSidepanelOpen"></div>
 </template>
 
 <script>
@@ -49,18 +49,14 @@ export default {
   left: calc(33% + 10px);
 }
 
-.layerSidepanel {
+.layerSidepanelOpen {
   position: absolute;
   background-color: beige;
-  left: 0px;
-  top : 100px;
-  z-index: 1000;
-}
-
-.layerSidepanelOpen {
   left: 5px;
   width: 33%;
   height: 100%;
   max-height: calc(100% - 125px);
+  top : 100px;
+  z-index: 1000;
 }
 </style>

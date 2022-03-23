@@ -2,13 +2,20 @@
     <button :class="{pdfManager: true, pdfManagerOpen: moveSidePanel}" @click="actionSidePanel">
       <img src="../assets/texte.png" height ="30" width="30"/>
     </button>
-    <div :class="{pdfSidepanelOpen: moveSidePanel, pdfSidepanel: true}"></div>
+    <div v-if="moveSidePanel" class="pdfSidepanelOpen">
+      <PDF class="pdfContainer"/>
+    </div>
 </template>
 
 <script>
+import PDF from './pdfComponents/PDF.vue'
+
 export default {
   name: 'PDFManager',
   emits: ['pdfOpenState'],
+  components: {
+    PDF,
+  },
   data() {
     return {
       infSidePanel: false,
@@ -48,21 +55,22 @@ export default {
 }
 
 .pdfManagerOpen {
-  right: calc(33% + 10px);
+  right: calc(36% + 10px);
 }
 
-.pdfSidepanel {
+.pdfSidepanelOpen {
   position: absolute;
   background-color: beige;
-  right: 0px;
+  right: 5px;
+  width: 36%;
+  height: 100%;
+  max-height: calc(100% - 125px);
   top : 100px;
   z-index: 1000;
   width : 0px;
 }
 
-.pdfSidepanelOpen {
-  right: 5px;
-  width: 33%;
+.pdfContainer {
   height: 100%;
   max-height: calc(100% - 125px);
   resize: horizontal;
