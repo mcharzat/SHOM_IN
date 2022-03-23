@@ -9,6 +9,7 @@
 export default {
   name: "PDF"
 }
+
 </script>
 
 <style scoped>
@@ -17,4 +18,9 @@ export default {
   height: 100%;
   width: 100%;
 }
+
+.toolbarButton {
+  display: none;
+}
+
 </style>
