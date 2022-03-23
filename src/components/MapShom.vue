@@ -125,13 +125,15 @@ export default {
 
       map.on(L.Draw.Event.DRAWSTART, () => {
         drawnItems.clearLayers();
+        this.layerManager.removeLayer(drawnItems);
       });
 
       map.on(L.Draw.Event.CREATED, (event) => {
         const layer = event.layer;
         this.selectionArea = layer.getBounds().toBBoxString();
 
-        drawnItems.addLayer(layer);
+        drawnItems.addLayer(layer).addTo(map);
+        this.layerManager.addOverlay(drawnItems, "Selection");
       });
     },
     getMousePosition(pos) {
