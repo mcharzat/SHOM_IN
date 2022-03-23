@@ -15,9 +15,40 @@ export default {
   name: 'MapShom',
   data() {
     return {
+      url: "https://masterTSI:fx7Hvd7J2BZF%40C@shom.wms.geomod.fr/KARMOR_MAP_SERVICES/wms",
+      wmsLayers: [
+        "base",
+        "hydrography",
+        "soundings",
+        "dangers",
+        "restrictions",
+        "topo",
+        "aton",
+        "meta"
+      ],
+      wmsNames: [
+        "Base Layer",
+        "Hydrography",
+        "Soundings",
+        "Dangers",
+        "Restrictions",
+        "Topography",
+        "Aids To Navigation",
+        "Metadata"
+      ],
+      tryDict: {
+        hydrography: 0,
+        soundings: 0,
+        dangers: 0,
+        restrictions: 0,
+        topo: 0,
+        aton: 0,
+        meta: 0
+      },
       userLocation: {},
       onMap: false,
       selectionArea: "",
+      layersManaged : L.layerGroup(),
     }
   },
   mounted() {
@@ -38,6 +69,30 @@ export default {
     L.control.zoom({
       position: 'bottomright',
     }).addTo(map);
+
+    const layerManager = L.control.layers({}, {}, {position: "bottomleft"});
+    layerManager.addTo(map);
+
+    this.wmsLayers.forEach((layerName, i) => {
+      const layer = L.tileLayer.wms(
+        this.url,
+        {
+          layers: layerName,
+          format: 'image/png',
+        }
+      );
+      if (i == 0) {
+        layer.addTo(map);
+      }
+      if (i > 0) {
+        layerManager.addOverlay(layer, this.wmsNames[i]);
+        this.layersManaged.addLayer(layer);
+        this.tryDict[layerName] = this.layersManaged.getLayerId(layer);
+      }
+    });
+
+    //exemple of removing a layer
+    //layerManager.removeLayer(this.layersManaged.getLayer(this.tryDict["topo"]));
 
     const drawnItems = L.featureGroup().addTo(map);
 
@@ -64,14 +119,6 @@ export default {
       drawnItems.addLayer(layer);
     });
 
-    const tile = L.tileLayer.wms(
-      'https://masterTSI:fx7Hvd7J2BZF%40C@shom.wms.geomod.fr/KARMOR_MAP_SERVICES/wms',
-      {
-        layers: 'base',
-        format: 'image/png',
-      }
-    );
-    tile.addTo(map);
     //Connexion à la fonction au déplacement de la souris
     map.on('mousemove', this.getMousePosition, this);
   },
@@ -131,5 +178,16 @@ export default {
   background-size: 66%;
   background-image: url("../assets/select.png");
   background-position: 5px 5px;
+}
+
+.leaflet-control-layers-list{
+  padding-top: 0px;
+  text-align: left;
+}
+
+.leaflet-control-layers-toggle {
+  background-size: 66%;
+  background-image: url("../assets/layers.png");
+  background-position: 8px 8px;
 }
 </style>
