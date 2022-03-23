@@ -48,81 +48,93 @@ export default {
       userLocation: {},
       onMap: false,
       selectionArea: "",
+      layerManager : L.control.layers(),
       layersManaged : L.layerGroup(),
+      map: true,
     }
   },
   mounted() {
     // Leaflet
-    const map = L.map(this.$refs['Shom_IN'], {
-      zoomControl: false,
-      zoomSnap: 0.5,
-      zoomDelta: 0.5,
-      wheelPxPerZoomLevel: 250,
-      attributionControl: false
-    }).setView([46.50370875, -10.5], 6.5);
-     
-    L.control.scale({
-      position: 'bottomright',
-      imperial: false
-    }).addTo(map);
-
-    L.control.zoom({
-      position: 'bottomright',
-    }).addTo(map);
-
-    const layerManager = L.control.layers({}, {}, {position: "bottomleft"});
-    layerManager.addTo(map);
-
-    this.wmsLayers.forEach((layerName, i) => {
-      const layer = L.tileLayer.wms(
-        this.url,
-        {
-          layers: layerName,
-          format: 'image/png',
-        }
-      );
-      if (i == 0) {
-        layer.addTo(map);
-      }
-      if (i > 0) {
-        layerManager.addOverlay(layer, this.wmsNames[i]);
-        this.layersManaged.addLayer(layer);
-        this.tryDict[layerName] = this.layersManaged.getLayerId(layer);
-      }
-    });
+    this.setupMap();
+    this.setupControls();
+    this.setupSelectArea();
 
     //exemple of removing a layer
-    //layerManager.removeLayer(this.layersManaged.getLayer(this.tryDict["topo"]));
-
-    const drawnItems = L.featureGroup().addTo(map);
-
-    L.drawLocal.draw.toolbar.buttons.rectangle = 'Select an area';
-    map.addControl(new L.Control.Draw({
-      position: "bottomright",
-      draw: {
-        polyline: false,
-        polygon: false,
-        marker: false,
-        circle: false, 
-        circlemarker:false
-      }
-    }));
-
-    map.on(L.Draw.Event.DRAWSTART, function () {
-      drawnItems.clearLayers();
-    });
-
-    map.on(L.Draw.Event.CREATED, function (event) {
-      const layer = event.layer;
-      this.selectionArea = layer.getBounds().toBBoxString();
-
-      drawnItems.addLayer(layer);
-    });
+    //this.layerManager.removeLayer(this.layersManaged.getLayer(this.tryDict["topo"]));
 
     //Connexion à la fonction au déplacement de la souris
-    map.on('mousemove', this.getMousePosition, this);
+    this.map.on('mousemove', this.getMousePosition, this);
   },
   methods: {
+    setupMap() {
+      this.map = L.map(this.$refs['Shom_IN'], {
+        zoomControl: false,
+        zoomSnap: 0.5,
+        zoomDelta: 0.5,
+        wheelPxPerZoomLevel: 250,
+        attributionControl: false
+      }).setView([46.50370875, -10.5], 6.5);
+    },
+    setupControls() {
+      L.control.scale({
+        position: 'bottomright',
+        imperial: false
+      }).addTo(this.map);
+
+      L.control.zoom({
+        position: 'bottomright',
+      }).addTo(this.map);
+
+      this.setupLayerControls();
+    },
+    setupLayerControls() {
+      this.layerManager.setPosition("bottomleft");
+      this.layerManager.addTo(this.map);
+
+      this.wmsLayers.forEach((layerName, i) => {
+        const layer = L.tileLayer.wms(
+          this.url,
+          {
+            layers: layerName,
+            format: 'image/png',
+          }
+        );
+        if (i == 0) {
+          layer.addTo(this.map);
+        }
+        if (i > 0) {
+          this.layerManager.addOverlay(layer, this.wmsNames[i]);
+          this.layersManaged.addLayer(layer);
+          this.tryDict[layerName] = this.layersManaged.getLayerId(layer);
+        }
+      });
+    },
+    setupSelectArea() {
+      const drawnItems = L.featureGroup().addTo(this.map);
+
+      L.drawLocal.draw.toolbar.buttons.rectangle = 'Select an area';
+      this.map.addControl(new L.Control.Draw({
+        position: "bottomright",
+        draw: {
+          polyline: false,
+          polygon: false,
+          marker: false,
+          circle: false, 
+          circlemarker:false
+        }
+      }));
+
+      this.map.on(L.Draw.Event.DRAWSTART, function () {
+        drawnItems.clearLayers();
+      });
+
+      this.map.on(L.Draw.Event.CREATED, function (event) {
+        const layer = event.layer;
+        this.selectionArea = layer.getBounds().toBBoxString();
+
+        drawnItems.addLayer(layer);
+      });
+    },
     getMousePosition(pos) {
       this.onMap=true;
       this.userLocation = {
