@@ -22,13 +22,17 @@
 </template>
 
 <script>
+import swal from 'sweetalert';
+
 export default {
   name: 'navBar',
   data() {
     return {
       login: "login",
       pwd: "pwd",
-      clientLog: false
+      clientLog: false,
+      title: "Documentation titre",
+      doc: "Documentation"
     }
   },
   mounted() {
@@ -43,7 +47,10 @@ export default {
       this.clientLog = false;
     },
     displayHelp: function () {
-      
+
+      swal(this.title,this.doc,{ 
+        button: "Fermer",
+      });
     }
   },
   computed: {
@@ -113,7 +120,7 @@ export default {
     margin : auto 10px;
     height: 30px;
     background: white;
-    text-color: #076E8C;
+    color: #076E8C;
   }
   .logged p{
     margin : auto 10px;
@@ -135,4 +142,8 @@ export default {
     border-radius: 50%;
   }
 
+  .swal-modal {
+    background-color: rgba(63,255,106,0.69);
+    border: 3px solid white;
+  }
 </style>
