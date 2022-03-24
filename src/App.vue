@@ -17,6 +17,7 @@ import SPARQLResearch from './components/SPARQLResearch.vue'
 import LayerManager from './components/LayerManager.vue'
 import PDFManager from './components/PDFManager.vue'
 
+
 export default {
   name: 'App',
   data() {

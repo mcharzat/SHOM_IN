@@ -22,7 +22,6 @@
 </template>
 
 <script>
-import swal from 'sweetalert';
 
 export default {
   name: 'navBar',
@@ -47,8 +46,7 @@ export default {
       this.clientLog = false;
     },
     displayHelp: function () {
-
-      swal(this.title,this.doc,{ 
+      this.$swal(this.title,this.doc,{ 
         button: "Fermer",
       });
     }
@@ -142,8 +140,8 @@ export default {
     border-radius: 50%;
   }
 
-  .swal-modal {
-    background-color: rgba(63,255,106,0.69);
-    border: 3px solid white;
+  .swal-title {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
   }
+  
 </style>
