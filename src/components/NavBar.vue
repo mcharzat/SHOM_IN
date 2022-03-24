@@ -139,9 +139,6 @@ export default {
     font-size:30px;
     border-radius: 50%;
   }
-
-  .swal-title {
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-  }
   
+
 </style>
