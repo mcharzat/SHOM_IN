@@ -1,6 +1,6 @@
 <template>
     <button :class="{layerManager: true, layerManagerOpen: moveSidePanel}" @click="actionSidePanel">
-      <img src="../assets/layers.png" height ="30" width="30"/>
+      <img src="../assets/logo.png" height ="30" width="30"/>
     </button>
     <div v-if="moveSidePanel" class="layerSidepanelOpen"></div>
 </template>
