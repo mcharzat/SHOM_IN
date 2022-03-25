@@ -27,7 +27,7 @@ export default {
   },
   methods: {
     checkType(field) {
-      return this.values[field].type != "uri";
+      return !["uri", "bnode"].includes(this.values[field].type);
     }
   },
 }
