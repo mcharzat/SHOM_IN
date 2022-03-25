@@ -25,13 +25,11 @@ export default {
   data() {
     return {
       infSidePanel: false,
-      fields: [],
       data: [],
     }
   },
   watch: {
     queryResult: function (results) {
-      this.fiedls = results.head.vars;
       this.data = results.results.bindings;
     }
   },
