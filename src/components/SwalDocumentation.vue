@@ -6,7 +6,9 @@ import PDF from './pdfComponents/PDF.vue'
 
 export default {
   name: 'SwalManager',
-  components: PDF,
+  components: {
+    PDF
+  },
 }
 </script>
 <style scoped>
