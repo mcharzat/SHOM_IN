@@ -40,18 +40,31 @@ export default {
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  /*margin-top: 60px;*/
-}
+  #app {
+    font-family: Avenir, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: #2c3e50;
+    /*margin-top: 60px;*/
+  }
 
-.container {
-  position: relative;
-  height: 100%;
-  width: 100%;
-}
+  .container {
+    position: relative;
+    height: 100%;
+    width: 100%;
+  }
+
+  .swal2-container {
+    font-family: Avenir, Helvetica, Arial, sans-serif;
+    background: #076E8C;
+  }
+
+  .swal2-popup {
+    color: #076E8C;
+  }
+
+  .swal2-confirm {
+    background-color: #076E8C !important;
+  }
 </style>

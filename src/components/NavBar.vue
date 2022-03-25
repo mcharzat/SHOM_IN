@@ -22,13 +22,19 @@
 </template>
 
 <script>
+import { createApp } from 'vue';
+import PDF from './pdfComponents/PDF.vue';
+import SwalDocumentationVue from './SwalDocumentation.vue';
+
 export default {
   name: 'navBar',
   data() {
     return {
       login: "login",
       pwd: "pwd",
-      clientLog: false
+      clientLog: false,
+      title: "Documentation titre",
+      doc: "Documentation"
     }
   },
   mounted() {
@@ -43,7 +49,18 @@ export default {
       this.clientLog = false;
     },
     displayHelp: function () {
-      
+      const doc = createApp(SwalDocumentationVue);
+      doc.component('PDF', PDF);
+
+      this.$swal({
+        titleText: this.title,
+        showCloseButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        width: 800,
+        html: '<div id="modal"></div>'
+      })
+      doc.mount("#modal");
     }
   },
   computed: {
@@ -73,8 +90,6 @@ export default {
     z-index: 10;
   }
 
-
-
   .navBarLeft{
     height: 50px;
     width: 400px;
@@ -92,7 +107,6 @@ export default {
     font-size: 40px;
     margin : auto 10px;
   }
-
 
   .navBarMiddle{
     position: fixed;
@@ -113,7 +127,7 @@ export default {
     margin : auto 10px;
     height: 30px;
     background: white;
-    text-color: #076E8C;
+    color: #076E8C;
   }
   .logged p{
     margin : auto 10px;
@@ -134,5 +148,5 @@ export default {
     font-size:30px;
     border-radius: 50%;
   }
-
+  
 </style>
