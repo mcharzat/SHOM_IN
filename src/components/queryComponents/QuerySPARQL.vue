@@ -28,6 +28,7 @@ import {Yasr,Yasqe} from '@triply/yasgui'
 
 export default {
   name: 'QuerySPARQL',
+  emits: ['myQueryResult'],
   data () {
     return {
       config: data,
@@ -63,8 +64,8 @@ export default {
     const yasr = new Yasr(document.getElementById("yasr"));
 
     // link yasqe and yasr
-    yasqe.on("queryResponse", function(_yasqe, response, duration) {
-      //console.log(response);
+    yasqe.on("queryResponse", (_yasqe, response, duration) => {
+      this.$emit("myQueryResult", JSON.parse(response.text));
       yasr.setResponse(response, duration);
     });
   },

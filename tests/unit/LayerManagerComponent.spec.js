@@ -1,5 +1,5 @@
 import { shallowMount } from "@vue/test-utils";
-import layerManager from "@/components/LayerManager.vue";
+import layerManager from "@/components/DisplayResearch.vue";
 
 describe("LayerManager.vue", () => {
     it("click open the panel", async () => {
