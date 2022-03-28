@@ -62,7 +62,7 @@ export default {
 .research {
   position: absolute;
   height: 100px;
-  width: 50%;
+  width: 70%;
   top: 100px;
   left: 100px;
   z-index: 25;

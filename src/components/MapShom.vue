@@ -108,7 +108,7 @@ export default {
 
 .mouseTracker{
   width:330px;
-  height:34px;
+  height:21.5px;
   position: fixed;
   bottom: 1px;
   right: 100px;
@@ -117,9 +117,10 @@ export default {
 .mouseTracker p{
   background: white;
   opacity: 60%;
-  padding: 2px;
-  height:12.5px;
-  font-size: 0.8em;
+  height:16.5px;
+  padding:2px;
+  line-height: 1;
+  font-size: 0.75em;
 }
 
 .leaflet-touch .leaflet-control-layers,

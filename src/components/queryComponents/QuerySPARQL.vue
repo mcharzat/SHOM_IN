@@ -1,35 +1,13 @@
 <template>
 
     <div class="container-fluid" style="margin-top:1em;">
-      <div class="row">
-        <div class="col-md-7">
-          <div id="ui-search"></div>
-        </div>
-        <div class="col-md-5">
-          <div class="row" style="margin-bottom:0.5em;">
-            <div class="col-md-12">
-             <span style="font-size:90%;"> 
-             Les requêtes sont envoyées à <a id="endpoint" href="http://fr.dbpedia.org/sparql">http://fr.dbpedia.org/sparql</a>
-             </span>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-12">
-             <div id="yasqe"></div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-12">
-             <div id="shareQuery">Lien direct vers la requête : <a href="" target="_blank">...</a></div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="row justify-content-center">
-        <div class="col-md-12">
-          <div id="yasr"></div>
-        </div>
-      </div>
+
+      <div id="ui-search"></div>
+
+      <div id="yasqe" style="display:none"></div>
+
+      <div id="yasr"></div>
+
     </div>
   
 </template>
@@ -98,7 +76,7 @@ export default {
     });
 
     // link yasqe and yasr
-    yasqe.on("queryResponse", function(_yasqe, response, duration) {
+    yasqe.on("queryResponse", (_yasqe, response, duration) => {
       yasr.setResponse(response, duration);
       this.sparnatural.disableLoading() ;
     });

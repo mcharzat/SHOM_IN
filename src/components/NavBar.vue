@@ -65,7 +65,6 @@ export default {
     top: 0;
     left: 0;
     width: 100%;
-    height: 50px;
     margin: 0 auto;
     background: rgba(7, 110, 140,0.8);
     padding: 10px;
@@ -113,7 +112,7 @@ export default {
     margin : auto 10px;
     height: 30px;
     background: white;
-    text-color: #076E8C;
+    color: #076E8C;
   }
   .logged p{
     margin : auto 10px;
