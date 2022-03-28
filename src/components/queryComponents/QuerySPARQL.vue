@@ -6,7 +6,7 @@
 
       <div id="yasqe" style="display:none"></div>
 
-      <div id="yasr"></div>
+      <div id="yasr" style="display:none"></div>
 
     </div>
   
