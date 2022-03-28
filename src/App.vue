@@ -2,10 +2,13 @@
   <div class="container">
     <NavBar />
     <MapShom />
-    <LayerManager />
+    <DisplayResearch 
+      :queryResult="result"
+    />
     <PDFManager @pdfOpenState="updatedPdfState"/>
     <SPARQLResearch 
       :widthPdf="widthPdf"
+      @sparnaResult="conveyResult"
     />
   </div>
 </template>
@@ -14,26 +17,30 @@
 import NavBar from './components/NavBar.vue'
 import MapShom from './components/MapShom.vue'
 import SPARQLResearch from './components/SPARQLResearch.vue'
-import LayerManager from './components/LayerManager.vue'
+import DisplayResearch from './components/DisplayResearch.vue'
 import PDFManager from './components/PDFManager.vue'
 
 export default {
   name: 'App',
   data() {
     return {
-      widthPdf: false
+      widthPdf: false,
+      result: {}
     }
   },
   methods: {
     updatedPdfState: function(width) {
       this.widthPdf = width;
+    },
+    conveyResult (result) {
+      this.result = result;
     }
   },
   components: {
     NavBar,
     MapShom,
     SPARQLResearch,
-    LayerManager,
+    DisplayResearch,
     PDFManager
   }
 }
