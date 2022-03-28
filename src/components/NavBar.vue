@@ -23,7 +23,6 @@
 
 <script>
 import { createApp } from 'vue';
-import PDF from './pdfComponents/PDF.vue';
 import SwalDocumentationVue from './SwalDocumentation.vue';
 
 export default {
@@ -50,7 +49,6 @@ export default {
     },
     displayHelp: function () {
       const doc = createApp(SwalDocumentationVue);
-      doc.component('PDF', PDF);
 
       this.$swal({
         titleText: this.title,
