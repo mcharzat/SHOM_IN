@@ -120,7 +120,8 @@ export default {
   height:16.5px;
   padding:2px;
   line-height: 1;
-  font-size: 0.75em;
+  font-size: 0.65em;
+  font-family: sans-serif;
 }
 
 .leaflet-touch .leaflet-control-layers,

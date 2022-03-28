@@ -1,6 +1,6 @@
 <template>
 
-    <div class="container-fluid" style="margin-top:1em;">
+    <div class="container-fluid">
 
       <div id="ui-search"></div>
 

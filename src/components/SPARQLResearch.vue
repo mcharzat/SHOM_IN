@@ -8,7 +8,6 @@
 </template>
 
 <script>
-//import QuerySPARQL from './queryComponents/QuerySPARQL.vue'
 import QuerySPARQL from './queryComponents/QuerySPARQL.vue'
 
 export default {
@@ -51,7 +50,7 @@ export default {
   width: 50px;
   top: 155px;
   right: 5px;
-  z-index: 25;
+  z-index: 35;
   
   background-color:white;
   border:solid;
@@ -64,7 +63,7 @@ export default {
   height: 100px;
   width: 70%;
   top: 100px;
-  left: 100px;
+  left: 50px;
   z-index: 25;
 }
 
