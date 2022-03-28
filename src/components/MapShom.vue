@@ -239,7 +239,7 @@ export default {
       }
     },
     addResearchToLayerControl(layer, name) {
-      if (!this.layersManaged.has(layer)) {
+      if (!this.layersManaged.hasLayer(layer)) {
         this.layersManaged.addLayer(layer);
         this.layerManager.addOverlay(layer, name);
       }
@@ -247,7 +247,7 @@ export default {
     clearResearchLayer() {
       this.layerResearchedElements.eachLayer((layer) => {
         layer.clearLayers();
-        if (this.layersManaged.has(layer)) {
+        if (this.layersManaged.hasLayer(layer)) {
         this.layersManaged.removeLayer(layer);
         this.layerManager.remove(layer);
       }
