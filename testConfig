@@ -1,0 +1,47 @@
+const { defineConfig } = require('@vue/cli-service')
+
+const path = require('path');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+
+module.exports = defineConfig({
+  transpileDependencies: true,
+  configureWebpack: {
+    
+    entry: [ "./public/lib/sparnatural/src/sparnatural.js"
+    ],
+    output: {
+      path: path.resolve(__dirname, 'dist'),
+      filename: "sparnatural.js"
+    },
+    module: {
+      rules: [
+        {
+         test: /\.(js|jsx)$/,
+         exclude: /node_modules/,
+         use: "babel-loader"
+        },
+        {
+        test: /\.(sass|scss)$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          "css-loader", // translates CSS into CommonJS
+          "sass-loader", // compiles Sass to CSS
+        ]
+      },
+        {
+        test: /\.css$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          "css-loader" // translates CSS into CommonJS
+        ]
+      },
+      ]
+    },
+    plugins: [
+      new MiniCssExtractPlugin({
+        filename: "sparnatural.css",
+        chunkFilename: "[id].css"
+      }),    
+      ],
+  }
+})

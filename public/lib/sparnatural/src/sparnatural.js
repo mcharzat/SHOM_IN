@@ -1,11 +1,10 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-mixed-spaces-and-tabs */
-//require("jstree/dist/themes/default/style.min.css");
+require("jstree/dist/themes/default/style.min.css");
 
-//require("./assets/stylesheets/sparnatural.scss");
+require("./assets/stylesheets/sparnatural.scss");
 
-//require("easy-autocomplete");
-require("../../sparnatural2/sparnatural.css");
+require("easy-autocomplete");
 
 //
 

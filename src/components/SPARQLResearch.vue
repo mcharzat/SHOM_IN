@@ -9,7 +9,7 @@
 
 <script>
 //import QuerySPARQL from './queryComponents/QuerySPARQL.vue'
-import QuerySPARQL from './queryComponents/QuerySPARQL2.vue'
+import QuerySPARQL from './queryComponents/QuerySPARQL.vue'
 
 export default {
   name: 'SPARQLResearch',
