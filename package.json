@@ -22,7 +22,8 @@
     "jquery": "^3.6.0",
     "leaflet": "^1.7.1",
     "leaflet-draw": "^1.0.4",
-    "vue": "^3.2.13"
+    "vue": "^3.2.13",
+    "vue-sweetalert2": "^5.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",

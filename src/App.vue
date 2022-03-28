@@ -2,10 +2,13 @@
   <div class="containerAppa">
     <NavBar />
     <MapShom />
-    <LayerManager />
+    <DisplayResearch 
+      :queryResult="result"
+    />
     <PDFManager @pdfOpenState="updatedPdfState"/>
     <SPARQLResearch 
       :widthPdf="widthPdf"
+      @sparnaResult="conveyResult"
     />
   </div>
 </template>
@@ -14,44 +17,61 @@
 import NavBar from './components/NavBar.vue'
 import MapShom from './components/MapShom.vue'
 import SPARQLResearch from './components/SPARQLResearch.vue'
-import LayerManager from './components/LayerManager.vue'
+import DisplayResearch from './components/DisplayResearch.vue'
 import PDFManager from './components/PDFManager.vue'
 
 export default {
   name: 'App',
   data() {
     return {
-      widthPdf: false
+      widthPdf: false,
+      result: {}
     }
   },
   methods: {
     updatedPdfState: function(width) {
       this.widthPdf = width;
+    },
+    conveyResult (result) {
+      this.result = result;
     }
   },
   components: {
     NavBar,
     MapShom,
     SPARQLResearch,
-    LayerManager,
+    DisplayResearch,
     PDFManager
   }
 }
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  /*margin-top: 60px;*/
-}
+  #app {
+    font-family: Avenir, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: #2c3e50;
+    /*margin-top: 60px;*/
+  }
 
-.containerAppa {
-  position: relative;
-  height: 100%;
-  width: 100%;
-}
+  .containerAppa {
+    position: relative;
+    height: 100%;
+    width: 100%;
+  }
+
+  .swal2-container {
+    font-family: Avenir, Helvetica, Arial, sans-serif;
+    background: #076E8C;
+  }
+
+  .swal2-popup {
+    color: #076E8C;
+  }
+
+  .swal2-confirm {
+    background-color: #076E8C !important;
+  }
 </style>

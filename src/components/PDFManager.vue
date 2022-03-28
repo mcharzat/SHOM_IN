@@ -67,6 +67,7 @@ export default {
   max-height: calc(100% - 125px);
   top : 100px;
   z-index: 1000;
+  scrollbar-width: none;
   resize: horizontal;
   overflow: auto;
   direction: rtl;

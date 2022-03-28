@@ -3,7 +3,7 @@
     <img src="../assets/research.png" height ="35" width="35"/>
   </button>
   <div class="research" :hidden="!displayPanel">
-    <QuerySPARQL />
+    <QuerySPARQL @myQueryResult="conveyResult"/>
   </div>
 </template>
 
@@ -12,6 +12,7 @@ import QuerySPARQL from './queryComponents/QuerySPARQL.vue'
 
 export default {
   name: 'SPARQLResearch',
+  emits: ['sparnaResult'],
   components: {
       QuerySPARQL
   },
@@ -37,6 +38,9 @@ export default {
   methods: {
     actionResearchPanel() {
       this.isDisplayed = !this.isDisplayed;
+    },
+    conveyResult (result) {
+      this.$emit('sparnaResult', result);
     }
   },
 }
