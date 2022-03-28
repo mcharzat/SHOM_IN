@@ -75,7 +75,7 @@ export default {
   left: 5px;
   width: 33%;
   height: 100%;
-  max-height: calc(100% - 125px);
+  max-height: calc(100% - 160px);
   top : 100px;
 
   overflow: scroll;
