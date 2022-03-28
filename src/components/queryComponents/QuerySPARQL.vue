@@ -5,9 +5,6 @@
         <div class="col-md-7">
           <div id="ui-search"></div>
         </div>
-            <div class="col-md-7">
-             <button id="executeRequest">Execute requête</button>
-            </div>
         <div class="col-md-5">
           <div class="row">
             <div class="col-md-12">
@@ -59,7 +56,7 @@ export default {
     });
 
     const yasqe = new Yasqe(document.getElementById("yasqe"), {
-      requestConfig: { endpoint: "http://fr.dbpedia.org/sparql" },
+      requestConfig: { endpoint: "http://fr.dbpedia.org/sparql", resizeable: true},
       copyEndpointOnNewTab: false  
     });
 

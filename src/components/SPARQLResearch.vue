@@ -8,7 +8,8 @@
 </template>
 
 <script>
-import QuerySPARQL from './queryComponents/QuerySPARQL.vue'
+//import QuerySPARQL from './queryComponents/QuerySPARQL.vue'
+import QuerySPARQL from './queryComponents/QuerySPARQL2.vue'
 
 export default {
   name: 'SPARQLResearch',
