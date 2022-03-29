@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import data from '../../assets/data/ontology_test.json'
+import data from '../../assets/sparnatural_config/atlantis-sparnaconfig.ttl'
 import {Yasr,Yasqe} from '@triply/yasgui'
 
 export default {
@@ -17,21 +17,29 @@ export default {
     return {
       config: data,
       sparnatural:{},
+
     }
   },
   mounted() {         
+    $.urlParam = function(name){
+        var results = new RegExp('[\\?&amp;]' + name + '=([^&amp;#]*)').exec(window.location.href);
+        if(results == null) { return null; }
+        return results[1] || 0;
+      }
+
+    var lang = ($.urlParam('lang') != null)?$.urlParam('lang'):'fr';
 
     this.sparnatural = document.getElementById('ui-search').Sparnatural({
-      config: this.config,
-      // config: "sparnatural-config.ttl",
+      config: this.config ,
       maxDepth: 4,
       addDistinct: true,
+      language: lang,
       noTypeCriteriaForObjects: ["http://dbpedia.org/ontology/Artwork"],
       sendQueryOnFirstClassSelected: true,
       backgroundBaseColor: '2,184,117',
       autocomplete : null,
       list : null,
-      defaultEndpoint: "http://fr.dbpedia.org/sparql",
+      defaultEndpoint: "http://localhost:7200/repositories/test_shom",
       sparqlPrefixes : {
         "dbpedia" : "http://dbpedia.org/ontology/"
       },
@@ -56,7 +64,7 @@ export default {
     });
 
     const yasqe = new Yasqe(document.getElementById("yasqe"), {
-      requestConfig: { endpoint: "http://fr.dbpedia.org/sparql" },
+      requestConfig: { endpoint: "http://localhost:7200/repositories/test_shom" },
       copyEndpointOnNewTab: false  
     });
 
