@@ -1,15 +1,9 @@
 <template>
-
     <div class="container-fluid">
-
       <div id="ui-search"></div>
-
       <div id="yasqe" style="display:none"></div>
-
       <div id="yasr" style="display:none"></div>
-
-    </div>
-  
+    </div>  
 </template>
 
 <script>
@@ -47,7 +41,6 @@ export default {
         queryString = this.semanticPostProcess(queryString);
         $('#sparql code').html(queryString.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"));
         yasqe.setValue(queryString);
-        // yasqe.query();
       },
       tooltipConfig : {
         delay: [800, 100],
