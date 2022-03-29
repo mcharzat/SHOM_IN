@@ -15,7 +15,7 @@ export default {
   name: 'QuerySPARQL',
   emits: ['myQueryResult'],
   props: {
-    bboxArea:  {
+    coordsBboxArea:  {
       type: Object,
       default: () => {}
     },
@@ -23,14 +23,13 @@ export default {
   data () {
     return {
       config: ontology,
-      sparnatural:{},
-      data: ""
+      sparnatural: {}
     }
   },
   watch: {
-    bboxArea: function (results) {
+    coordsBboxArea: function (bbox) {
       console.log('coucoucoucou');
-      console.log(results);
+      console.log(bbox);
       //this.data = results.results.bindings;
     }
   },

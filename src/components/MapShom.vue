@@ -154,7 +154,7 @@ export default {
         const layer = event.layer;
         this.selectionArea = layer.getBounds().toBBoxString();
         console.log(this.selectionArea);
-        this.$emit("bboxSelectionArea", this.selectionArea);
+        this.$emit("bboxSelectionArea", this.selectionArea.split(','));
         drawnItems.addLayer(layer).addTo(map);
         this.layerManager.addOverlay(drawnItems, "Selection");
       });

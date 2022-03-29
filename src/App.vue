@@ -3,6 +3,7 @@
     <NavBar />
     <MapShom
       :queryResultMap="result"
+      @bboxSelectionArea="conveyBbox"
     />
     <DisplayResearch 
       :queryResult="result"
@@ -10,6 +11,7 @@
     <PDFManager @pdfOpenState="updatedPdfState"/>
     <SPARQLResearch 
       :widthPdf="widthPdf"
+      :bboxArea="bbox"
       @sparnaResult="conveyResult"
     />
   </div>
@@ -27,7 +29,8 @@ export default {
   data() {
     return {
       widthPdf: false,
-      result: []
+      result: [],
+      bbox: []
     }
   },
   methods: {
@@ -36,6 +39,9 @@ export default {
     },
     conveyResult (result) {
       this.result = result;
+    },
+    conveyBbox (bbox) {
+      this.bbox = bbox;
     }
   },
   components: {
