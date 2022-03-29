@@ -14,20 +14,9 @@
 #    Object Properties
 #################################################################
 
-###  http://data.ordnancesurvey.co.uk/ontology/spatialrelations/contains
-<http://data.ordnancesurvey.co.uk/ontology/spatialrelations/contains> rdf:type owl:ObjectProperty ;
-rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                                      owl:equivalentProperty <http://data.shom.fr/def/navigation_cotiere#contient> ;
-                                                                      rdfs:subPropertyOf <http://data.shom.fr/def/navigation_cotiere#aUneRelationSpatialeAvec> ,
-                                                                                         [ owl:inverseOf <http://data.shom.fr/def/navigation_cotiere#aUneRelationSpatialeAvec>
-                                                                                         ] ;
-                                                                      owl:inverseOf <http://data.shom.fr/def/navigation_cotiere#estSitueDans> .
-
-
 ###  http://data.shom.fr/def/navigation_cotiere#aPourAction
 <http://data.shom.fr/def/navigation_cotiere#aPourAction> rdf:type owl:ObjectProperty ;
 rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                         rdfs:subPropertyOf <http://data.shom.fr/def/navigation_cotiere#aPourSpecification> ;
                                                          rdfs:domain [ rdf:type owl:Class ;
                                                                        owl:unionOf ( <http://data.shom.fr/def/navigation_cotiere#Information>
                                                                                      <http://data.shom.fr/def/navigation_cotiere#Instruction>
@@ -38,23 +27,10 @@ rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Lis
                                                          <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :type_action ;
                                                          rdfs:label "a pour action"@fr .
 
-###  http://data.shom.fr/def/navigation_cotiere#aPourCaracteristique
-<http://data.shom.fr/def/navigation_cotiere#aPourCaracteristique> rdf:type owl:ObjectProperty ;
-rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                                  rdfs:label "a pour caractéristique"@fr .
-
-
-###  http://data.shom.fr/def/navigation_cotiere#aPourCaracteristiqueNavire
-<http://data.shom.fr/def/navigation_cotiere#aPourCaracteristiqueNavire> rdf:type owl:ObjectProperty ;
-rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                                        rdfs:domain <http://data.shom.fr/def/navigation_cotiere#Navire> ;
-                                                                        rdfs:label "a pour caractéristique navire"@fr .
-
 
 ###  http://data.shom.fr/def/navigation_cotiere#aPourCargaison
 <http://data.shom.fr/def/navigation_cotiere#aPourCargaison> rdf:type owl:ObjectProperty ;
 rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                            rdfs:subPropertyOf <http://data.shom.fr/def/navigation_cotiere#aPourCaracteristiqueNavire> ;
                                                             rdfs:domain <http://data.shom.fr/def/navigation_cotiere#Navire> ;
                                                             rdfs:range <http://data.shom.fr/def/navigation_cotiere#TypeDeCargaison>;
                                                             <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :type_cargaison ;
@@ -65,42 +41,22 @@ rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Lis
 ###  http://data.shom.fr/def/navigation_cotiere#aPourCible
 <http://data.shom.fr/def/navigation_cotiere#aPourCible> rdf:type owl:ObjectProperty ;
 rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                        rdfs:subPropertyOf <http://data.shom.fr/def/navigation_cotiere#aPourSpecification> ;
                                                         rdfs:domain <http://data.shom.fr/def/navigation_cotiere#ConsigneDeNavigation> ;
                                                         rdfs:range <http://data.shom.fr/def/navigation_cotiere#TypeDeNavire> ;
                                                         <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :type_navire ;
                                                         rdfs:label "a pour cible"@fr .
 
 
-###  http://data.shom.fr/def/navigation_cotiere#aPourConditionLocaleQualitative
-<http://data.shom.fr/def/navigation_cotiere#aPourConditionLocaleQualitative> rdf:type owl:ObjectProperty ;
-rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                                             rdfs:comment "L'objet de cette propriété peut être une valeur qui nécessite être précisé avec une autre propriété et objet. Donc, elle peut être dans un quoted triple écrit en RDF-star. Par exemple : <<_:entité _:aPourConditionLocale _:objet>> _:autrePropriete _:autreObjet."@fr ;
-                                                                             rdfs:label "a pour condition locale qualitative"@fr .
-
 
 ###  http://data.shom.fr/def/navigation_cotiere#aPourConditionMeteo
 <http://data.shom.fr/def/navigation_cotiere#aPourConditionMeteo> rdf:type owl:ObjectProperty ;
 rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                                 rdfs:subPropertyOf <http://data.shom.fr/def/navigation_cotiere#aPourConditionLocaleQualitative> ;
                                                                  rdfs:range [ rdf:type owl:Restriction ;
                                                                               owl:onProperty <http://www.w3.org/2004/02/skos/core#inScheme> ;
                                                                               owl:hasValue <http://data.shom.fr/id/codes/navigation_cotiere/typedindicationmeteorologique/liste>
                                                                             ] ;
                                                                  rdfs:comment "L'objet de cette propriété peut être une valeur qui nécessite être précisé avec une autre propriété et objet. Donc, elle peut être dans un quoted triple écrit en RDF-star. Par exemple : <<_:entité _:aPourConditionLocale _:objet>> _:autrePropriete _:autreObjet."@fr ;
                                                                  rdfs:label "a pour condition météorologique"@fr .
-
-
-###  http://data.shom.fr/def/navigation_cotiere#aPourConditionOceano
-<http://data.shom.fr/def/navigation_cotiere#aPourConditionOceano> rdf:type owl:ObjectProperty ;
-rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                                  rdfs:subPropertyOf <http://data.shom.fr/def/navigation_cotiere#aPourConditionLocaleQualitative> ;
-                                                                  rdfs:range [ rdf:type owl:Restriction ;
-                                                                               owl:onProperty <http://www.w3.org/2004/02/skos/core#inScheme> ;
-                                                                               owl:hasValue <http://data.shom.fr/id/codes/navigation_cotiere/typedindicationoceanographique/liste>
-                                                                             ] ;
-                                                                  rdfs:comment "L'objet de cette propriété peut être une valeur qui nécessite être précisé avec une autre propriété et objet. Donc, elle peut être dans un quoted triple écrit en RDF-star. Par exemple : <<_:entité _:aPourConditionLocale _:objet>> _:autrePropriete _:autreObjet."@fr ;
-                                                                  rdfs:label "a pour condition océanographique"@fr .
 
 
 ###  http://data.shom.fr/def/navigation_cotiere#aPourDirection
@@ -116,10 +72,6 @@ rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Lis
 ###  http://data.shom.fr/def/navigation_cotiere#aPourElement
 <http://data.shom.fr/def/navigation_cotiere#aPourElement> rdf:type owl:ObjectProperty ;
 rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                          rdfs:subPropertyOf <http://data.shom.fr/def/navigation_cotiere#aPourCaracteristique> ,
-                                                                             [ owl:inverseOf <http://data.shom.fr/def/navigation_cotiere#aPourCaracteristique>
-                                                                             ] ;
-                                                          owl:inverseOf <http://data.shom.fr/def/navigation_cotiere#estUnElementDe> ;
                                                           rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
                                                           rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
                                                           <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
@@ -133,7 +85,6 @@ rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Lis
 ###  http://data.shom.fr/def/navigation_cotiere#aPourEntiteImpliquee
 <http://data.shom.fr/def/navigation_cotiere#aPourEntiteImpliquee> rdf:type owl:ObjectProperty ;
 rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                                  rdfs:subPropertyOf <http://data.shom.fr/def/navigation_cotiere#aPourSpecification> ;
                                                                   rdfs:domain [ rdf:type owl:Class ;
                                                                                 owl:unionOf ( <http://data.shom.fr/def/navigation_cotiere#Alignement>
                                                                                               <http://data.shom.fr/def/navigation_cotiere#ConsigneDeNavigation>
@@ -154,7 +105,6 @@ rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Lis
 ###  http://data.shom.fr/def/navigation_cotiere#aPourEtat
 <http://data.shom.fr/def/navigation_cotiere#aPourEtat> rdf:type owl:ObjectProperty ;
 rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                       rdfs:subPropertyOf <http://data.shom.fr/def/navigation_cotiere#aPourCaracteristiqueNavire> ;
                                                        rdfs:domain <http://data.shom.fr/def/navigation_cotiere#Navire> ;
                                                        rdfs:range <http://data.shom.fr/def/navigation_cotiere#TypeDEtat> ;
                                                        <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :type_etat ;
@@ -164,7 +114,6 @@ rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Lis
 ###  http://data.shom.fr/def/navigation_cotiere#aPourForme
 <http://data.shom.fr/def/navigation_cotiere#aPourForme> rdf:type owl:ObjectProperty ;
 rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                        rdfs:subPropertyOf <http://data.shom.fr/def/navigation_cotiere#aPourCaracteristique> ;
                                                         rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
                                                         rdfs:range <http://data.shom.fr/def/navigation_cotiere#TypeDeForme> ;
                                                         <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :type_forme ;
@@ -174,7 +123,6 @@ rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Lis
 ###  http://data.shom.fr/def/navigation_cotiere#aPourLieuDEffet
 <http://data.shom.fr/def/navigation_cotiere#aPourLieuDEffet> rdf:type owl:ObjectProperty ;
 rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                             rdfs:subPropertyOf <http://data.shom.fr/def/navigation_cotiere#aPourSpecification> ;
                                                              rdfs:domain <http://data.shom.fr/def/navigation_cotiere#ConsigneDeNavigation> ;
                                                              rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
                                                              <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
@@ -184,7 +132,6 @@ rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Lis
 ###  http://data.shom.fr/def/navigation_cotiere#aPourMotif
 <http://data.shom.fr/def/navigation_cotiere#aPourMotif> rdf:type owl:ObjectProperty ;
 rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                        rdfs:subPropertyOf <http://data.shom.fr/def/navigation_cotiere#aPourCaracteristique> ;
                                                         rdfs:domain [ rdf:type owl:Class ;
                                                                       owl:unionOf ( <http://data.shom.fr/def/navigation_cotiere#AideALaNavigation>
                                                                                     <http://data.shom.fr/def/navigation_cotiere#Marque>
@@ -198,13 +145,11 @@ rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Lis
 ###  http://data.shom.fr/def/navigation_cotiere#aPourNature
 <http://data.shom.fr/def/navigation_cotiere#aPourNature> rdf:type owl:ObjectProperty ;
 rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                         rdfs:subPropertyOf <http://data.shom.fr/def/navigation_cotiere#aPourCaracteristique> ;
                                                          rdfs:domain <http://data.shom.fr/def/navigation_cotiere#EntiteGeographique> ;
                                                          rdfs:range <http://data.shom.fr/def/navigation_cotiere#TypeDEntiteGeographique>;
                                                          <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :type_entitegeo ;
                                                          rdfs:comment "Links rdf:type topographic entity to the concept that specifies its nature."@en ,
                                                                       "Relie une entité topographique au concept qui précise sa nature."@fr ;
-                                                         rdfs:isDefinedBy <http://data.shom.fr/def/navigation_cotiere#> ;
                                                          rdfs:label "a pour nature"@fr ,
                                                                     "has nature"@en .
 
@@ -212,7 +157,6 @@ rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Lis
 ###  http://data.shom.fr/def/navigation_cotiere#aPourPointDeDepart
 <http://data.shom.fr/def/navigation_cotiere#aPourPointDeDepart> rdf:type owl:ObjectProperty ;
 rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                                rdfs:subPropertyOf <http://data.shom.fr/def/navigation_cotiere#aPourSpecification> ;
                                                                 rdfs:domain [ rdf:type owl:Class ;
                                                                               owl:unionOf ( <http://data.shom.fr/def/navigation_cotiere#Alignement>
                                                                                             <http://data.shom.fr/def/navigation_cotiere#ConsigneDeNavigation>
@@ -223,7 +167,6 @@ rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Lis
                                                                             ] ;
                                                                 rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
                                                                 <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
-                                                                owl:propertyDisjointWith <http://data.shom.fr/def/navigation_cotiere#aPourPointDeDestination> ;
                                                                 rdfs:comment "L'objet de cette propriété sera toujours un rdfs:Container contennant une ou plusieurs entités, ou un rdfs:Container sera soit un rdf:Bag (entités sans ordre particulier) ou un rdf:Seq (entités dans un ordre particulier). Par exemple : _:entité _:aPourPointDeDepart [a rdfs:Container; rdf:_1 _:autreEntité1; rdf:_2 _:autreEntité2; ]."@fr ;
                                                                 rdfs:label "a pour point de départ"@fr .
 
@@ -231,7 +174,6 @@ rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Lis
 ###  http://data.shom.fr/def/navigation_cotiere#aPourPointDeDestination
 <http://data.shom.fr/def/navigation_cotiere#aPourPointDeDestination> rdf:type owl:ObjectProperty ;
 rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                                     rdfs:subPropertyOf <http://data.shom.fr/def/navigation_cotiere#aPourSpecification> ;
                                                                      rdfs:domain [ rdf:type owl:Class ;
                                                                                    owl:unionOf ( <http://data.shom.fr/def/navigation_cotiere#Alignement>
                                                                                                  <http://data.shom.fr/def/navigation_cotiere#ConsigneDeNavigation>
@@ -255,16 +197,11 @@ rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Lis
                                                                      rdfs:label "a pour port de rattachement"@fr .
 
 
-###  http://data.shom.fr/def/navigation_cotiere#aPourProvenance
-<http://data.shom.fr/def/navigation_cotiere#aPourProvenance> rdf:type owl:ObjectProperty ;
-rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                             rdfs:range <http://data.shom.fr/def/navigation_cotiere#OuvrageIN> .
 
 
 ###  http://data.shom.fr/def/navigation_cotiere#aPourRepere
 <http://data.shom.fr/def/navigation_cotiere#aPourRepere> rdf:type owl:ObjectProperty ;
 rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                         rdfs:subPropertyOf <http://data.shom.fr/def/navigation_cotiere#aPourSpecification> ;
                                                          rdfs:domain [ rdf:type owl:Class ;
                                                                        owl:unionOf ( <http://data.shom.fr/def/navigation_cotiere#Alignement>
                                                                                      <http://data.shom.fr/def/navigation_cotiere#Relevement>
@@ -276,16 +213,9 @@ rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Lis
                                                          rdfs:label "a pour repère"@fr .
 
 
-###  http://data.shom.fr/def/navigation_cotiere#aPourSpecification
-<http://data.shom.fr/def/navigation_cotiere#aPourSpecification> rdf:type owl:ObjectProperty ;
-rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                                rdfs:label "a pour spécification"@fr .
-
-
 ###  http://data.shom.fr/def/navigation_cotiere#aPourTaille
 <http://data.shom.fr/def/navigation_cotiere#aPourTaille> rdf:type owl:ObjectProperty ;
 rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                         rdfs:subPropertyOf <http://data.shom.fr/def/navigation_cotiere#aPourCaracteristiqueNavire> ;
                                                          rdfs:domain <http://data.shom.fr/def/navigation_cotiere#Navire> ;
                                                          rdfs:range <http://data.shom.fr/def/navigation_cotiere#TypeDeTaille>;
                                                          <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :type_taille ;
@@ -295,7 +225,6 @@ rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Lis
 ###  http://data.shom.fr/def/navigation_cotiere#aPourTemporaliteQualitative
 <http://data.shom.fr/def/navigation_cotiere#aPourTemporaliteQualitative> rdf:type owl:ObjectProperty ;
 rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                                         rdfs:subPropertyOf <http://data.shom.fr/def/navigation_cotiere#aPourConditionLocaleQualitative> ;
                                                                          rdfs:range [ rdf:type owl:Restriction ;
                                                                                       owl:onProperty <http://www.w3.org/2004/02/skos/core#inScheme> ;
                                                                                       owl:hasValue <http://data.shom.fr/id/codes/navigation_cotiere/typedindicationtemporelle/liste>
@@ -306,7 +235,6 @@ rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Lis
 ###  http://data.shom.fr/def/navigation_cotiere#aPourTypeCardinal
 <http://data.shom.fr/def/navigation_cotiere#aPourTypeCardinal> rdf:type owl:ObjectProperty ;
 rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                               rdfs:subPropertyOf <http://data.shom.fr/def/navigation_cotiere#aPourCaracteristique> ;
                                                                rdfs:domain [ rdf:type owl:Class ;
                                                                              owl:unionOf ( <http://data.shom.fr/def/navigation_cotiere#AideALaNavigation>
                                                                                            <http://data.shom.fr/def/navigation_cotiere#Marque>
@@ -314,8 +242,6 @@ rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Lis
                                                                            ] ;
                                                                rdfs:range <http://data.shom.fr/def/navigation_cotiere#DirectionCardinaleSimple> ;
                                                                <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :dir_cardinales ;
-                                                               owl:propertyDisjointWith <http://data.shom.fr/def/navigation_cotiere#aPourTypeLateral> ;
-                                                               rdfs:isDefinedBy <http://data.shom.fr/def/navigation_cotiere#> ;
                                                                rdfs:label "a pour type cardinal"@fr ,
                                                                           "has cardinal type"@en .
 
@@ -332,7 +258,6 @@ rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Lis
 ###  http://data.shom.fr/def/navigation_cotiere#aPourTypeDeDanger
 <http://data.shom.fr/def/navigation_cotiere#aPourTypeDeDanger> rdf:type owl:ObjectProperty ;
 rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                               rdfs:subPropertyOf <http://data.shom.fr/def/navigation_cotiere#aPourNature> ;
                                                                rdfs:domain <http://data.shom.fr/def/navigation_cotiere#Danger> ;
                                                                rdfs:range <http://data.shom.fr/def/navigation_cotiere#aPourTypeDeDanger> ;
                                                                <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :type_danger ;
@@ -342,7 +267,6 @@ rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Lis
 ###  http://data.shom.fr/def/navigation_cotiere#aPourTypeDeLieuDeStationnement
 <http://data.shom.fr/def/navigation_cotiere#aPourTypeDeLieuDeStationnement> rdf:type owl:ObjectProperty ;
 rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                                            rdfs:subPropertyOf <http://data.shom.fr/def/navigation_cotiere#aPourNature> ;
                                                                             rdfs:domain <http://data.shom.fr/def/navigation_cotiere#LieuDeStationnement> ;
                                                                             rdfs:range <http://data.shom.fr/def/navigation_cotiere#TypeDeLieuDeStationnement> ;
                                                                             <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :type_stationnement ;
@@ -352,7 +276,6 @@ rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Lis
 ###  http://data.shom.fr/def/navigation_cotiere#aPourTypeLateral
 <http://data.shom.fr/def/navigation_cotiere#aPourTypeLateral> rdf:type owl:ObjectProperty ;
 rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                              rdfs:subPropertyOf <http://data.shom.fr/def/navigation_cotiere#aPourCaracteristique> ;
                                                               rdfs:domain [ rdf:type owl:Class ;
                                                                             owl:unionOf ( <http://data.shom.fr/def/navigation_cotiere#AideALaNavigation>
                                                                                           <http://data.shom.fr/def/navigation_cotiere#Marque>
@@ -366,70 +289,16 @@ rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Lis
 ###  http://data.shom.fr/def/navigation_cotiere#aUneRelationSpatialeAvec
 <http://data.shom.fr/def/navigation_cotiere#aUneRelationSpatialeAvec> rdf:type owl:ObjectProperty ;
 rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                                      rdfs:subPropertyOf owl:topObjectProperty ;
                                                                       rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
                                                                       rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
                                                                       <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
                                                                       rdfs:label "a une relation spatiale avec"@fr .
 
 
-###  http://data.shom.fr/def/navigation_cotiere#apres
-<http://data.shom.fr/def/navigation_cotiere#apres> rdf:type owl:ObjectProperty ;
-rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                   rdfs:range [ rdf:type owl:Class ;
-                                                                owl:unionOf ( [ rdf:type owl:Restriction ;
-                                                                                owl:onProperty <http://www.w3.org/2004/02/skos/core#inScheme> ;
-                                                                                owl:hasValue <http://data.shom.fr/id/codes/navigation_cotiere/typedindicationmeteorologique/liste>
-                                                                              ]
-                                                                              [ rdf:type owl:Restriction ;
-                                                                                owl:onProperty <http://www.w3.org/2004/02/skos/core#inScheme> ;
-                                                                                owl:hasValue <http://data.shom.fr/id/codes/navigation_cotiere/typedindicationoceanographique/liste>
-                                                                              ]
-                                                                              [ rdf:type owl:Restriction ;
-                                                                                owl:onProperty <http://www.w3.org/2004/02/skos/core#inScheme> ;
-                                                                                owl:hasValue <http://data.shom.fr/id/codes/navigation_cotiere/typedindicationtemporelle/liste>
-                                                                              ]
-                                                                            )
-                                                              ] .
-
-
-###  http://data.shom.fr/def/navigation_cotiere#avant
-<http://data.shom.fr/def/navigation_cotiere#avant> rdf:type owl:ObjectProperty ;
-rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                   rdfs:range [ rdf:type owl:Class ;
-                                                                owl:unionOf ( [ rdf:type owl:Restriction ;
-                                                                                owl:onProperty <http://www.w3.org/2004/02/skos/core#inScheme> ;
-                                                                                owl:hasValue <http://data.shom.fr/id/codes/navigation_cotiere/typedindicationmeteorologique/liste>
-                                                                              ]
-                                                                              [ rdf:type owl:Restriction ;
-                                                                                owl:onProperty <http://www.w3.org/2004/02/skos/core#inScheme> ;
-                                                                                owl:hasValue <http://data.shom.fr/id/codes/navigation_cotiere/typedindicationoceanographique/liste>
-                                                                              ]
-                                                                              [ rdf:type owl:Restriction ;
-                                                                                owl:onProperty <http://www.w3.org/2004/02/skos/core#inScheme> ;
-                                                                                owl:hasValue <http://data.shom.fr/id/codes/navigation_cotiere/typedindicationtemporelle/liste>
-                                                                              ]
-                                                                            )
-                                                              ] .
-
-
-###  http://data.shom.fr/def/navigation_cotiere#contient
-<http://data.shom.fr/def/navigation_cotiere#contient> rdf:type owl:ObjectProperty ;
-rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                      owl:equivalentProperty <http://www.opengis.net/ont/geosparql#sfContains> ;
-                                                      rdfs:subPropertyOf <http://data.shom.fr/def/navigation_cotiere#aUneRelationSpatialeAvec> ,
-                                                                         [ owl:inverseOf <http://data.shom.fr/def/navigation_cotiere#aUneRelationSpatialeAvec>
-                                                                         ] ;
-                                                      owl:inverseOf <http://data.shom.fr/def/navigation_cotiere#estSitueDans> .
-
 
 ###  http://data.shom.fr/def/navigation_cotiere#deborde
 <http://data.shom.fr/def/navigation_cotiere#deborde> rdf:type owl:ObjectProperty ;
 rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                     rdfs:subPropertyOf <http://data.shom.fr/def/navigation_cotiere#aUneRelationSpatialeAvec> ,
-                                                                        [ owl:inverseOf <http://data.shom.fr/def/navigation_cotiere#aUneRelationSpatialeAvec>
-                                                                        ] ;
-                                                     owl:inverseOf <http://data.shom.fr/def/navigation_cotiere#estDebordeDe> ;
                                                      rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
                                                      rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
                                                      <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
@@ -439,14 +308,9 @@ rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Lis
 ###  http://data.shom.fr/def/navigation_cotiere#donneAccesA
 <http://data.shom.fr/def/navigation_cotiere#donneAccesA> rdf:type owl:ObjectProperty ;
 rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                         rdfs:subPropertyOf <http://data.shom.fr/def/navigation_cotiere#aUneRelationSpatialeAvec> ,
-                                                                            [ owl:inverseOf <http://data.shom.fr/def/navigation_cotiere#aUneRelationSpatialeAvec>
-                                                                            ] ;
-                                                         owl:inverseOf <http://data.shom.fr/def/navigation_cotiere#estAccessiblePar> ;
                                                          rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
                                                          rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
                                                          <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
-                                                         rdfs:isDefinedBy <http://data.shom.fr/def/navigation_cotiere#> ;
                                                          rdfs:label "donne accès à"@fr ,
                                                                     "gives access to"@en .
 
@@ -454,10 +318,6 @@ rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Lis
 ###  http://data.shom.fr/def/navigation_cotiere#entoure
 <http://data.shom.fr/def/navigation_cotiere#entoure> rdf:type owl:ObjectProperty ;
 rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                     rdfs:subPropertyOf <http://data.shom.fr/def/navigation_cotiere#aUneRelationSpatialeAvec> ,
-                                                                        [ owl:inverseOf <http://data.shom.fr/def/navigation_cotiere#aUneRelationSpatialeAvec>
-                                                                        ] ;
-                                                     owl:inverseOf <http://data.shom.fr/def/navigation_cotiere#estEntoureDe> ;
                                                      rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
                                                      rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
                                                      <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
@@ -467,7 +327,6 @@ rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Lis
 ###  http://data.shom.fr/def/navigation_cotiere#estALAbriDe
 <http://data.shom.fr/def/navigation_cotiere#estALAbriDe> rdf:type owl:ObjectProperty ;
 rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                         rdfs:subPropertyOf <http://data.shom.fr/def/navigation_cotiere#aUneRelationSpatialeAvec> ;
                                                          rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
                                                          rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
                                                          <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
@@ -477,10 +336,6 @@ rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Lis
 ###  http://data.shom.fr/def/navigation_cotiere#estALEstDe
 <http://data.shom.fr/def/navigation_cotiere#estALEstDe> rdf:type owl:ObjectProperty ;
 rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                        rdfs:subPropertyOf <http://data.shom.fr/def/navigation_cotiere#aUneRelationSpatialeAvec> ,
-                                                                           [ owl:inverseOf <http://data.shom.fr/def/navigation_cotiere#aUneRelationSpatialeAvec>
-                                                                           ] ;
-                                                        owl:inverseOf <http://data.shom.fr/def/navigation_cotiere#estALOuestDe> ;
                                                         rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
                                                         rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
                                                         <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
@@ -490,7 +345,6 @@ rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Lis
 ###  http://data.shom.fr/def/navigation_cotiere#estALEstNordEstDe
 <http://data.shom.fr/def/navigation_cotiere#estALEstNordEstDe> rdf:type owl:ObjectProperty ;
 rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                               rdfs:subPropertyOf <http://data.shom.fr/def/navigation_cotiere#aUneRelationSpatialeAvec> ;
                                                                rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
                                                                rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
                                                                <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
@@ -500,11 +354,9 @@ rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Lis
 ###  http://data.shom.fr/def/navigation_cotiere#estALExtremiteDe
 <http://data.shom.fr/def/navigation_cotiere#estALExtremiteDe> rdf:type owl:ObjectProperty ;
 rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                              rdfs:subPropertyOf <http://data.shom.fr/def/navigation_cotiere#aUneRelationSpatialeAvec> ;
                                                               rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
                                                               rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
                                                               <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
-                                                              rdfs:isDefinedBy <http://data.shom.fr/def/navigation_cotiere#> ;
                                                               rdfs:label "est à l'extremité de"@fr ,
                                                                          "is at the extremity of"@en .
 
@@ -512,9 +364,6 @@ rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Lis
 ###  http://data.shom.fr/def/navigation_cotiere#estALOuestDe
 <http://data.shom.fr/def/navigation_cotiere#estALOuestDe> rdf:type owl:ObjectProperty ;
 rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                          rdfs:subPropertyOf <http://data.shom.fr/def/navigation_cotiere#aUneRelationSpatialeAvec> ,
-                                                                             [ owl:inverseOf <http://data.shom.fr/def/navigation_cotiere#aUneRelationSpatialeAvec>
-                                                                             ] ;
                                                           rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
                                                           rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
                                                           <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
@@ -524,10 +373,6 @@ rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Lis
 ###  http://data.shom.fr/def/navigation_cotiere#estALaDroiteDe
 <http://data.shom.fr/def/navigation_cotiere#estALaDroiteDe> rdf:type owl:ObjectProperty ;
 rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                            rdfs:subPropertyOf <http://data.shom.fr/def/navigation_cotiere#aUneRelationSpatialeAvec> ,
-                                                                               [ owl:inverseOf <http://data.shom.fr/def/navigation_cotiere#aUneRelationSpatialeAvec>
-                                                                               ] ;
-                                                            owl:inverseOf <http://data.shom.fr/def/navigation_cotiere#estALaGaucheDe> ;
                                                             rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
                                                             rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
                                                             <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
@@ -537,9 +382,6 @@ rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Lis
 ###  http://data.shom.fr/def/navigation_cotiere#estALaGaucheDe
 <http://data.shom.fr/def/navigation_cotiere#estALaGaucheDe> rdf:type owl:ObjectProperty ;
 rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                            rdfs:subPropertyOf <http://data.shom.fr/def/navigation_cotiere#aUneRelationSpatialeAvec> ,
-                                                                               [ owl:inverseOf <http://data.shom.fr/def/navigation_cotiere#aUneRelationSpatialeAvec>
-                                                                               ] ;
                                                             rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
                                                             rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
                                                             <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
@@ -549,9 +391,6 @@ rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Lis
 ###  http://data.shom.fr/def/navigation_cotiere#estAccessiblePar
 <http://data.shom.fr/def/navigation_cotiere#estAccessiblePar> rdf:type owl:ObjectProperty ;
 rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                              rdfs:subPropertyOf <http://data.shom.fr/def/navigation_cotiere#aUneRelationSpatialeAvec> ,
-                                                                                 [ owl:inverseOf <http://data.shom.fr/def/navigation_cotiere#aUneRelationSpatialeAvec>
-                                                                                 ] ;
                                                               rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
                                                               rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
                                                               <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
@@ -561,7 +400,6 @@ rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Lis
 ###  http://data.shom.fr/def/navigation_cotiere#estAuLargeDe
 <http://data.shom.fr/def/navigation_cotiere#estAuLargeDe> rdf:type owl:ObjectProperty ;
 rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                          rdfs:subPropertyOf <http://data.shom.fr/def/navigation_cotiere#aUneRelationSpatialeAvec> ;
                                                           rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
                                                           rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
                                                           <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
@@ -571,10 +409,6 @@ rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Lis
 ###  http://data.shom.fr/def/navigation_cotiere#estAuNordDe
 <http://data.shom.fr/def/navigation_cotiere#estAuNordDe> rdf:type owl:ObjectProperty ;
 rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                         rdfs:subPropertyOf <http://data.shom.fr/def/navigation_cotiere#aUneRelationSpatialeAvec> ,
-                                                                            [ owl:inverseOf <http://data.shom.fr/def/navigation_cotiere#aUneRelationSpatialeAvec>
-                                                                            ] ;
-                                                         owl:inverseOf <http://data.shom.fr/def/navigation_cotiere#estAuSudDe> ;
                                                          rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
                                                          rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
                                                          <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
@@ -584,10 +418,6 @@ rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Lis
 ###  http://data.shom.fr/def/navigation_cotiere#estAuNordEstDe
 <http://data.shom.fr/def/navigation_cotiere#estAuNordEstDe> rdf:type owl:ObjectProperty ;
 rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                            rdfs:subPropertyOf <http://data.shom.fr/def/navigation_cotiere#aUneRelationSpatialeAvec> ,
-                                                                               [ owl:inverseOf <http://data.shom.fr/def/navigation_cotiere#aUneRelationSpatialeAvec>
-                                                                               ] ;
-                                                            owl:inverseOf <http://data.shom.fr/def/navigation_cotiere#estAuSudOuestDe> ;
                                                             rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
                                                             rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
                                                             <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
@@ -597,9 +427,6 @@ rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Lis
 ###  http://data.shom.fr/def/navigation_cotiere#estAuSudDe
 <http://data.shom.fr/def/navigation_cotiere#estAuSudDe> rdf:type owl:ObjectProperty ;
 rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                        rdfs:subPropertyOf <http://data.shom.fr/def/navigation_cotiere#aUneRelationSpatialeAvec> ,
-                                                                           [ owl:inverseOf <http://data.shom.fr/def/navigation_cotiere#aUneRelationSpatialeAvec>
-                                                                           ] ;
                                                         rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
                                                         rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
                                                         <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
@@ -609,9 +436,6 @@ rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Lis
 ###  http://data.shom.fr/def/navigation_cotiere#estAuSudOuestDe
 <http://data.shom.fr/def/navigation_cotiere#estAuSudOuestDe> rdf:type owl:ObjectProperty ;
 rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                             rdfs:subPropertyOf <http://data.shom.fr/def/navigation_cotiere#aUneRelationSpatialeAvec> ,
-                                                                                [ owl:inverseOf <http://data.shom.fr/def/navigation_cotiere#aUneRelationSpatialeAvec>
-                                                                                ] ;
                                                              rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
                                                              rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
                                                              <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
@@ -621,7 +445,6 @@ rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Lis
 ###  http://data.shom.fr/def/navigation_cotiere#estAuxAbordsDe
 <http://data.shom.fr/def/navigation_cotiere#estAuxAbordsDe> rdf:type owl:ObjectProperty ;
 rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                            rdfs:subPropertyOf <http://data.shom.fr/def/navigation_cotiere#aUneRelationSpatialeAvec> ;
                                                             rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
                                                             rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
                                                             <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
@@ -631,13 +454,6 @@ rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Lis
 ###  http://data.shom.fr/def/navigation_cotiere#estDansLEstDe
 <http://data.shom.fr/def/navigation_cotiere#estDansLEstDe> rdf:type owl:ObjectProperty ;
 rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                           rdfs:subPropertyOf <http://data.shom.fr/def/navigation_cotiere#estSitueDans> ,
-                                                                              [ owl:inverseOf <http://data.ordnancesurvey.co.uk/ontology/spatialrelations/contains>
-                                                                              ] ,
-                                                                              [ owl:inverseOf <http://data.shom.fr/def/navigation_cotiere#contient>
-                                                                              ] ,
-                                                                              [ owl:inverseOf <http://www.opengis.net/ont/geosparql#sfContains>
-                                                                              ] ;
                                                            rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
                                                            rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
                                                            <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
@@ -647,13 +463,6 @@ rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Lis
 ###  http://data.shom.fr/def/navigation_cotiere#estDansLOuestDe
 <http://data.shom.fr/def/navigation_cotiere#estDansLOuestDe> rdf:type owl:ObjectProperty ;
 rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                             rdfs:subPropertyOf <http://data.shom.fr/def/navigation_cotiere#estSitueDans> ,
-                                                                                [ owl:inverseOf <http://data.ordnancesurvey.co.uk/ontology/spatialrelations/contains>
-                                                                                ] ,
-                                                                                [ owl:inverseOf <http://data.shom.fr/def/navigation_cotiere#contient>
-                                                                                ] ,
-                                                                                [ owl:inverseOf <http://www.opengis.net/ont/geosparql#sfContains>
-                                                                                ] ;
                                                              rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
                                                              rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
                                                              <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
@@ -663,13 +472,6 @@ rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Lis
 ###  http://data.shom.fr/def/navigation_cotiere#estDansLeNordDe
 <http://data.shom.fr/def/navigation_cotiere#estDansLeNordDe> rdf:type owl:ObjectProperty ;
 rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                             rdfs:subPropertyOf <http://data.shom.fr/def/navigation_cotiere#estSitueDans> ,
-                                                                                [ owl:inverseOf <http://data.ordnancesurvey.co.uk/ontology/spatialrelations/contains>
-                                                                                ] ,
-                                                                                [ owl:inverseOf <http://data.shom.fr/def/navigation_cotiere#contient>
-                                                                                ] ,
-                                                                                [ owl:inverseOf <http://www.opengis.net/ont/geosparql#sfContains>
-                                                                                ] ;
                                                              rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
                                                              rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
                                                              <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
@@ -679,13 +481,6 @@ rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Lis
 ###  http://data.shom.fr/def/navigation_cotiere#estDansLeSudDe
 <http://data.shom.fr/def/navigation_cotiere#estDansLeSudDe> rdf:type owl:ObjectProperty ;
 rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                            rdfs:subPropertyOf <http://data.shom.fr/def/navigation_cotiere#estSitueDans> ,
-                                                                               [ owl:inverseOf <http://data.ordnancesurvey.co.uk/ontology/spatialrelations/contains>
-                                                                               ] ,
-                                                                               [ owl:inverseOf <http://data.shom.fr/def/navigation_cotiere#contient>
-                                                                               ] ,
-                                                                               [ owl:inverseOf <http://www.opengis.net/ont/geosparql#sfContains>
-                                                                               ] ;
                                                             rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
                                                             rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
                                                             <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
@@ -695,7 +490,6 @@ rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Lis
 ###  http://data.shom.fr/def/navigation_cotiere#estDeCouleur
 <http://data.shom.fr/def/navigation_cotiere#estDeCouleur> rdf:type owl:ObjectProperty ;
 rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                          rdfs:subPropertyOf <http://data.shom.fr/def/navigation_cotiere#aPourCaracteristique> ;
                                                           rdfs:domain [ rdf:type owl:Class ;
                                                                         owl:unionOf ( <http://data.shom.fr/def/navigation_cotiere#EntiteGeographique>
                                                                                       <http://data.shom.fr/def/navigation_cotiere#Secteur>
@@ -709,11 +503,9 @@ rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Lis
 ###  http://data.shom.fr/def/navigation_cotiere#estDeType
 <http://data.shom.fr/def/navigation_cotiere#estDeType> rdf:type owl:ObjectProperty ;
 rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                       rdfs:subPropertyOf <http://data.shom.fr/def/navigation_cotiere#aPourCaracteristiqueNavire> ;
                                                        rdfs:domain <http://data.shom.fr/def/navigation_cotiere#Navire> ;
                                                        rdfs:range <http://data.shom.fr/def/navigation_cotiere#TypeDeNavire> ;
                                                         <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :type_navire ;
-                                                       rdfs:isDefinedBy <http://data.shom.fr/def/navigation_cotiere#> ;
                                                        rdfs:label "est de type"@fr ,
                                                                   "type of ship"@en .
 
@@ -721,13 +513,9 @@ rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Lis
 ###  http://data.shom.fr/def/navigation_cotiere#estDebordeDe
 <http://data.shom.fr/def/navigation_cotiere#estDebordeDe> rdf:type owl:ObjectProperty ;
 rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                          rdfs:subPropertyOf <http://data.shom.fr/def/navigation_cotiere#aUneRelationSpatialeAvec> ,
-                                                                             [ owl:inverseOf <http://data.shom.fr/def/navigation_cotiere#aUneRelationSpatialeAvec>
-                                                                             ] ;
                                                           rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
                                                           rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
                                                           <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
-                                                          rdfs:isDefinedBy <http://data.shom.fr/def/navigation_cotiere#> ;
                                                           rdfs:label "est débordé de"@fr ,
                                                                      "surrounded by"@en .
 
@@ -735,7 +523,6 @@ rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Lis
 ###  http://data.shom.fr/def/navigation_cotiere#estEnracineA
 <http://data.shom.fr/def/navigation_cotiere#estEnracineA> rdf:type owl:ObjectProperty ;
 rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                          rdfs:subPropertyOf <http://data.shom.fr/def/navigation_cotiere#aUneRelationSpatialeAvec> ;
                                                           rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
                                                           rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
                                                           <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
@@ -745,13 +532,9 @@ rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Lis
 ###  http://data.shom.fr/def/navigation_cotiere#estEntoureDe
 <http://data.shom.fr/def/navigation_cotiere#estEntoureDe> rdf:type owl:ObjectProperty ;
 rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                          rdfs:subPropertyOf <http://data.shom.fr/def/navigation_cotiere#aUneRelationSpatialeAvec> ,
-                                                                             [ owl:inverseOf <http://data.shom.fr/def/navigation_cotiere#aUneRelationSpatialeAvec>
-                                                                             ] ;
                                                           rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
                                                           rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
                                                           <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
-                                                          rdfs:isDefinedBy <http://data.shom.fr/def/navigation_cotiere#> ;
                                                           rdfs:label "est entouré de"@fr ,
                                                                      "surrounded by"@en .
 
@@ -759,7 +542,6 @@ rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Lis
 ###  http://data.shom.fr/def/navigation_cotiere#estEntre
 <http://data.shom.fr/def/navigation_cotiere#estEntre> rdf:type owl:ObjectProperty ;
 rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                      rdfs:subPropertyOf <http://data.shom.fr/def/navigation_cotiere#aUneRelationSpatialeAvec> ;
                                                       rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
                                                       rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
                                                       <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
@@ -769,7 +551,6 @@ rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Lis
 ###  http://data.shom.fr/def/navigation_cotiere#estEquipeDe
 <http://data.shom.fr/def/navigation_cotiere#estEquipeDe> rdf:type owl:ObjectProperty ;
 rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                         rdfs:subPropertyOf <http://data.shom.fr/def/navigation_cotiere#aPourCaracteristiqueNavire> ;
                                                          rdfs:domain <http://data.shom.fr/def/navigation_cotiere#Navire> ;
                                                          rdfs:range <http://data.shom.fr/def/navigation_cotiere#TypeDEquipement>;
                                                          <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :type_equipement ;
@@ -779,10 +560,6 @@ rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Lis
 ###  http://data.shom.fr/def/navigation_cotiere#estGerePar
 <http://data.shom.fr/def/navigation_cotiere#estGerePar> rdf:type owl:ObjectProperty ;
 rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                        rdfs:subPropertyOf <http://data.shom.fr/def/navigation_cotiere#aPourCaracteristique> ,
-                                                                           [ owl:inverseOf <http://data.shom.fr/def/navigation_cotiere#aPourCaracteristique>
-                                                                           ] ;
-                                                        owl:inverseOf <http://data.shom.fr/def/navigation_cotiere#estLeGerantDe> ;
                                                         rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
                                                         rdfs:range [ rdf:type owl:Class ;
                                                                      owl:unionOf ( <http://data.shom.fr/def/navigation_cotiere#EntiteGeographique>
@@ -790,7 +567,6 @@ rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Lis
                                                                                  )
                                                                    ] ;
                                                         <http://data.sparna.fr/ontologies/sparnatural-config-datasources#> :base_request;
-                                                        rdfs:isDefinedBy <http://data.shom.fr/def/navigation_cotiere#> ;
                                                         rdfs:label "est géré par"@fr ,
                                                                    "is managed by"@en .
 
@@ -798,7 +574,6 @@ rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Lis
 ###  http://data.shom.fr/def/navigation_cotiere#estImposeePar
 <http://data.shom.fr/def/navigation_cotiere#estImposeePar> rdf:type owl:ObjectProperty ;
 rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                           rdfs:subPropertyOf <http://data.shom.fr/def/navigation_cotiere#aPourSpecification> ;
                                                            rdfs:domain <http://data.shom.fr/def/navigation_cotiere#ConsigneDeNavigation> ;
                                                            rdfs:range <http://data.shom.fr/def/navigation_cotiere#Reglement> ;
                                                            <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_reglement ;
@@ -808,9 +583,6 @@ rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Lis
 ###  http://data.shom.fr/def/navigation_cotiere#estLeGerantDe
 <http://data.shom.fr/def/navigation_cotiere#estLeGerantDe> rdf:type owl:ObjectProperty ;
 rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                           rdfs:subPropertyOf <http://data.shom.fr/def/navigation_cotiere#aPourCaracteristique> ,
-                                                                              [ owl:inverseOf <http://data.shom.fr/def/navigation_cotiere#aPourCaracteristique>
-                                                                              ] ;
                                                            rdfs:domain [ rdf:type owl:Class ;
                                                                          owl:unionOf ( <http://data.shom.fr/def/navigation_cotiere#EntiteGeographique>
                                                                                        <http://data.shom.fr/def/navigation_cotiere#Organisation>
@@ -833,10 +605,6 @@ rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Lis
 ###  http://data.shom.fr/def/navigation_cotiere#estMarquePar
 <http://data.shom.fr/def/navigation_cotiere#estMarquePar> rdf:type owl:ObjectProperty ;
 rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                          rdfs:subPropertyOf <http://data.shom.fr/def/navigation_cotiere#aUneRelationSpatialeAvec> ,
-                                                                             [ owl:inverseOf <http://data.shom.fr/def/navigation_cotiere#aUneRelationSpatialeAvec>
-                                                                             ] ;
-                                                          owl:inverseOf <http://data.shom.fr/def/navigation_cotiere#marqueLEntite> ;
                                                           rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
                                                           rdfs:range [ rdf:type owl:Class ;
                                                                        owl:unionOf ( <http://data.shom.fr/def/navigation_cotiere#AideALaNavigation>
@@ -845,7 +613,6 @@ rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Lis
                                                                      ] ;
                                                           <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_marquepar ;
                                                           rdfs:comment "e.g. une bouée"@fr ;
-                                                          rdfs:isDefinedBy <http://data.shom.fr/def/navigation_cotiere#> ;
                                                           rdfs:label "est marqué par"@fr ,
                                                                      "is marked by"@en .
 
@@ -853,7 +620,6 @@ rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Lis
 ###  http://data.shom.fr/def/navigation_cotiere#estOuvertAu
 <http://data.shom.fr/def/navigation_cotiere#estOuvertAu> rdf:type owl:ObjectProperty ;
 rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                         rdfs:subPropertyOf <http://data.shom.fr/def/navigation_cotiere#aPourCaracteristique> ;
                                                          rdfs:domain <http://data.shom.fr/def/navigation_cotiere#EntiteGeographique> ;
                                                          rdfs:range <http://data.shom.fr/def/navigation_cotiere#DirectionCardinale> ;
                                                          <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :dir_cardinales ;
@@ -864,7 +630,6 @@ rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Lis
 ###  http://data.shom.fr/def/navigation_cotiere#estPresDe
 <http://data.shom.fr/def/navigation_cotiere#estPresDe> rdf:type owl:ObjectProperty ;
 rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                       rdfs:subPropertyOf <http://data.shom.fr/def/navigation_cotiere#aUneRelationSpatialeAvec> ;
                                                        rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
                                                        rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
                                                        <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
@@ -874,7 +639,6 @@ rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Lis
 ###  http://data.shom.fr/def/navigation_cotiere#estProtegePar
 <http://data.shom.fr/def/navigation_cotiere#estProtegePar> rdf:type owl:ObjectProperty ;
 rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                           rdfs:subPropertyOf <http://data.shom.fr/def/navigation_cotiere#aUneRelationSpatialeAvec> ;
                                                            rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
                                                            rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
                                                            <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
@@ -884,20 +648,9 @@ rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Lis
 ###  http://data.shom.fr/def/navigation_cotiere#estSitueDans
 <http://data.shom.fr/def/navigation_cotiere#estSitueDans> rdf:type owl:ObjectProperty ;
 rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                          owl:equivalentProperty [ owl:inverseOf <http://data.ordnancesurvey.co.uk/ontology/spatialrelations/contains> ;
-                                                                                   owl:equivalentProperty [ owl:inverseOf <http://data.shom.fr/def/navigation_cotiere#contient> ;
-                                                                                                            owl:equivalentProperty [ owl:inverseOf <http://www.opengis.net/ont/geosparql#sfContains>
-                                                                                                                                   ]
-                                                                                                          ]
-                                                                                 ] ;
-                                                          rdfs:subPropertyOf <http://data.shom.fr/def/navigation_cotiere#aUneRelationSpatialeAvec> ,
-                                                                             [ owl:inverseOf <http://data.shom.fr/def/navigation_cotiere#aUneRelationSpatialeAvec>
-                                                                             ] ;
-                                                          owl:inverseOf <http://www.opengis.net/ont/geosparql#sfContains> ;
                                                           rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
                                                           rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
                                                           <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
-                                                          rdfs:isDefinedBy <http://data.shom.fr/def/navigation_cotiere#> ;
                                                           rdfs:label "est situé dans"@fr ,
                                                                      "is situated in"@en .
 
@@ -905,9 +658,6 @@ rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Lis
 ###  http://data.shom.fr/def/navigation_cotiere#estUnElementDe
 <http://data.shom.fr/def/navigation_cotiere#estUnElementDe> rdf:type owl:ObjectProperty ;
 rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                            rdfs:subPropertyOf <http://data.shom.fr/def/navigation_cotiere#aPourCaracteristique> ,
-                                                                               [ owl:inverseOf <http://data.shom.fr/def/navigation_cotiere#aPourCaracteristique>
-                                                                               ] ;
                                                             rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
                                                             rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
                                                             <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
@@ -921,7 +671,6 @@ rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Lis
 ###  http://data.shom.fr/def/navigation_cotiere#estUneMarqueDeType
 <http://data.shom.fr/def/navigation_cotiere#estUneMarqueDeType> rdf:type owl:ObjectProperty ;
 rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                                rdfs:subPropertyOf <http://data.shom.fr/def/navigation_cotiere#aPourCaracteristique> ;
                                                                 rdfs:domain <http://data.shom.fr/def/navigation_cotiere#Marque> ;
                                                                 rdfs:range <http://data.shom.fr/def/navigation_cotiere#AideALaNavigation> ;
                                                                 <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_aidenav ;
@@ -931,7 +680,6 @@ rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Lis
 ###  http://data.shom.fr/def/navigation_cotiere#impliqueDeSuivre
 <http://data.shom.fr/def/navigation_cotiere#impliqueDeSuivre> rdf:type owl:ObjectProperty ;
 rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                              rdfs:subPropertyOf <http://data.shom.fr/def/navigation_cotiere#aPourSpecification> ;
                                                               rdfs:domain <http://data.shom.fr/def/navigation_cotiere#Instruction> ;
                                                               rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
                                                               <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
@@ -942,7 +690,6 @@ rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Lis
 ###  http://data.shom.fr/def/navigation_cotiere#lExtremiteDe
 <http://data.shom.fr/def/navigation_cotiere#lExtremiteDe> rdf:type owl:ObjectProperty ;
 rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                          rdfs:subPropertyOf <http://data.shom.fr/def/navigation_cotiere#unePartieDe> ;
                                                           rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
                                                           rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
                                                           <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
@@ -952,7 +699,6 @@ rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Lis
 ###  http://data.shom.fr/def/navigation_cotiere#leMeridienDe
 <http://data.shom.fr/def/navigation_cotiere#leMeridienDe> rdf:type owl:ObjectProperty ;
 rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                          rdfs:subPropertyOf <http://data.shom.fr/def/navigation_cotiere#unePartieDe> ;
                                                           rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
                                                           rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
                                                           <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
@@ -962,7 +708,6 @@ rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Lis
 ###  http://data.shom.fr/def/navigation_cotiere#leMilieuDe
 <http://data.shom.fr/def/navigation_cotiere#leMilieuDe> rdf:type owl:ObjectProperty ;
 rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                        rdfs:subPropertyOf <http://data.shom.fr/def/navigation_cotiere#unePartieDe> ;
                                                         rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
                                                         rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
                                                         <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
@@ -972,9 +717,6 @@ rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Lis
 ###  http://data.shom.fr/def/navigation_cotiere#marqueLEntite
 <http://data.shom.fr/def/navigation_cotiere#marqueLEntite> rdf:type owl:ObjectProperty ;
 rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                           rdfs:subPropertyOf <http://data.shom.fr/def/navigation_cotiere#aUneRelationSpatialeAvec> ,
-                                                                              [ owl:inverseOf <http://data.shom.fr/def/navigation_cotiere#aUneRelationSpatialeAvec>
-                                                                              ] ;
                                                            rdfs:domain [ rdf:type owl:Class ;
                                                                          owl:unionOf ( <http://data.shom.fr/def/navigation_cotiere#AideALaNavigation>
                                                                                        <http://data.shom.fr/def/navigation_cotiere#Marque>
@@ -982,7 +724,6 @@ rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Lis
                                                                        ] ;
                                                            rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
                                                            <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
-                                                           rdfs:isDefinedBy <http://data.shom.fr/def/navigation_cotiere#> ;
                                                            rdfs:label "marks entity"@en ,
                                                                       "marque l'entité"@fr .
 
@@ -990,7 +731,6 @@ rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Lis
 ###  http://data.shom.fr/def/navigation_cotiere#nEstPasEquipeDe
 <http://data.shom.fr/def/navigation_cotiere#nEstPasEquipeDe> rdf:type owl:ObjectProperty ;
 rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                             rdfs:subPropertyOf <http://data.shom.fr/def/navigation_cotiere#aPourCaracteristiqueNavire> ;
                                                              rdfs:domain <http://data.shom.fr/def/navigation_cotiere#Navire> ;
                                                              rdfs:range <http://data.shom.fr/def/navigation_cotiere#TypeDEquipement>;
                                                              <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :type_equipement ;
@@ -1006,29 +746,6 @@ rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Lis
                                                          rdfs:label "une partie de"@fr .
 
 
-###  http://www.opengis.net/ont/geosparql#sfContains
-<http://www.opengis.net/ont/geosparql#sfContains> rdf:type owl:ObjectProperty ;
-rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                  owl:equivalentProperty [ owl:inverseOf <http://data.shom.fr/def/navigation_cotiere#estSitueDans>
-                                                                         ] ;
-                                                  rdfs:subPropertyOf <http://data.shom.fr/def/navigation_cotiere#aUneRelationSpatialeAvec> ,
-                                                                     [ owl:inverseOf <http://data.shom.fr/def/navigation_cotiere#aUneRelationSpatialeAvec>
-                                                                     ] ;
-                                                  rdfs:isDefinedBy <http://www.opengis.net/ont/geosparql#> .
-
-
-
-
-###  http://www.w3.org/2004/02/skos/core#exactMatch
-<http://www.w3.org/2004/02/skos/core#exactMatch> rdf:type owl:ObjectProperty ;
-rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                                 rdfs:label "exact match"@en .
-
-
-###  http://www.w3.org/2004/02/skos/core#inScheme
-<http://www.w3.org/2004/02/skos/core#inScheme> rdf:type owl:ObjectProperty ;
-rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                                               rdfs:label "is in scheme"@en .
 
 
 #################################################################
@@ -1075,10 +792,6 @@ rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Sparna
 ###  http://data.shom.fr/def/navigation_cotiere#Amer
 <http://data.shom.fr/def/navigation_cotiere#Amer> rdf:type owl:Class ;
 rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
-                                                  owl:equivalentClass [ rdf:type owl:Restriction ;
-                                                                        owl:onProperty <http://data.shom.fr/def/navigation_cotiere#aPourNature> ;
-                                                                        owl:someValuesFrom <http://data.shom.fr/def/navigation_cotiere#TypeDAmer>
-                                                                      ] ;
                                                   rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#EntiteGeographique> ;
                                                   rdfs:label "Amer"@fr .
 
@@ -1086,11 +799,6 @@ rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Sparna
 ###  http://data.shom.fr/def/navigation_cotiere#Balise
 <http://data.shom.fr/def/navigation_cotiere#Balise> rdf:type owl:Class ;
 rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
-                                                    owl:equivalentClass <http://www.ontotext.com/proton/protonext#Beacon> ,
-                                                                        [ rdf:type owl:Restriction ;
-                                                                          owl:onProperty <http://data.shom.fr/def/navigation_cotiere#aPourNature> ;
-                                                                          owl:hasValue <http://data.shom.fr/id/codes/nav/typedentitegeographique/Balise>
-                                                                        ] ;
                                                     rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#AideALaNavigation> ,
                                                                     <http://data.shom.fr/def/navigation_cotiere#Amer> ;
                                                     rdfs:label "Balise"@fr ,
@@ -1100,10 +808,6 @@ rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Sparna
 ###  http://data.shom.fr/def/navigation_cotiere#Bouee
 <http://data.shom.fr/def/navigation_cotiere#Bouee> rdf:type owl:Class ;
 rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
-                                                   owl:equivalentClass [ rdf:type owl:Restriction ;
-                                                                         owl:onProperty <http://data.shom.fr/def/navigation_cotiere#aPourNature> ;
-                                                                         owl:hasValue <http://data.shom.fr/id/codes/nav/typedentitegeographique/Bouee>
-                                                                       ] ;
                                                    rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#AideALaNavigation> ;
                                                    rdfs:label "Bouée"@fr ,
                                                               "Buoy"@en .
@@ -1132,11 +836,7 @@ rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Sparna
 
 ###  http://data.shom.fr/def/navigation_cotiere#ConditionLocale
 <http://data.shom.fr/def/navigation_cotiere#ConditionLocale> rdf:type owl:Class ;
-rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
-                                                             owl:equivalentClass [ rdf:type owl:Restriction ;
-                                                                                   owl:onProperty <http://data.shom.fr/def/navigation_cotiere#aPourConditionLocaleQualitative> ;
-                                                                                   owl:someValuesFrom <http://data.shom.fr/def/navigation_cotiere#TypeDeConditionLocale>
-                                                                                 ] .
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> .
 
 
 ###  http://data.shom.fr/def/navigation_cotiere#ConsigneDeNavigation
@@ -1247,10 +947,6 @@ rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Sparna
 ###  http://data.shom.fr/def/navigation_cotiere#Espar
 <http://data.shom.fr/def/navigation_cotiere#Espar> rdf:type owl:Class ;
 rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
-                                                   owl:equivalentClass [ rdf:type owl:Restriction ;
-                                                                         owl:onProperty <http://data.shom.fr/def/navigation_cotiere#aPourNature> ;
-                                                                         owl:hasValue <http://data.shom.fr/id/codes/nav/typedentitegeographique/Espar>
-                                                                       ] ;
                                                    rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#AideALaNavigation> ,
                                                                    <http://data.shom.fr/def/navigation_cotiere#Amer> ;
                                                    rdfs:label "Espar"@fr .
@@ -1269,10 +965,6 @@ rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Sparna
 ###  http://data.shom.fr/def/navigation_cotiere#Feu
 <http://data.shom.fr/def/navigation_cotiere#Feu> rdf:type owl:Class ;
 rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
-                                                 owl:equivalentClass [ rdf:type owl:Restriction ;
-                                                                       owl:onProperty <http://data.shom.fr/def/navigation_cotiere#aPourNature> ;
-                                                                       owl:hasValue <http://data.shom.fr/id/codes/nav/typedentitegeographique/Feu>
-                                                                     ] ;
                                                  rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#AideALaNavigation> ,
                                                                  <http://data.shom.fr/def/navigation_cotiere#Amer> ;
                                                  rdfs:label "Feu"@fr .
@@ -1281,10 +973,6 @@ rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Sparna
 ###  http://data.shom.fr/def/navigation_cotiere#FeuASecteur
 <http://data.shom.fr/def/navigation_cotiere#FeuASecteur> rdf:type owl:Class ;
 rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
-                                                         owl:equivalentClass [ rdf:type owl:Restriction ;
-                                                                               owl:onProperty <http://data.shom.fr/def/navigation_cotiere#aPourNature> ;
-                                                                               owl:hasValue <http://data.shom.fr/id/codes/nav/typedentitegeographique/FeuASecteur>
-                                                                             ] ;
                                                          rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#Feu> ;
                                                          rdfs:label "Feu à Secteur"@fr .
 
@@ -1301,10 +989,6 @@ rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Sparna
 ###  http://data.shom.fr/def/navigation_cotiere#IndicationMeteo
 <http://data.shom.fr/def/navigation_cotiere#IndicationMeteo> rdf:type owl:Class ;
 rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
-                                                             owl:equivalentClass [ rdf:type owl:Restriction ;
-                                                                                   owl:onProperty <http://data.shom.fr/def/navigation_cotiere#aPourConditionMeteo> ;
-                                                                                   owl:someValuesFrom <http://data.shom.fr/def/navigation_cotiere#TypeDIndicationMeteorologique>
-                                                                                 ] ;
                                                              rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#ConditionLocale> ;
                                                              rdfs:label "Indication Météorologique"@fr .
 
@@ -1312,10 +996,6 @@ rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Sparna
 ###  http://data.shom.fr/def/navigation_cotiere#IndicationOceano
 <http://data.shom.fr/def/navigation_cotiere#IndicationOceano> rdf:type owl:Class ;
 rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
-                                                              owl:equivalentClass [ rdf:type owl:Restriction ;
-                                                                                    owl:onProperty <http://data.shom.fr/def/navigation_cotiere#aPourConditionOceano> ;
-                                                                                    owl:someValuesFrom <http://data.shom.fr/def/navigation_cotiere#TypeDIndicationOceanographique>
-                                                                                  ] ;
                                                               rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#ConditionLocale> ;
                                                               rdfs:label "Indication Océanographique"@fr .
 
@@ -1323,10 +1003,6 @@ rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Sparna
 ###  http://data.shom.fr/def/navigation_cotiere#IndicationTemporelle
 <http://data.shom.fr/def/navigation_cotiere#IndicationTemporelle> rdf:type owl:Class ;
 rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
-                                                                  owl:equivalentClass [ rdf:type owl:Restriction ;
-                                                                                        owl:onProperty <http://data.shom.fr/def/navigation_cotiere#aPourTemporaliteQualitative> ;
-                                                                                        owl:someValuesFrom <http://data.shom.fr/def/navigation_cotiere#TypeDIndicationTemporelle>
-                                                                                      ] ;
                                                                   rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#ConditionLocale> ;
                                                                   rdfs:label "Indication Temporelle"@fr .
 
@@ -1574,10 +1250,6 @@ rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Sparna
 ###  http://data.shom.fr/def/navigation_cotiere#MarqueDEauxSaines
 <http://data.shom.fr/def/navigation_cotiere#MarqueDEauxSaines> rdf:type owl:Class ;
 rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
-                                                               owl:equivalentClass [ rdf:type owl:Restriction ;
-                                                                                     owl:onProperty <http://data.shom.fr/def/navigation_cotiere#aPourMotif> ;
-                                                                                     owl:hasValue <http://data.shom.fr/id/codes/nav/typedemotif/MotifEauxSaines>
-                                                                                   ] ;
                                                                rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#Marque> ,
                                                                                [ owl:intersectionOf ( [ rdf:type owl:Restriction ;
                                                                                                         owl:onProperty <http://data.shom.fr/def/navigation_cotiere#estDeCouleur> ;
@@ -1625,10 +1297,6 @@ Les marques latérales diffèrent suivant qu’elles sont employées dans l’un
 ###  http://data.shom.fr/def/navigation_cotiere#MarqueDeChenalPrefereBabordRegionA
 <http://data.shom.fr/def/navigation_cotiere#MarqueDeChenalPrefereBabordRegionA> rdf:type owl:Class ;
 rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
-                                                                                owl:equivalentClass [ rdf:type owl:Restriction ;
-                                                                                                      owl:onProperty <http://data.shom.fr/def/navigation_cotiere#aPourMotif> ;
-                                                                                                      owl:hasValue <http://data.shom.fr/id/codes/nav/typedemotif/MotifChenalPrefereBabordRegionA>
-                                                                                                    ] ;
                                                                                 rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#MarqueDeChenalPrefere> ,
                                                                                                 [ rdf:type owl:Restriction ;
                                                                                                   owl:onProperty <http://data.shom.fr/def/navigation_cotiere#aPourTypeLateral> ;
@@ -1640,10 +1308,6 @@ rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Sparna
 ###  http://data.shom.fr/def/navigation_cotiere#MarqueDeChenalPrefereTribordRegionA
 <http://data.shom.fr/def/navigation_cotiere#MarqueDeChenalPrefereTribordRegionA> rdf:type owl:Class ;
 rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
-                                                                                 owl:equivalentClass [ rdf:type owl:Restriction ;
-                                                                                                       owl:onProperty <http://data.shom.fr/def/navigation_cotiere#aPourMotif> ;
-                                                                                                       owl:hasValue <http://data.shom.fr/id/codes/nav/typedemotif/MotifChenalPrefereTribordRegionA>
-                                                                                                     ] ;
                                                                                  rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#MarqueDeChenalPrefere> ,
                                                                                                  [ rdf:type owl:Restriction ;
                                                                                                    owl:onProperty <http://data.shom.fr/def/navigation_cotiere#aPourTypeLateral> ;
@@ -1655,10 +1319,6 @@ rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Sparna
 ###  http://data.shom.fr/def/navigation_cotiere#MarqueDeDangerIsole
 <http://data.shom.fr/def/navigation_cotiere#MarqueDeDangerIsole> rdf:type owl:Class ;
 rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
-                                                                 owl:equivalentClass [ rdf:type owl:Restriction ;
-                                                                                       owl:onProperty <http://data.shom.fr/def/navigation_cotiere#aPourMotif> ;
-                                                                                       owl:hasValue <http://data.shom.fr/id/codes/nav/typedemotif/MotifDangerIsole>
-                                                                                     ] ;
                                                                  rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#Marque> ,
                                                                                  [ owl:intersectionOf ( [ rdf:type owl:Restriction ;
                                                                                                           owl:onProperty <http://data.shom.fr/def/navigation_cotiere#estDeCouleur> ;
@@ -1856,11 +1516,6 @@ rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Sparna
 ###  http://data.shom.fr/def/navigation_cotiere#Phare
 <http://data.shom.fr/def/navigation_cotiere#Phare> rdf:type owl:Class ;
 rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
-                                                   owl:equivalentClass <http://www.ontotext.com/proton/protonext#LightHouse> ,
-                                                                       [ rdf:type owl:Restriction ;
-                                                                         owl:onProperty <http://data.shom.fr/def/navigation_cotiere#aPourNature> ;
-                                                                         owl:hasValue <http://data.shom.fr/id/codes/nav/typedentitegeographique/Phare>
-                                                                       ] ;
                                                    rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#AideALaNavigation> ,
                                                                    <http://data.shom.fr/def/navigation_cotiere#Amer> ;
                                                    rdfs:label "Phare"@fr .
@@ -1959,10 +1614,6 @@ rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Sparna
 ###  http://data.shom.fr/def/navigation_cotiere#Tourelle
 <http://data.shom.fr/def/navigation_cotiere#Tourelle> rdf:type owl:Class ;
 rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
-                                                      owl:equivalentClass [ rdf:type owl:Restriction ;
-                                                                            owl:onProperty <http://data.shom.fr/def/navigation_cotiere#aPourNature> ;
-                                                                            owl:hasValue <http://data.shom.fr/id/codes/nav/typedentitegeographique/Tourelle>
-                                                                          ] ;
                                                       rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#AideALaNavigation> ,
                                                                       <http://data.shom.fr/def/navigation_cotiere#Amer> ;
                                                       rdfs:label "Tourelle"@fr .
@@ -1978,10 +1629,6 @@ rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#Sparna
 ###  http://data.shom.fr/def/navigation_cotiere#TypeDAmer
 <http://data.shom.fr/def/navigation_cotiere#TypeDAmer> rdf:type owl:Class ;
 rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
-                                                       owl:equivalentClass [ rdf:type owl:Restriction ;
-                                                                             owl:onProperty <http://www.w3.org/2004/02/skos/core#inScheme> ;
-                                                                             owl:hasValue <https://data.shom.fr/id/codes/navigation_cotiere/typedamer/liste>
-                                                                           ] ;
                                                        rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#TypeDEntiteGeographique> ;
                                                        rdfs:label "Type d'Amer"@fr .
 
