@@ -130,9 +130,9 @@ export default {
       return queryString;
     },
     semanticPostProcess(queryString) {
-        queryString = this.prefixesPostProcess(queryString);
-        queryString = this.sparnatural.expandSparql(queryString);
-        return queryString;
+      queryString = this.prefixesPostProcess(queryString);
+      queryString = this.sparnatural.expandSparql(queryString);
+      return queryString;
     },
     emitResults (response) {
       let results = JSON.parse(response).results.bindings;
