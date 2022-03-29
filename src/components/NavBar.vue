@@ -93,6 +93,8 @@ export default {
   }
   .logo{
     margin : auto 10px;
+    background : white;
+    border-radius: 50%;
   }
   .logo img{
     height: 50px;
