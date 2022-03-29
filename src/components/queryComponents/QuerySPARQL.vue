@@ -16,8 +16,8 @@ export default {
   emits: ['myQueryResult'],
   props: {
     coordsBboxArea:  {
-      type: Object,
-      default: () => {}
+      type: Array,
+      default: () => []
     },
   },
   data () {
@@ -29,6 +29,8 @@ export default {
   watch: {
     coordsBboxArea: function (bbox) {
       console.log(bbox);
+      
+      //this.sparnatural.onQueryUpdated();
     }
   },
   mounted() {         
@@ -61,6 +63,11 @@ export default {
         queryString = this.labelDescriptionSelectionPostProcess(queryString);
         queryString = this.optionalQueriesPostProcess(queryString);
         queryString = this.anyEntitiesPostProcess(queryString);
+
+        if (this.coordsBboxArea.length != 0) {
+          queryString = this.addSelectAreaBbox(queryString);
+        }
+    
         $('#sparql code').html(queryString.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"));
         yasqe.setValue(queryString);
       },
@@ -106,11 +113,11 @@ export default {
         ?eGeom gsp:asWKT ?wkt.
         FILTER (geof:sfWithin(?wkt, '''
             <http://www.opengis.net/def/crs/OGC/1.3/CRS84>
-                Polygon ((${this.coordsBboxArea[0]} ${this.coordsBboxArea[1]},
-                ${this.coordsBboxArea[2]} ${this.coordsBboxArea[1]},
-                ${this.coordsBboxArea[2]} ${this.coordsBboxArea[3]},
-                ${this.coordsBboxArea[0]} ${this.coordsBboxArea[3]},
-                ${this.coordsBboxArea[0]} ${this.coordsBboxArea[1]}))'''^^gsp:wktLiteral))\n}`);
+                Polygon ((${this.coordsBboxArea[1]} ${this.coordsBboxArea[0]},
+                ${this.coordsBboxArea[1]} ${this.coordsBboxArea[2]},
+                ${this.coordsBboxArea[3]} ${this.coordsBboxArea[2]},
+                ${this.coordsBboxArea[3]} ${this.coordsBboxArea[0]},
+                ${this.coordsBboxArea[1]} ${this.coordsBboxArea[0]}))'''^^gsp:wktLiteral))\n}`);
       return queryString;
     },
     prefixesPostProcess(queryString) {
