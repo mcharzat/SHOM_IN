@@ -69,9 +69,9 @@ describe("MapShom.vue", () => {
         const wrapper = mount(mapShom);
         const coord = [48.726567 ,-3.986004];
 
-        const coord1 = wrapper.vm.extractCoordPointWkt("Point(-3.986004 48.726567)");
-        const coord2 = wrapper.vm.extractCoordPointWkt("<http://www.opengis.net/def/crs/EPSG/0/4326> Point(-3.986004 48.726567)");
-        const coord3 = wrapper.vm.extractCoordPointWkt("<http://www.opengis.net/def/crs/EPSG/0/3857> Point(-3.986004 48.726567)");
+        const coord1 = wrapper.vm.extractCoordPointWkt(wrapper.vm.checkEPSGWkt("Point(-3.986004 48.726567)"));
+        const coord2 = wrapper.vm.extractCoordPointWkt(wrapper.vm.checkEPSGWkt("<http://www.opengis.net/def/crs/EPSG/0/4326> Point(-3.986004 48.726567)"));
+        const coord3 = wrapper.vm.checkEPSGWkt("<http://www.opengis.net/def/crs/EPSG/0/3857> Point(-3.986004 48.726567)");
 
         expect(coord1).toEqual(expect.arrayContaining(coord));
         expect(coord2).toEqual(expect.arrayContaining(coord));
@@ -80,9 +80,9 @@ describe("MapShom.vue", () => {
 
     it("extract coord from wkt line", () => {
         const wrapper = mount(mapShom);
-        const coord = [[48.7442339 ,-4.0096052],[48.73301, -3.970418]];
+        const coord = [[-4.0096052 ,48.7442339],[-3.970418, 48.73301]];
 
-        const coord1 = wrapper.vm.extractCoordLineWkt("LINESTRING (48.7442339 -4.0096052, 48.73301 -3.970418)");
+        const coord1 = wrapper.vm.extractCoordLineWkt(wrapper.vm.checkEPSGWkt("LINESTRING (48.7442339 -4.0096052, 48.73301 -3.970418)"));
 
         expect(coord1).toEqual(expect.arrayContaining(coord));
     });

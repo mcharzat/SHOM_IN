@@ -3,6 +3,7 @@
     <div class="mouseTracker">
         <p>{{ coordinate }}</p>
     </div>
+    <EntityResult :values="dataEntity" v-show="false" ref="entity"></EntityResult>
 </template>
 
 <script>
@@ -11,8 +12,13 @@ import "leaflet-draw/dist/leaflet.draw.css";
 import 'leaflet';
 import "leaflet-draw";
 
+import EntityResult from "./queryComponents/EntityResult.vue";
+
 export default {
   name: 'MapShom',
+  components: {
+    EntityResult,
+  },
   props: {
     queryResult:  {
       type: Object,
@@ -54,6 +60,7 @@ export default {
         meta: 0
       },
       data: [],
+      dataEntity: {},
       userLocation: {},
       onMap: false,
       selectionArea: "",
@@ -81,7 +88,7 @@ export default {
     this.setupControls(map);
     this.setupSelectArea(map);
     this.setupResults(map);
-
+    
     //exemple of removing a layer
     //this.layerManager.removeLayer(this.layersManaged.getLayer(this.tryDict["topo"]));
 
@@ -183,20 +190,65 @@ export default {
           }
         } else if (Object.keys(element).includes("wkt")
                   && element.wkt.type == "literal") {
-          if (element.wkt.value.includes("POINT")) {
-            const coord = this.extractCoordPointWkt(element.wkt.value);
-            if (coord) {
-              this.displayElement(coord, element)
+          const upperCoord = coord.toUpperCase();
+          let coord = this.checkEPSGWkt(element.wkt.value);
+          if (!coord) {
+            if (upperCoord.includes("POINT")) {
+              const coords = this.extractCoordPointWkt(coord);
+              this.displayElement(coords, element);
+            } else if (upperCoord.includes("LINESTRING")) {
+              let coords = [];
+              if (upperCoord.includes("MULTILINESTRING")) {
+                coords = this.extractCoordMultiLineWkt(coord);
+              } else {
+                coords = this.extractCoordLineWkt(coord);
+              }
+              this.displayLineElement(coords, element);
+            } else if (upperCoord.includes("POLYGON")) {
+              const coords = this.extractCoordPolygonWkt(coord);
+              this.displayPolygonElement(coords, element);
             }
-          } else if (element.wkt.value.includes("LINESTRING")) {
-            const coords = this.extractCoordPointWkt(element.wkt.value);
-            this.displayLineElement(coords, element)
           }
+          
         }
       })
     },
-    extractCoordPointWkt(value) {
-      let coord = value.split("> ");
+    extractCoordPointWkt(coord) {
+      coord = coord.split(" ");
+
+      const lng = parseFloat(coord[0].split("(")[coord[0].includes("(") ? 1 : 0]);
+      const lat = parseFloat(coord[1].split(")")[0]);
+      return [lat, lng];
+    },
+    extractCoordLineWkt(coord, poly=false) {
+      coord = coord.split("(")[coord.includes("(") ? 1 : 0].split(")")[0].split(", ");
+      const listPoints = [];
+
+      for (let k = 0; k < coord.length - (poly ? 1 : 0); k++) {    
+        listPoints.push(this.extractCoordPointWkt(coord[k]));
+      }
+      return listPoints;
+    },
+    extractCoordMultiLineWkt(coord, poly=false) {
+      coord = coord.split("((")[coord.includes("((") ? 1 : 0].split("))")[0].split("),(");
+      const listCoords = [];
+
+      for (let k = 0; k < coord.length; k++) {
+        listCoords.push(this.extractCoordLineWkt(coord[k], poly));
+      }
+      return listCoords;
+    },
+    extractCoordPolygonWkt(coord) {
+      coord = coord.split("(((")[1].split(")))")[0].split(")),((");
+      const listPoints = [];
+
+      for (let k = 0; k < coord.length; k++) {
+        listPoints.push(this.extractCoordMultiLineWkt(coord[k], true));
+      }
+      return listPoints;
+    },
+    checkEPSGWkt(coord) {
+      coord = coord.split("> ");
 
       if (coord.length > 1 && !coord[0].includes("4326")) {
         return;
@@ -205,38 +257,59 @@ export default {
       } else {
         coord = coord[0];
       }
-      coord = coord.split(" ");
-      const lng = parseFloat(coord[0].split("(")[1]);
-      const lat = parseFloat(coord[1].split(")")[0]);
-      return [lat, lng];
-    },
-    extractCoordLineWkt(value) {
-      let coords = value.split("(")[1].split(")")[0].split(", ");
-      const listPoints = [];
-
-      for (let k = 0; k < coords.length; k++) {
-        const coordPoint = coords[k].split(" ");
-        const lat = parseFloat(coordPoint[0]),
-          lng = parseFloat(coordPoint[1]);
-
-        listPoints.push([lat, lng]);
-      }
-      return listPoints;
+      return coord;
     },
     displayElement(coord, element) {
       switch (element.type.value) {
         case "geo":
-          this.layerGeoElements.addLayer(L.marker(coord, {icon: L.icon({iconurl: "markerIcons/geo.png"})}));
-          this.addResearchToLayerControl(this.layerGeoElements, "Geographic Entities");
+          this.createMarker(
+            coord, "geo", [38, 50],
+            element, this.layerGeoElements, "Geographic Entities"
+          );
           break;
-          case "advice":
-          this.layerAdviceElements.addLayer(L.marker(coord, {icon: L.icon({iconurl: "markerIcons/advice.png"})}));
-          this.addResearchToLayerControl(this.layerAdviceElements, "Advice Entities");
+        case "advice":
+          this.createMarker(
+            coord, "advice", [40, 30],
+            element, this.layerAdviceElements, "Advice Entities"
+          );
           break;
         default:
-          this.layerDefaultElements.addLayer(L.marker(coord, {icon: L.icon({iconurl: "markerIcons/default.png"})}));
-          this.addResearchToLayerControl(this.layerDefaultElements, "Research Elements");
+          this.createMarker(
+            coord, "default", [50, 40],
+            element, this.layerDefaultElements, "Research Elements"
+          );
       }
+    },
+    displayLineElement(coords, element) {
+      const line = L.polyline(coords);
+
+      this.createPopup(line, element);
+      this.layerGeoElements.addLayer(line);
+      this.addResearchToLayerControl(this.layerGeoElements, "Geographic Entities");
+    },
+    displayPolygonElement(coords, element) {
+      const polygone = L.polygon(coords);
+
+      this.createPopup(polygone, element);
+      this.layerGeoElements.addLayer(polygone);
+      this.addResearchToLayerControl(this.layerGeoElements, "Geographic Entities");
+    },
+    createMarker(coord, iconName, iconSize, element, layer, layerName) {
+      const icon = L.icon({iconUrl: "markerIcons/" + iconName + ".png", iconSize: iconSize});
+      const marker = L.marker(coord, {icon: icon});
+
+      this.createPopup(marker, element);
+      layer.addLayer(marker);
+      this.addResearchToLayerControl(layer, layerName);
+    },
+    createPopup(symbol, element) {
+      symbol.on("click", async () => {
+        symbol.unbindPopup();
+        this.dataEntity = element;
+        await this.$refs["entity"].$.update();
+        symbol.bindPopup(this.$refs["entity"].$el.innerHTML);
+        symbol.openPopup();
+      })
     },
     addResearchToLayerControl(layer, name) {
       if (!this.layersManaged.hasLayer(layer)) {
