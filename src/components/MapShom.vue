@@ -64,12 +64,13 @@ export default {
       userLocation: {},
       onMap: false,
       selectionArea: "",
+      map: true,
       layerManager : L.control.layers(),
       layersManaged : L.layerGroup(),
-      layerResearchedElements: L.layerGroup(),
-      layerDefaultElements: L.layerGroup(),
-      layerGeoElements: L.layerGroup(),
-      layerAdviceElements: L.layerGroup(),
+      layerResearchedElements: L.featureGroup(),
+      layerDefaultElements: L.featureGroup(),
+      layerGeoElements: L.featureGroup(),
+      layerAdviceElements: L.featureGroup(),
     }
   },
   watch: {
@@ -88,12 +89,11 @@ export default {
     this.setupControls(map);
     this.setupSelectArea(map);
     this.setupResults(map);
-    
-    //exemple of removing a layer
-    //this.layerManager.removeLayer(this.layersManaged.getLayer(this.tryDict["topo"]));
 
     //Connexion à la fonction au déplacement de la souris
     map.on('mousemove', this.getMousePosition, this);
+
+    this.map = map;
   },
   methods: {
     setupMap() {
@@ -181,37 +181,45 @@ export default {
             && element.lat.type == "literal"
             && Object.keys(element).includes("lng")
             && element.lng.type == "literal") {
-          if (element.lat.value.includes("°")) {
-            const lat = this.convertDegreeToLatlng(element.lat.value);
-            const lng = this.convertDegreeToLatlng(element.lng.value);
-            this.displayElement([lat, lng], element);
-          } else {
-            this.displayElement([parseFloat(element.lat.value), parseFloat(element.lng.value)], element);
-          }
+          this.displayResultGeo(element);
         } else if (Object.keys(element).includes("wkt")
                   && element.wkt.type == "literal") {
-          const upperCoord = coord.toUpperCase();
-          let coord = this.checkEPSGWkt(element.wkt.value);
-          if (!coord) {
-            if (upperCoord.includes("POINT")) {
-              const coords = this.extractCoordPointWkt(coord);
-              this.displayElement(coords, element);
-            } else if (upperCoord.includes("LINESTRING")) {
-              let coords = [];
-              if (upperCoord.includes("MULTILINESTRING")) {
-                coords = this.extractCoordMultiLineWkt(coord);
-              } else {
-                coords = this.extractCoordLineWkt(coord);
-              }
-              this.displayLineElement(coords, element);
-            } else if (upperCoord.includes("POLYGON")) {
-              const coords = this.extractCoordPolygonWkt(coord);
-              this.displayPolygonElement(coords, element);
-            }
-          }
-          
+          this.displayResultWkt(element);
         }
       })
+      this.map.fitBounds(this.layerResearchedElements.getBounds());
+    },
+    displayResultGeo(element) {
+      if (element.lat.value.includes("°")) {
+        const lat = this.convertDegreeToLatlng(element.lat.value);
+        const lng = this.convertDegreeToLatlng(element.lng.value);
+        this.displayElement([lat, lng], element);
+      } else {
+        this.displayElement(
+          [parseFloat(element.lat.value), parseFloat(element.lng.value)],
+          element);
+      }
+    },
+    displayResultWkt(element) {
+      const upperCoord = element.wkt.value.toUpperCase();
+      let coord = this.checkEPSGWkt(element.wkt.value);
+      if (coord) {
+        if (upperCoord.includes("POINT")) {
+          const coords = this.extractCoordPointWkt(coord);
+          this.displayElement(coords, element);
+        } else if (upperCoord.includes("LINESTRING")) {
+          let coords = [];
+          if (upperCoord.includes("MULTILINESTRING")) {
+            coords = this.extractCoordMultiLineWkt(coord);
+          } else {
+            coords = this.extractCoordLineWkt(coord);
+          }
+          this.displayLineElement(coords, element);
+        } else if (upperCoord.includes("POLYGON")) {
+          const coords = this.extractCoordPolygonWkt(coord);
+          this.displayPolygonElement(coords, element);
+        }
+      }
     },
     extractCoordPointWkt(coord) {
       coord = coord.split(" ");
@@ -260,7 +268,8 @@ export default {
       return coord;
     },
     displayElement(coord, element) {
-      switch (element.type.value) {
+      const category = "toDo";
+      switch (category) {
         case "geo":
           this.createMarker(
             coord, "geo", [38, 50],
@@ -280,6 +289,14 @@ export default {
           );
       }
     },
+    createMarker(coord, iconName, iconSize, element, layer, layerName) {
+      const icon = L.icon({iconUrl: "markerIcons/" + iconName + ".png", iconSize: iconSize});
+      const marker = L.marker(coord, {icon: icon});
+
+      this.createPopup(marker, element);
+      layer.addLayer(marker);
+      this.addResearchToLayerControl(layer, layerName);
+    },
     displayLineElement(coords, element) {
       const line = L.polyline(coords);
 
@@ -294,14 +311,6 @@ export default {
       this.layerGeoElements.addLayer(polygone);
       this.addResearchToLayerControl(this.layerGeoElements, "Geographic Entities");
     },
-    createMarker(coord, iconName, iconSize, element, layer, layerName) {
-      const icon = L.icon({iconUrl: "markerIcons/" + iconName + ".png", iconSize: iconSize});
-      const marker = L.marker(coord, {icon: icon});
-
-      this.createPopup(marker, element);
-      layer.addLayer(marker);
-      this.addResearchToLayerControl(layer, layerName);
-    },
     createPopup(symbol, element) {
       symbol.on("click", async () => {
         symbol.unbindPopup();
@@ -313,6 +322,7 @@ export default {
     },
     addResearchToLayerControl(layer, name) {
       if (!this.layersManaged.hasLayer(layer)) {
+        layer.addTo(this.map);
         this.layersManaged.addLayer(layer);
         this.layerManager.addOverlay(layer, name);
       }
@@ -321,9 +331,9 @@ export default {
       this.layerResearchedElements.eachLayer((layer) => {
         layer.clearLayers();
         if (this.layersManaged.hasLayer(layer)) {
-        this.layersManaged.removeLayer(layer);
-        this.layerManager.remove(layer);
-      }
+          this.layersManaged.removeLayer(layer);
+          this.layerManager.removeLayer(layer);
+        }
       })
     },
     getMousePosition(pos) {
