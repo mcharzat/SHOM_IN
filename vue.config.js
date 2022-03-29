@@ -4,6 +4,5 @@ module.exports = defineConfig({
   transpileDependencies: true,
   configureWebpack: {
 
-    
   }
 })

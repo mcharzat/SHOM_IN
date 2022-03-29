@@ -1,6 +1,7 @@
 <template>
-<div><PDF/></div>
+  <div><PDF/></div>
 </template>
+
 <script>
 import PDF from './pdfComponents/PDF.vue'
 
@@ -11,9 +12,12 @@ export default {
   },
 }
 </script>
+
 <style scoped>
+
 div {
     height: 100%;
     width: 100%;
 }
+
 </style>

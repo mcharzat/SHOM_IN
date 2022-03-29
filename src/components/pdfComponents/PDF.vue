@@ -1,6 +1,6 @@
 <template>
   <div class="divSize">
-    <iframe class="divSize" :src="getFilePath"></iframe>
+    <iframe class="divSize" frameborder="0" :src="getFilePath"></iframe>
   </div>
 </template>
 

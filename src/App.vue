@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="containerAppa">
     <NavBar />
     <MapShom />
     <DisplayResearch 
@@ -56,7 +56,7 @@ export default {
     /*margin-top: 60px;*/
   }
 
-  .container {
+  .containerAppa {
     position: relative;
     height: 100%;
     width: 100%;

@@ -72,7 +72,6 @@ export default {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 
   .navBar{
@@ -80,7 +79,6 @@ export default {
     top: 0;
     left: 0;
     width: 100%;
-    height: 50px;
     margin: 0 auto;
     background: rgba(7, 110, 140,0.8);
     padding: 10px;

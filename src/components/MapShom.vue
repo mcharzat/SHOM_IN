@@ -158,7 +158,6 @@ export default {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
 .map {
   height: 100%;
@@ -168,7 +167,7 @@ export default {
 
 .mouseTracker{
   width:330px;
-  height:34px;
+  height:21.5px;
   position: fixed;
   bottom: 1px;
   right: 100px;
@@ -177,9 +176,11 @@ export default {
 .mouseTracker p{
   background: white;
   opacity: 60%;
-  padding: 2px;
-  height:12.5px;
-  font-size: 0.8em;
+  height:16.5px;
+  padding:2px;
+  line-height: 1;
+  font-size: 0.65em;
+  font-family: sans-serif;
 }
 
 .leaflet-touch .leaflet-control-layers,

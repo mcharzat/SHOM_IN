@@ -1,6 +1,6 @@
 <template>
   <div class="myEntity">
-    <ul v-for="field in extractFields" :key="field">
+    <ul class="fieldList" v-for="field in extractFields" :key="field">
       <div v-if="checkType(field)">
         <h5 class="field"> {{ field }} </h5>
         <ul>
@@ -36,8 +36,7 @@ export default {
 <style scoped>
 .myEntity {
     margin: 10px;
-    padding-top: 1px;
-    padding-bottom: 1px;
+    padding: 1px 15px 1px 0px;
     background-color: rgba(44, 62, 80, 0.8);
     color: white;
     box-shadow: 0 0 50px rgba(255,255,255,0.5), 0 0 5px rgba(255,255,255,0.5);
@@ -47,5 +46,9 @@ export default {
 
 .field {
     margin-bottom: 5px;
+}
+
+.fieldList {
+  padding-left: 20px;
 }
 </style>

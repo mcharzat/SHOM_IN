@@ -71,13 +71,13 @@ export default {
 
 .resultSidepanelOpen {
   position: absolute;
-  background-color: rgba(44, 62, 80, 33%);
+  background-color: rgba(255, 255, 255, 83%);
+  padding-top: 15px;
   left: 5px;
   width: 33%;
   height: 100%;
   max-height: calc(100% - 160px);
   top : 100px;
-
   overflow: scroll;
   z-index: 1000;
 }
