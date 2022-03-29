@@ -1,8 +1,8 @@
 <template>
   <nav class=navBar>
     <div class=navBarLeft>
-      <div class="logo"><img src="../assets/logo.png"></div>
-      <div class="name">Nom du site</div>
+      <div class="logo"><img src="../assets/logo_shom_1.png"></div>
+      <div class="name">Nérée</div>
     </div>
     <div v-if="!isLog" class="navBarMiddle notLogged"> 
         <label for="login">Login:</label>
