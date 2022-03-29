@@ -28,9 +28,7 @@ export default {
   },
   watch: {
     coordsBboxArea: function (bbox) {
-      console.log('coucoucoucou');
       console.log(bbox);
-      //this.data = results.results.bindings;
     }
   },
   mounted() {         
@@ -103,7 +101,16 @@ export default {
   methods: {
     addSelectAreaBbox(queryString) {
       // ex bbox : -3.530592318234245,47.13401849882367,-2.8469636918917662,47.492171405800896
-      queryString = queryString.replace(new RegExp('}$'), "  FILTER (?long>)(?long<)&&(?lat)(?lat).\nFILTER (?long>)(?long<)&&(?lat)(?lat).\n}");
+      queryString = queryString.replace(new RegExp('}$'),
+      ` ?ent geom:hasGeometry ?eGeom .
+        ?eGeom gsp:asWKT ?wkt.
+        FILTER (geof:sfWithin(?wkt, '''
+            <http://www.opengis.net/def/crs/OGC/1.3/CRS84>
+                Polygon ((${this.coordsBboxArea[0]} ${this.coordsBboxArea[1]},
+                ${this.coordsBboxArea[2]} ${this.coordsBboxArea[1]},
+                ${this.coordsBboxArea[2]} ${this.coordsBboxArea[3]},
+                ${this.coordsBboxArea[0]} ${this.coordsBboxArea[3]},
+                ${this.coordsBboxArea[0]} ${this.coordsBboxArea[1]}))'''^^gsp:wktLiteral))\n}`);
       return queryString;
     },
     prefixesPostProcess(queryString) {
@@ -113,6 +120,7 @@ export default {
                 "PREFIX nav: <http://data.shom.fr/def/navigation_cotiere#>\n"+
                 "PREFIX geom: <http://data.ign.fr/def/geometrie#>\n"+
                 "PREFIX skos: <http://www.w3.org/2004/02/skos/core#>"+
+                "PREFIX geof: <http://www.opengis.net/def/function/geosparql/>"+
                 "PREFIX gsp: <http://www.opengis.net/ont/geosparql#>\n SELECT ");
       }       
       return queryString;
