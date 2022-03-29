@@ -1,23 +1,37 @@
 <template>
     <div class="container-fluid">
       <div id="ui-search"></div>
-      <div id="yasqe" style="display:none"></div>
+      <div id="yasqe"></div>
+      <!--<div id="yasqe" style="display:none"></div>-->
       <div id="yasr" style="display:none"></div>
     </div>  
 </template>
 
 <script>
-import data from '../../assets/sparnatural_config/atlantis-sparnaconfig.ttl'
+import ontology from '../../assets/sparnatural_config/atlantis-sparnaconfig.ttl'
 import {Yasr,Yasqe} from '@triply/yasgui'
 
 export default {
   name: 'QuerySPARQL',
   emits: ['myQueryResult'],
+  props: {
+    bboxArea:  {
+      type: Object,
+      default: () => {}
+    },
+  },
   data () {
     return {
-      config: data,
+      config: ontology,
       sparnatural:{},
-
+      data: ""
+    }
+  },
+  watch: {
+    bboxArea: function (results) {
+      console.log('coucoucoucou');
+      console.log(results);
+      //this.data = results.results.bindings;
     }
   },
   mounted() {         
@@ -88,6 +102,11 @@ export default {
     });
   },
   methods: {
+    addSelectAreaBbox(queryString) {
+      // ex bbox : -3.530592318234245,47.13401849882367,-2.8469636918917662,47.492171405800896
+      queryString = queryString.replace(new RegExp('}$'), "  FILTER (?long>)(?long<)&&(?lat)(?lat).\nFILTER (?long>)(?long<)&&(?lat)(?lat).\n}");
+      return queryString;
+    },
     prefixesPostProcess(queryString) {
       if(queryString.indexOf("rdf-schema#") == -1) {
           queryString = queryString.replace("SELECT ", 

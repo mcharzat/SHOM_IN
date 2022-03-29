@@ -16,6 +16,7 @@ import EntityResult from "./queryComponents/EntityResult.vue";
 
 export default {
   name: 'MapShom',
+  emits: ['bboxSelectionArea'],
   components: {
     EntityResult,
   },
@@ -152,7 +153,8 @@ export default {
       map.on(L.Draw.Event.CREATED, (event) => {
         const layer = event.layer;
         this.selectionArea = layer.getBounds().toBBoxString();
-
+        console.log(this.selectionArea);
+        this.$emit("bboxSelectionArea", this.selectionArea);
         drawnItems.addLayer(layer).addTo(map);
         this.layerManager.addOverlay(drawnItems, "Selection");
       });
