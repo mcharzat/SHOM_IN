@@ -20,9 +20,9 @@ export default {
     EntityResult,
   },
   props: {
-    queryResult:  {
-      type: Object,
-      default: () => {}
+    queryResultMap:  {
+      type: Array,
+      default: () => []
     },
   },
   data() {
@@ -59,7 +59,6 @@ export default {
         aton: 0,
         meta: 0
       },
-      data: [],
       dataEntity: {},
       userLocation: {},
       onMap: false,
@@ -79,13 +78,8 @@ export default {
     this.setupSelectArea(map);
     this.setupResults(map);
 
-    this.$watch('queryResult', (results) => {
-      if ((results.head.vars.includes("lat") 
-          && results.head.vars.includes("lng")) 
-          || results.head.vars.includes("wkt")) {
-        this.data = results.results.bindings;
-        this.displayResult(map);
-      }
+    this.$watch('queryResultMap', () => {
+      this.displayResult(map);
     })
 
     //Connexion à la fonction au déplacement de la souris
@@ -172,33 +166,34 @@ export default {
     },
     displayResult(map) { 
       this.clearResearchLayer();
-      this.data.forEach(element => {
-        if (Object.keys(element).includes("lat")
-            && element.lat.type == "literal"
-            && Object.keys(element).includes("lng")
-            && element.lng.type == "literal") {
-          this.displayResultGeo(element, map);
-        } else if (Object.keys(element).includes("wkt")
-                  && element.wkt.type == "literal") {
+      this.queryResultMap.forEach(element => {
+        const keys = Object.keys(element);
+        if (keys.includes("wkt")
+            && element.wkt.type == "literal") {
           this.displayResultWkt(element, map);
+        } else if (keys.includes("lat")
+                  && element.lat.type == "literal"
+                  && keys.includes("lng")
+                  && element.lng.type == "literal") {
+          this.displayResultGeo(element, map);
         }
       })
-      map.fitBounds(this.layerResearchedElements.getBounds());
+      this.checkFitBounds(map);
     },
     displayResultGeo(element, map) {
-      if (element.lat.value.includes("°")) {
-        const lat = this.convertDegreeToLatlng(element.lat.value);
-        const lng = this.convertDegreeToLatlng(element.lng.value);
+      if (element.lat.value[0].includes("°")) {
+        const lat = this.convertDegreeToLatlng(element.lat.value[0]);
+        const lng = this.convertDegreeToLatlng(element.lng.value[0]);
         this.displayElement([lat, lng], element, map);
       } else {
         this.displayElement(
-          [parseFloat(element.lat.value), parseFloat(element.lng.value)],
+          [parseFloat(element.lat.value[0]), parseFloat(element.lng.value[0])],
           element, map);
       }
     },
     displayResultWkt(element, map) {
-      const upperCoord = element.wkt.value.toUpperCase();
-      let coord = this.checkEPSGWkt(element.wkt.value);
+      const upperCoord = element.wkt.value[0].toUpperCase();
+      let coord = this.checkEPSGWkt(element.wkt.value[0]);
       if (coord) {
         if (upperCoord.includes("POINT")) {
           const coords = this.extractCoordPointWkt(coord);
@@ -212,22 +207,27 @@ export default {
           }
           this.displayLineElement(coords, element, map);
         } else if (upperCoord.includes("POLYGON")) {
-          const coords = this.extractCoordPolygonWkt(coord);
+          let coords = [];
+          if (upperCoord.includes("MULTIPOLYGON")) {
+            coords = this.extractCoordPolygonWkt(coord);
+          } else {
+            coords = this.extractCoordMultiLineWkt(coord);
+          }
           this.displayPolygonElement(coords, element, map);
         }
       }
     },
     extractCoordPointWkt(coord) {
-      coord = coord.split(" ");
+      coord = coord.replace(/^ /i, "").replace(' (', "(").split(" ");
 
       const lng = parseFloat(coord[0].split("(")[coord[0].includes("(") ? 1 : 0]);
       const lat = parseFloat(coord[1].split(")")[0]);
       return [lat, lng];
     },
     extractCoordLineWkt(coord, poly=false) {
-      coord = coord.split("(")[coord.includes("(") ? 1 : 0].split(")")[0].split(", ");
+      coord = coord.split("(")[coord.includes("(") ? 1 : 0].split(")")[0].split(",");
       const listPoints = [];
-
+      
       for (let k = 0; k < coord.length - (poly ? 1 : 0); k++) {    
         listPoints.push(this.extractCoordPointWkt(coord[k]));
       }
@@ -329,6 +329,14 @@ export default {
         if (this.layersManaged.hasLayer(layer)) {
           this.layersManaged.removeLayer(layer);
           this.layerManager.removeLayer(layer);
+        }
+      })
+    },
+    checkFitBounds(map) {
+      this.layerResearchedElements.eachLayer((layer) => {
+        if (layer.getLayers().length > 0) {
+          map.fitBounds(this.layerResearchedElements.getBounds());
+          return;
         }
       })
     },
