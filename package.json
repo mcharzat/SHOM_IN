@@ -5,6 +5,7 @@
   "description": "```\r npm install\r ```",
   "author": "",
   "scripts": {
+    "postinstall": "cp .customModule/leaflet-src.js node_modules/leaflet/dist/leaflet-src.js",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",

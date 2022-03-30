@@ -1,7 +1,9 @@
 <template>
   <div class="containerAppa">
     <NavBar />
-    <MapShom />
+    <MapShom
+      :queryResult="result"
+    />
     <DisplayResearch 
       :queryResult="result"
     />

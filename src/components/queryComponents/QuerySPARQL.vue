@@ -39,7 +39,7 @@ export default {
       backgroundBaseColor: '2,184,117',
       autocomplete : null,
       list : null,
-      defaultEndpoint: "http://localhost:7200/repositories/test_shom",
+      defaultEndpoint: "http://172.31.58.17:7200/repositories/test_shom",
       sparqlPrefixes : {
         "dbpedia" : "http://dbpedia.org/ontology/"
       },
@@ -64,7 +64,7 @@ export default {
     });
 
     const yasqe = new Yasqe(document.getElementById("yasqe"), {
-      requestConfig: { endpoint: "http://localhost:7200/repositories/test_shom" },
+      requestConfig: { endpoint: "http://172.31.58.17:7200/repositories/test_shom" },
       copyEndpointOnNewTab: false  
     });
 
