@@ -99,7 +99,7 @@ export default {
       return queryString;
     },
     labelDescriptionSelectionPostProcess(queryString) {
-        queryString = queryString.replace("SELECT DISTINCT ?this", "SELECT DISTINCT ?label ?description ?information ?wkt ?lat ?lng");
+        queryString = queryString.replace("SELECT DISTINCT ?this", "SELECT DISTINCT ?this ?label ?description ?information ?wkt ?lat ?lng");
         return queryString;
     },
     optionalQueriesPostProcess(queryString) {
