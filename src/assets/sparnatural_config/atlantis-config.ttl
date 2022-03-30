@@ -1,0 +1,2081 @@
+@prefix : <http://www.semanticweb.org/formation/ontologies/2022/2/untitled-ontology-20#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@base <http://www.semanticweb.org/formation/ontologies/2022/2/untitled-ontology-20> .
+
+<http://www.semanticweb.org/formation/ontologies/2022/2/untitled-ontology-20> rdf:type owl:Ontology ;
+	owl:imports <http://data.sparna.fr/ontologies/sparnatural-config-core> , <http://data.sparna.fr/ontologies/sparnatural-config-datasources> .
+
+
+#################################################################
+#    Object Properties
+#################################################################
+
+###  http://data.shom.fr/def/navigation_cotiere#aPourAction
+<http://data.shom.fr/def/navigation_cotiere#aPourAction> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                         rdfs:domain [ rdf:type owl:Class ;
+                                                                       owl:unionOf ( <http://data.shom.fr/def/navigation_cotiere#Information>
+                                                                                     <http://data.shom.fr/def/navigation_cotiere#Instruction>
+                                                                                     <http://data.shom.fr/def/navigation_cotiere#Interdiction>
+                                                                                   )
+                                                                     ] ;
+                                                         rdfs:range <http://data.shom.fr/def/navigation_cotiere#TypeDAction> ;
+                                                         <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :type_action ;
+                                                         rdfs:label "a pour action"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#aPourCargaison
+<http://data.shom.fr/def/navigation_cotiere#aPourCargaison> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                            rdfs:domain <http://data.shom.fr/def/navigation_cotiere#Navire> ;
+                                                            rdfs:range <http://data.shom.fr/def/navigation_cotiere#TypeDeCargaison>;
+                                                            <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :type_cargaison ;
+                                                            rdfs:comment "hydrocarbures, matières dangereuses, ciment, produits agro-alimentaires, marchandises, passagers"@fr ;
+                                                            rdfs:label "a pour cargaison"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#aPourCible
+<http://data.shom.fr/def/navigation_cotiere#aPourCible> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                        rdfs:domain <http://data.shom.fr/def/navigation_cotiere#ConsigneDeNavigation> ;
+                                                        rdfs:range <http://data.shom.fr/def/navigation_cotiere#TypeDeNavire> ;
+                                                        <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :type_navire ;
+                                                        rdfs:label "a pour cible"@fr .
+
+
+
+###  http://data.shom.fr/def/navigation_cotiere#aPourConditionMeteo
+<http://data.shom.fr/def/navigation_cotiere#aPourConditionMeteo> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                                 rdfs:range [ rdf:type owl:Restriction ;
+                                                                              owl:onProperty <http://www.w3.org/2004/02/skos/core#inScheme> ;
+                                                                              owl:hasValue <http://data.shom.fr/id/codes/navigation_cotiere/typedindicationmeteorologique/liste>
+                                                                            ] ;
+                                                                 rdfs:comment "L'objet de cette propriété peut être une valeur qui nécessite être précisé avec une autre propriété et objet. Donc, elle peut être dans un quoted triple écrit en RDF-star. Par exemple : <<_:entité _:aPourConditionLocale _:objet>> _:autrePropriete _:autreObjet."@fr ;
+                                                                 rdfs:label "a pour condition météorologique"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#aPourDirection
+<http://data.shom.fr/def/navigation_cotiere#aPourDirection> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                            rdfs:domain <http://data.shom.fr/def/navigation_cotiere#PhenomeneMeteorologiqueOuOceanographique> ;
+                                                            rdfs:range <http://data.shom.fr/def/navigation_cotiere#DirectionCardinale> ;
+                                                            <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :dir_cardinales ;
+                                                            rdfs:comment "Exemple : vent aPourDirection NE = vent de NE = vient du NE, va vers le SW"@fr ;
+                                                            rdfs:label "a pour direction"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#aPourElement
+<http://data.shom.fr/def/navigation_cotiere#aPourElement> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                          rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                          rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                          <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
+                                                          rdfs:comment "Links rdf:type topographic entity to another, of which it is partly constituted."@en ,
+                                                                       "Relie une entité topographique à une autre dont elle est partiellement constituée."@fr ;
+                                                          rdfs:isDefinedBy <http://data.shom.fr/def/navigation_cotiere#> ;
+                                                          rdfs:label "a pour élément"@fr ,
+                                                                     "has element"@en .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#aPourEntiteImpliquee
+<http://data.shom.fr/def/navigation_cotiere#aPourEntiteImpliquee> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                                  rdfs:domain [ rdf:type owl:Class ;
+                                                                                owl:unionOf ( <http://data.shom.fr/def/navigation_cotiere#Alignement>
+                                                                                              <http://data.shom.fr/def/navigation_cotiere#ConsigneDeNavigation>
+                                                                                              <http://data.shom.fr/def/navigation_cotiere#Reglement>
+                                                                                              <http://data.shom.fr/def/navigation_cotiere#Relevement>
+                                                                                              <http://data.shom.fr/def/navigation_cotiere#Reperage>
+                                                                                              <http://data.shom.fr/def/navigation_cotiere#Route>
+                                                                                            )
+                                                                              ] ;
+                                                                  rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                                  <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
+                                                                  rdfs:comment "L'objet de cette propriété sera toujours un rdfs:Container contennant une ou plusieurs entités, ou un rdfs:Container sera soit un rdf:Bag (entités sans ordre particulier) ou un rdf:Seq (entités dans un ordre particulier). Par exemple : _:entité _:aPourEntiteImpliquee [a rdfs:Container; rdf:_1 _:autreEntité1; rdf:_2 _:autreEntité2; ]."@fr ;
+                                                                  rdfs:isDefinedBy <http://data.shom.fr/def/navigation_cotiere#> ;
+                                                                  rdfs:label "a pour entité impliquée"@fr ,
+                                                                             "entity involved"@en .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#aPourEtat
+<http://data.shom.fr/def/navigation_cotiere#aPourEtat> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                       rdfs:domain <http://data.shom.fr/def/navigation_cotiere#Navire> ;
+                                                       rdfs:range <http://data.shom.fr/def/navigation_cotiere#TypeDEtat> ;
+                                                       <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :type_etat ;
+                                                       rdfs:label "a pour état"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#aPourForme
+<http://data.shom.fr/def/navigation_cotiere#aPourForme> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                        rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                        rdfs:range <http://data.shom.fr/def/navigation_cotiere#TypeDeForme> ;
+                                                        <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :type_forme ;
+                                                        rdfs:label "a pour forme"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#aPourLieuDEffet
+<http://data.shom.fr/def/navigation_cotiere#aPourLieuDEffet> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                             rdfs:domain <http://data.shom.fr/def/navigation_cotiere#ConsigneDeNavigation> ;
+                                                             rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                             <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
+                                                             rdfs:label "a pour lieu d'effet"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#aPourMotif
+<http://data.shom.fr/def/navigation_cotiere#aPourMotif> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                        rdfs:domain [ rdf:type owl:Class ;
+                                                                      owl:unionOf ( <http://data.shom.fr/def/navigation_cotiere#AideALaNavigation>
+                                                                                    <http://data.shom.fr/def/navigation_cotiere#Marque>
+                                                                                  )
+                                                                    ] ;
+                                                        rdfs:range <http://data.shom.fr/def/navigation_cotiere#TypeDeMotif>;
+                                                        <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :type_motif ;
+                                                        rdfs:label "a pour motif"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#aPourNature
+<http://data.shom.fr/def/navigation_cotiere#aPourNature> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                         rdfs:domain <http://data.shom.fr/def/navigation_cotiere#EntiteGeographique> ;
+                                                         rdfs:range <http://data.shom.fr/def/navigation_cotiere#TypeDEntiteGeographique>;
+                                                         <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :type_entitegeo ;
+                                                         rdfs:comment "Links rdf:type topographic entity to the concept that specifies its nature."@en ,
+                                                                      "Relie une entité topographique au concept qui précise sa nature."@fr ;
+                                                         rdfs:label "a pour nature"@fr ,
+                                                                    "has nature"@en .
+
+# http://ontologies.sparna.fr/sparnatural-demo-semapps#searchTypeDentiteGeographique
+:searchTypeDentiteGeographique rdf:type :ObjectProperty;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SearchProperty> ;
+rdfs:domain <http://data.shom.fr/def/navigation_cotiere#TypeDEntiteGeographique>;
+rdfs:range :Search;
+<http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<http://www.w3.org/2000/01/rdf-schema#label>";
+rdfs:label "full-text search"@en , "recherche plein-texte"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#aPourPointDeDepart
+<http://data.shom.fr/def/navigation_cotiere#aPourPointDeDepart> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                                rdfs:domain [ rdf:type owl:Class ;
+                                                                              owl:unionOf ( <http://data.shom.fr/def/navigation_cotiere#Alignement>
+                                                                                            <http://data.shom.fr/def/navigation_cotiere#ConsigneDeNavigation>
+                                                                                            <http://data.shom.fr/def/navigation_cotiere#DispositifDeSeparationDuTrafic>
+                                                                                            <http://data.shom.fr/def/navigation_cotiere#Relevement>
+                                                                                            <http://data.shom.fr/def/navigation_cotiere#Route>
+                                                                                          )
+                                                                            ] ;
+                                                                rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                                <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
+                                                                rdfs:comment "L'objet de cette propriété sera toujours un rdfs:Container contennant une ou plusieurs entités, ou un rdfs:Container sera soit un rdf:Bag (entités sans ordre particulier) ou un rdf:Seq (entités dans un ordre particulier). Par exemple : _:entité _:aPourPointDeDepart [a rdfs:Container; rdf:_1 _:autreEntité1; rdf:_2 _:autreEntité2; ]."@fr ;
+                                                                rdfs:label "a pour point de départ"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#aPourPointDeDestination
+<http://data.shom.fr/def/navigation_cotiere#aPourPointDeDestination> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                                     rdfs:domain [ rdf:type owl:Class ;
+                                                                                   owl:unionOf ( <http://data.shom.fr/def/navigation_cotiere#Alignement>
+                                                                                                 <http://data.shom.fr/def/navigation_cotiere#ConsigneDeNavigation>
+                                                                                                 <http://data.shom.fr/def/navigation_cotiere#DispositifDeSeparationDuTrafic>
+                                                                                                 <http://data.shom.fr/def/navigation_cotiere#Relevement>
+                                                                                                 <http://data.shom.fr/def/navigation_cotiere#Route>
+                                                                                               )
+                                                                                 ] ;
+                                                                     rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                                     <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
+                                                                     rdfs:comment "L'objet de cette propriété sera toujours un rdfs:Container contennant une ou plusieurs entités, ou un rdfs:Container sera soit un rdf:Bag (entités sans ordre particulier) ou un rdf:Seq (entités dans un ordre particulier). Par exemple : _:entité _:aPourPointDeDestination [a rdfs:Container; rdf:_1 _:autreEntité1; rdf:_2 _:autreEntité2; ]."@fr ;
+                                                                     rdfs:label "a pour point de destination"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#aPourPortDeRattachement
+<http://data.shom.fr/def/navigation_cotiere#aPourPortDeRattachement> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                                     rdfs:domain <http://data.shom.fr/def/navigation_cotiere#CourantDeMaree> ;
+                                                                     rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                                     <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
+                                                                     rdfs:label "a pour port de rattachement"@fr .
+
+
+
+
+###  http://data.shom.fr/def/navigation_cotiere#aPourRepere
+<http://data.shom.fr/def/navigation_cotiere#aPourRepere> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                         rdfs:domain [ rdf:type owl:Class ;
+                                                                       owl:unionOf ( <http://data.shom.fr/def/navigation_cotiere#Alignement>
+                                                                                     <http://data.shom.fr/def/navigation_cotiere#Relevement>
+                                                                                   )
+                                                                     ] ;
+                                                         rdfs:range <http://data.shom.fr/def/navigation_cotiere#EntiteGeographique> ;
+                                                         <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :entite_geo ;
+                                                         rdfs:comment "L'objet de cette propriété sera toujours un rdfs:Container contennant une ou plusieurs entités, ou un rdfs:Container sera soit un rdf:Bag (entités sans ordre particulier) ou un rdf:Seq (entités dans un ordre particulier). Par exemple : _:entité _:aPourRepere [a rdfs:Container; rdf:_1 _:autreEntité1; rdf:_2 _:autreEntité2; ]."@fr ;
+                                                         rdfs:label "a pour repère"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#aPourTaille
+<http://data.shom.fr/def/navigation_cotiere#aPourTaille> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                         rdfs:domain <http://data.shom.fr/def/navigation_cotiere#Navire> ;
+                                                         rdfs:range <http://data.shom.fr/def/navigation_cotiere#TypeDeTaille>;
+                                                         <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :type_taille ;
+                                                         rdfs:label "a pour taille"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#aPourTemporaliteQualitative
+<http://data.shom.fr/def/navigation_cotiere#aPourTemporaliteQualitative> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                                         rdfs:range [ rdf:type owl:Restriction ;
+                                                                                      owl:onProperty <http://www.w3.org/2004/02/skos/core#inScheme> ;
+                                                                                      owl:hasValue <http://data.shom.fr/id/codes/navigation_cotiere/typedindicationtemporelle/liste>
+                                                                                    ] ;
+                                                                         rdfs:label "a pour temporalité qualitative"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#aPourTypeCardinal
+<http://data.shom.fr/def/navigation_cotiere#aPourTypeCardinal> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                               rdfs:domain [ rdf:type owl:Class ;
+                                                                             owl:unionOf ( <http://data.shom.fr/def/navigation_cotiere#AideALaNavigation>
+                                                                                           <http://data.shom.fr/def/navigation_cotiere#Marque>
+                                                                                         )
+                                                                           ] ;
+                                                               rdfs:range <http://data.shom.fr/def/navigation_cotiere#DirectionCardinaleSimple> ;
+                                                               <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :dir_cardinales ;
+                                                               rdfs:label "a pour type cardinal"@fr ,
+                                                                          "has cardinal type"@en .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#aPourTypeDeCourant
+<http://data.shom.fr/def/navigation_cotiere#aPourTypeDeCourant> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                                rdfs:domain <http://data.shom.fr/def/navigation_cotiere#Courant> ;
+                                                                rdfs:range <http://data.shom.fr/def/navigation_cotiere#TypeDeCourant> ;
+                                                                <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :type_courant ;
+                                                                rdfs:label "a pour type de courant"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#aPourTypeDeDanger
+<http://data.shom.fr/def/navigation_cotiere#aPourTypeDeDanger> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                               rdfs:domain <http://data.shom.fr/def/navigation_cotiere#Danger> ;
+                                                               rdfs:range <http://data.shom.fr/def/navigation_cotiere#aPourTypeDeDanger> ;
+                                                               <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :type_danger ;
+                                                               rdfs:label "a pour type de danger"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#aPourTypeDeLieuDeStationnement
+<http://data.shom.fr/def/navigation_cotiere#aPourTypeDeLieuDeStationnement> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                                            rdfs:domain <http://data.shom.fr/def/navigation_cotiere#LieuDeStationnement> ;
+                                                                            rdfs:range <http://data.shom.fr/def/navigation_cotiere#TypeDeLieuDeStationnement> ;
+                                                                            <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :type_stationnement ;
+                                                                            rdfs:label "a pour type de lieu de stationnement"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#aPourTypeLateral
+<http://data.shom.fr/def/navigation_cotiere#aPourTypeLateral> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                              rdfs:domain [ rdf:type owl:Class ;
+                                                                            owl:unionOf ( <http://data.shom.fr/def/navigation_cotiere#AideALaNavigation>
+                                                                                          <http://data.shom.fr/def/navigation_cotiere#Marque>
+                                                                                        )
+                                                                          ] ;
+                                                              rdfs:range <http://data.shom.fr/def/navigation_cotiere#DirectionLaterale> ;
+                                                              <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :dir_laterales ;
+                                                              rdfs:label "a pour type latéral"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#aUneRelationSpatialeAvec
+<http://data.shom.fr/def/navigation_cotiere#aUneRelationSpatialeAvec> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                                      rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                                      rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                                      <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
+                                                                      rdfs:label "a une relation spatiale avec"@fr .
+
+
+
+###  http://data.shom.fr/def/navigation_cotiere#deborde
+<http://data.shom.fr/def/navigation_cotiere#deborde> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                     rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                     rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                     <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
+                                                     rdfs:label "déborde"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#donneAccesA
+<http://data.shom.fr/def/navigation_cotiere#donneAccesA> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                         rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                         rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                         <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
+                                                         rdfs:label "donne accès à"@fr ,
+                                                                    "gives access to"@en .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#entoure
+<http://data.shom.fr/def/navigation_cotiere#entoure> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                     rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                     rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                     <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
+                                                     rdfs:label "etoure"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#estALAbriDe
+<http://data.shom.fr/def/navigation_cotiere#estALAbriDe> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                         rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                         rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                         <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
+                                                         rdfs:label "est à l'abri de"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#estALEstDe
+<http://data.shom.fr/def/navigation_cotiere#estALEstDe> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                        rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                        rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                        <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
+                                                        rdfs:label "est à l'est de"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#estALEstNordEstDe
+<http://data.shom.fr/def/navigation_cotiere#estALEstNordEstDe> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                               rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                               rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                               <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
+                                                               rdfs:label "est à l'est-nord-est de"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#estALExtremiteDe
+<http://data.shom.fr/def/navigation_cotiere#estALExtremiteDe> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                              rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                              rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                              <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
+                                                              rdfs:label "est à l'extremité de"@fr ,
+                                                                         "is at the extremity of"@en .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#estALOuestDe
+<http://data.shom.fr/def/navigation_cotiere#estALOuestDe> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                          rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                          rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                          <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
+                                                          rdfs:label "est à l'ouest de"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#estALaDroiteDe
+<http://data.shom.fr/def/navigation_cotiere#estALaDroiteDe> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                            rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                            rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                            <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
+                                                            rdfs:label "est à la droite de"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#estALaGaucheDe
+<http://data.shom.fr/def/navigation_cotiere#estALaGaucheDe> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                            rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                            rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                            <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
+                                                            rdfs:label "est à la gauche de"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#estAccessiblePar
+<http://data.shom.fr/def/navigation_cotiere#estAccessiblePar> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                              rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                              rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                              <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
+                                                              rdfs:label "est accessible par"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#estAuLargeDe
+<http://data.shom.fr/def/navigation_cotiere#estAuLargeDe> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                          rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                          rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                          <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
+                                                          rdfs:label "est au large de"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#estAuNordDe
+<http://data.shom.fr/def/navigation_cotiere#estAuNordDe> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                         rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                         rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                         <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
+                                                         rdfs:label "est au nord de"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#estAuNordEstDe
+<http://data.shom.fr/def/navigation_cotiere#estAuNordEstDe> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                            rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                            rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                            <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
+                                                            rdfs:label "est au nord-est de"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#estAuSudDe
+<http://data.shom.fr/def/navigation_cotiere#estAuSudDe> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                        rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                        rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                        <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
+                                                        rdfs:label "est au sud de"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#estAuSudOuestDe
+<http://data.shom.fr/def/navigation_cotiere#estAuSudOuestDe> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                             rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                             rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                             <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
+                                                             rdfs:label "est au sud-ouest de"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#estAuxAbordsDe
+<http://data.shom.fr/def/navigation_cotiere#estAuxAbordsDe> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                            rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                            rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                            <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
+                                                            rdfs:label "est aux abords de"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#estDansLEstDe
+<http://data.shom.fr/def/navigation_cotiere#estDansLEstDe> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                           rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                           rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                           <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
+                                                           rdfs:label "est dans l'est de"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#estDansLOuestDe
+<http://data.shom.fr/def/navigation_cotiere#estDansLOuestDe> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                             rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                             rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                             <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
+                                                             rdfs:label "est dans l'ouest de"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#estDansLeNordDe
+<http://data.shom.fr/def/navigation_cotiere#estDansLeNordDe> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                             rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                             rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                             <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
+                                                             rdfs:label "est dans le nord de"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#estDansLeSudDe
+<http://data.shom.fr/def/navigation_cotiere#estDansLeSudDe> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                            rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                            rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                            <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
+                                                            rdfs:label "est dans le sud de"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#estDeCouleur
+<http://data.shom.fr/def/navigation_cotiere#estDeCouleur> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                          rdfs:domain [ rdf:type owl:Class ;
+                                                                        owl:unionOf ( <http://data.shom.fr/def/navigation_cotiere#EntiteGeographique>
+                                                                                      <http://data.shom.fr/def/navigation_cotiere#Secteur>
+                                                                                    )
+                                                                      ] ;
+                                                          rdfs:range <http://data.shom.fr/def/navigation_cotiere#TypeDeCouleur>;
+                                                          <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :type_couleur ;
+                                                          rdfs:label "est de couleur"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#estDeType
+<http://data.shom.fr/def/navigation_cotiere#estDeType> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                       rdfs:domain <http://data.shom.fr/def/navigation_cotiere#Navire> ;
+                                                       rdfs:range <http://data.shom.fr/def/navigation_cotiere#TypeDeNavire> ;
+                                                        <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :type_navire ;
+                                                       rdfs:label "est de type"@fr ,
+                                                                  "type of ship"@en .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#estDebordeDe
+<http://data.shom.fr/def/navigation_cotiere#estDebordeDe> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                          rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                          rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                          <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
+                                                          rdfs:label "est débordé de"@fr ,
+                                                                     "surrounded by"@en .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#estEnracineA
+<http://data.shom.fr/def/navigation_cotiere#estEnracineA> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                          rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                          rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                          <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
+                                                          rdfs:label "est enraciné à"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#estEntoureDe
+<http://data.shom.fr/def/navigation_cotiere#estEntoureDe> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                          rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                          rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                          <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
+                                                          rdfs:label "est entouré de"@fr ,
+                                                                     "surrounded by"@en .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#estEntre
+<http://data.shom.fr/def/navigation_cotiere#estEntre> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                      rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                      rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                      <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
+                                                      rdfs:label "est entre"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#estEquipeDe
+<http://data.shom.fr/def/navigation_cotiere#estEquipeDe> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                         rdfs:domain <http://data.shom.fr/def/navigation_cotiere#Navire> ;
+                                                         rdfs:range <http://data.shom.fr/def/navigation_cotiere#TypeDEquipement>;
+                                                         <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :type_equipement ;
+                                                         rdfs:label "est équipé de"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#estGerePar
+<http://data.shom.fr/def/navigation_cotiere#estGerePar> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                        rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                        rdfs:range [ rdf:type owl:Class ;
+                                                                     owl:unionOf ( <http://data.shom.fr/def/navigation_cotiere#EntiteGeographique>
+                                                                                   <http://data.shom.fr/def/navigation_cotiere#Organisation>
+                                                                                 )
+                                                                   ] ;
+                                                        <http://data.sparna.fr/ontologies/sparnatural-config-datasources#> :base_request;
+                                                        rdfs:label "est géré par"@fr ,
+                                                                   "is managed by"@en .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#estImposeePar
+<http://data.shom.fr/def/navigation_cotiere#estImposeePar> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                           rdfs:domain <http://data.shom.fr/def/navigation_cotiere#ConsigneDeNavigation> ;
+                                                           rdfs:range <http://data.shom.fr/def/navigation_cotiere#Reglement> ;
+                                                           <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_reglement ;
+                                                           rdfs:label "est imposée par"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#estLeGerantDe
+<http://data.shom.fr/def/navigation_cotiere#estLeGerantDe> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                           rdfs:domain [ rdf:type owl:Class ;
+                                                                         owl:unionOf ( <http://data.shom.fr/def/navigation_cotiere#EntiteGeographique>
+                                                                                       <http://data.shom.fr/def/navigation_cotiere#Organisation>
+                                                                                     )
+                                                                       ] ;
+                                                           rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                           <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
+                                                           rdfs:label "est le gérant de"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#estLocaliseA
+<http://data.shom.fr/def/navigation_cotiere#estLocaliseA> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                          rdfs:domain <http://data.shom.fr/def/navigation_cotiere#PhenomeneMeteorologiqueOuOceanographique> ;
+                                                          rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                          <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
+                                                          rdfs:label "est localisé à"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#estMarquePar
+<http://data.shom.fr/def/navigation_cotiere#estMarquePar> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                          rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                          rdfs:range [ rdf:type owl:Class ;
+                                                                       owl:unionOf ( <http://data.shom.fr/def/navigation_cotiere#AideALaNavigation>
+                                                                                     <http://data.shom.fr/def/navigation_cotiere#Marque>
+                                                                                   )
+                                                                     ] ;
+                                                          <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_marquepar ;
+                                                          rdfs:comment "e.g. une bouée"@fr ;
+                                                          rdfs:label "est marqué par"@fr ,
+                                                                     "is marked by"@en .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#estOuvertAu
+<http://data.shom.fr/def/navigation_cotiere#estOuvertAu> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                         rdfs:domain <http://data.shom.fr/def/navigation_cotiere#EntiteGeographique> ;
+                                                         rdfs:range <http://data.shom.fr/def/navigation_cotiere#DirectionCardinale> ;
+                                                         <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :dir_cardinales ;
+                                                         rdfs:comment "Par exemple : une anse ouverte au Sud"@fr ;
+                                                         rdfs:label "est ouvert au"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#estPresDe
+<http://data.shom.fr/def/navigation_cotiere#estPresDe> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                       rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                       rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                       <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
+                                                       rdfs:label "est près de"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#estProtegePar
+<http://data.shom.fr/def/navigation_cotiere#estProtegePar> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                           rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                           rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                           <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
+                                                           rdfs:label "est protégé par"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#estSitueDans
+<http://data.shom.fr/def/navigation_cotiere#estSitueDans> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                          rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                          rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                          <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
+                                                          rdfs:label "est situé dans"@fr ,
+                                                                     "is situated in"@en .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#estUnElementDe
+<http://data.shom.fr/def/navigation_cotiere#estUnElementDe> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                            rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                            rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                            <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
+                                                            rdfs:comment "Links rdf:type topographic entity to another, of which it is rdf:type part."@en ,
+                                                                         "Relie une entité topographique à une autre dont elle fait partie."@fr ;
+                                                            rdfs:isDefinedBy <http://data.shom.fr/def/navigation_cotiere#> ;
+                                                            rdfs:label "est un élément de"@fr ,
+                                                                       "is an element of"@en .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#estUneMarqueDeType
+<http://data.shom.fr/def/navigation_cotiere#estUneMarqueDeType> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                                rdfs:domain <http://data.shom.fr/def/navigation_cotiere#Marque> ;
+                                                                rdfs:range <http://data.shom.fr/def/navigation_cotiere#AideALaNavigation> ;
+                                                                <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_aidenav ;
+                                                                rdfs:label "est une marque de type"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#impliqueDeSuivre
+<http://data.shom.fr/def/navigation_cotiere#impliqueDeSuivre> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                              rdfs:domain <http://data.shom.fr/def/navigation_cotiere#Instruction> ;
+                                                              rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                              <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
+                                                              rdfs:comment "L'objet de cette propriété sera toujours un rdfs:Container contennant une ou plusieurs entités, ou un rdfs:Container sera soit un rdf:Bag (entités sans ordre particulier) ou un rdf:Seq (entités dans un ordre particulier). Par exemple : _:entité _:impliqueDeSuivre [a rdfs:Container; rdf:_1 _:autreEntité1; rdf:_2 _:autreEntité2; ]."@fr ;
+                                                              rdfs:label "implique de suivre"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#lExtremiteDe
+<http://data.shom.fr/def/navigation_cotiere#lExtremiteDe> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                          rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                          rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                          <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
+                                                          rdfs:label "l'extremité de"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#leMeridienDe
+<http://data.shom.fr/def/navigation_cotiere#leMeridienDe> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                          rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                          rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                          <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
+                                                          rdfs:label "le méridien de"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#leMilieuDe
+<http://data.shom.fr/def/navigation_cotiere#leMilieuDe> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                        rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                        rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                        <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
+                                                        rdfs:label "le milieu de"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#marqueLEntite
+<http://data.shom.fr/def/navigation_cotiere#marqueLEntite> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                           rdfs:domain [ rdf:type owl:Class ;
+                                                                         owl:unionOf ( <http://data.shom.fr/def/navigation_cotiere#AideALaNavigation>
+                                                                                       <http://data.shom.fr/def/navigation_cotiere#Marque>
+                                                                                     )
+                                                                       ] ;
+                                                           rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                           <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
+                                                           rdfs:label "marks entity"@en ,
+                                                                      "marque l'entité"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#nEstPasEquipeDe
+<http://data.shom.fr/def/navigation_cotiere#nEstPasEquipeDe> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                             rdfs:domain <http://data.shom.fr/def/navigation_cotiere#Navire> ;
+                                                             rdfs:range <http://data.shom.fr/def/navigation_cotiere#TypeDEquipement>;
+                                                             <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :type_equipement ;
+                                                             rdfs:label "n'est pas équipé de"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#unePartieDe
+<http://data.shom.fr/def/navigation_cotiere#unePartieDe> rdf:type owl:ObjectProperty ;
+rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                         rdfs:domain <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                         rdfs:range <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                         <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_feature ;
+                                                         rdfs:label "une partie de"@fr .
+
+
+
+
+#################################################################
+#    Classes
+#################################################################
+
+
+
+# http://ontologies.sparna.fr/sparnatural-demo-semapps#Search
+
+:Search a owl:Class ;
+	rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+	<http://data.sparna.fr/ontologies/sparnatural-config-core#faIcon> "fas fa-search" ;
+	rdfs:label "Rechercher"@fr , "Search"@en .
+
+###  http://data.shom.fr/def/navigation_cotiere#AideALaNavigation
+<http://data.shom.fr/def/navigation_cotiere#AideALaNavigation> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                               rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#EntiteGeographique> ;
+                                                               rdfs:comment """Les établissements de signalisation maritime (ESM) sont l'ensemble des dispositifs d'aides à la navigation maritime. Ils sont fixes ou flottants, actifs ou non actifs. et sont constitués par :
+les phares,
+les feux,
+les bouées,
+les tourelles,
+et les espars.
+
+En fonction de leur rôle dans la signalisation maritime, ils possèdent certaines caractéristiques ou certains équipements (feux, réflecteurs, signaux radio).
+
+Les ESM sont recensés dans une base informatique nationale dénommée \"ALADIN\", base aux normes Acai, dont les accès sont soumis au préalable à autorisation par création de compte « Cerbère ».
+
+Source : https://sextant.ifremer.fr/record/d4fded20-4afc-11e0-8fd0-005056987263/"""@fr ,
+                                                                            "http://www.dirm.nord-atlantique-manche-ouest.developpement-durable.gouv.fr/les-aides-a-la-navigation-infographie-r295.html"@fr ,
+                                                                            "https://diffusion.shom.fr/pro/balisage_maritime.html"@fr ;
+                                                               rdfs:label "Aide à la Navigation"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#AideVirtuelleALaNavigation
+<http://data.shom.fr/def/navigation_cotiere#AideVirtuelleALaNavigation> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                                        rdfs:subClassOf <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                                        rdfs:label "Aide Virtuelle à la Navigation"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#Alignement
+<http://data.shom.fr/def/navigation_cotiere#Alignement> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                        rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#AideVirtuelleALaNavigation> ;
+                                                        rdfs:isDefinedBy <http://data.shom.fr/def/navigation_cotiere#> ;
+                                                        rdfs:label "Alignement"@fr ,
+                                                                   "Leading Line"@en .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#Amer
+<http://data.shom.fr/def/navigation_cotiere#Amer> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                  rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#EntiteGeographique> ;
+                                                  rdfs:label "Amer"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#Balise
+<http://data.shom.fr/def/navigation_cotiere#Balise> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                    rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#AideALaNavigation> ,
+                                                                    <http://data.shom.fr/def/navigation_cotiere#Amer> ;
+                                                    rdfs:label "Balise"@fr ,
+                                                               "Beacon"@en .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#Bouee
+<http://data.shom.fr/def/navigation_cotiere#Bouee> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                   rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#AideALaNavigation> ;
+                                                   rdfs:label "Bouée"@fr ,
+                                                              "Buoy"@en .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#C22
+<http://data.shom.fr/def/navigation_cotiere#C22> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                 rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#OuvrageIN> .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#C2A
+<http://data.shom.fr/def/navigation_cotiere#C2A> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                 rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#OuvrageIN> .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#Chenal
+<http://data.shom.fr/def/navigation_cotiere#Chenal> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                    owl:equivalentClass <http://sweetontology.net/realmHydroBody/Channel> ,
+                                                                        <http://www.ontotext.com/proton/protonext#Channel> ;
+                                                    rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#ZoneDuDomaineMaritime> ;
+                                                    rdfs:label "Chenal"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#ConditionLocale
+<http://data.shom.fr/def/navigation_cotiere#ConditionLocale> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#ConsigneDeNavigation
+<http://data.shom.fr/def/navigation_cotiere#ConsigneDeNavigation> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                                  rdfs:comment "??? optionnel : 'a pour cible' some 'is in scheme' value 'Type de Navire' SubClassOf 'Consigne de Navigation'"@fr ,
+                                                                               "??? optionnel : 'est imposée par' some Règlement SubClassOf 'Consigne de Navigation'"@fr ;
+                                                                  rdfs:isDefinedBy <http://data.shom.fr/def/navigation_cotiere#> ;
+                                                                  rdfs:label "Consigne de Navigation"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#Cote
+<http://data.shom.fr/def/navigation_cotiere#Cote> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                  owl:equivalentClass <http://www.ontotext.com/proton/protonext#Coast> ;
+                                                  rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#ZoneDuDomaineTerrestre> ,
+                                                                  [ rdf:type owl:Restriction ;
+                                                                    owl:onProperty <http://data.shom.fr/def/navigation_cotiere#estUnElementDe> ;
+                                                                    owl:someValuesFrom <http://data.shom.fr/def/navigation_cotiere#Littoral>
+                                                                  ] ;
+                                                  rdfs:comment "Bande de TERRE située au voisinage de la MER. Bord extérieur de cette bande. RIVAGE de la MER. Source : S-32 IHO - Hydrographic Dictionary"@fr ,
+                                                               "Zone de contact entre la terre et la mer vers l'intérieur (dunes, embruns) et la ligne des plus basses mers ; littoral. (Certains auteurs distinguent la côte, bande de terre telle qu'elle est vue du large et qui présente un certain relief, et le rivage, zone soumise directement à l'action des vagues.) (https://www.larousse.fr/dictionnaires/francais/c%c3%b4te/19603)."@fr ;
+                                                  rdfs:label "Côte"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#Courant
+<http://data.shom.fr/def/navigation_cotiere#Courant> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                     rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#PhenomeneOceanographique> ;
+                                                     rdfs:comment "Le mouvement permanent ou périodique des eaux, généralement dans le sens horizontal, dû à diverses causes telles que des différences de température, le vent ou les marées."@fr ;
+                                                     rdfs:label "Courant"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#CourantDeMaree
+<http://data.shom.fr/def/navigation_cotiere#CourantDeMaree> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                            owl:equivalentClass <http://sweetontology.net/phenOceanDynamics/TidalCurrent> ;
+                                                            rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#Courant> ,
+                                                                            <http://www.ontotext.com/proton/protonext#WaterCurrent> ;
+                                                            rdfs:label "Courant de Marée"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#CourantDuAuVent
+<http://data.shom.fr/def/navigation_cotiere#CourantDuAuVent> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                             rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#Courant> ,
+                                                                             <http://www.ontotext.com/proton/protonext#WaterCurrent> ;
+                                                             rdfs:label "Courant dû au Vent"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#Danger
+<http://data.shom.fr/def/navigation_cotiere#Danger> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                    rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#EntiteGeographique> ;
+                                                    rdfs:label "Danger"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#DirectionCardinale
+<http://data.shom.fr/def/navigation_cotiere#DirectionCardinale> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                                rdfs:comment "Les points cardinaux de la rose des vents. Nous en comptons 16."@fr ;
+                                                                rdfs:isDefinedBy <http://data.shom.fr/def/navigation_cotiere#> ;
+                                                                rdfs:label "Cardinal Direction"@en ,
+                                                                           "Direction Cardinale"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#DirectionCardinaleComplexe
+<http://data.shom.fr/def/navigation_cotiere#DirectionCardinaleComplexe> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                                        rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#DirectionCardinale> ;
+                                                                        owl:disjointWith <http://data.shom.fr/def/navigation_cotiere#DirectionCardinaleSimple> ;
+                                                                        rdfs:comment "Les points cardinaux qui se retrouvent entre les quatre points cardinaux principaux. Nous en comptons 12."@fr ;
+                                                                        rdfs:label "Direction Cardinale Complexe"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#DirectionCardinaleSimple
+<http://data.shom.fr/def/navigation_cotiere#DirectionCardinaleSimple> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                                      rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#DirectionCardinale> ;
+                                                                      rdfs:comment "Les quatre points cardinaux principaux de la rose des vents : nord (0°), est (90°), sud (180°), ouest (270°)."@fr ;
+                                                                      rdfs:label "Direction Cardinale Simple"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#DirectionLaterale
+<http://data.shom.fr/def/navigation_cotiere#DirectionLaterale> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                               rdfs:comment "Les deux directions oposées à gauche et à droit d'un navire selon un observateur situé sur le navire et orienté vers l'avant. La direction bâbord se trouve à gauche et tribord à droit."@fr ;
+                                                               rdfs:label "Direction Latérale"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#DispositifDeSeparationDuTrafic
+<http://data.shom.fr/def/navigation_cotiere#DispositifDeSeparationDuTrafic> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                                            rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#AideVirtuelleALaNavigation> ;
+                                                                            rdfs:comment "Façon virtuelle d'organiser le flux de trafic en mer."@fr ;
+                                                                            rdfs:label "Dispositif de séparation du trafic (DST)"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#EntiteGeographique
+<http://data.shom.fr/def/navigation_cotiere#EntiteGeographique> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                                rdfs:subClassOf <http://www.opengis.net/ont/geosparql#Feature> ;
+                                                                rdfs:isDefinedBy <http://data.shom.fr/def/navigation_cotiere#> ;
+                                                                rdfs:label "Entité Géographique"@fr ,
+                                                                           "Geographic Entity"@en .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#Espar
+<http://data.shom.fr/def/navigation_cotiere#Espar> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                   rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#AideALaNavigation> ,
+                                                                   <http://data.shom.fr/def/navigation_cotiere#Amer> ;
+                                                   rdfs:label "Espar"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#Etale
+<http://data.shom.fr/def/navigation_cotiere#Etale> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                   owl:equivalentClass <http://data.shom.fr/def/navigation_cotiere#Renverse> ;
+                                                   rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#CourantDeMaree> ,
+                                                                   <http://sweetontology.net/phenOceanDynamics/TidalCurrent> ;
+                                                   rdfs:comment "Entre le flot et le jusant, le courant devient nul durant une période variable selon le lieu : c'est l'étale ou renverse."@fr ;
+                                                   rdfs:label "Étale"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#Feu
+<http://data.shom.fr/def/navigation_cotiere#Feu> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                 rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#AideALaNavigation> ,
+                                                                 <http://data.shom.fr/def/navigation_cotiere#Amer> ;
+                                                 rdfs:label "Feu"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#FeuASecteur
+<http://data.shom.fr/def/navigation_cotiere#FeuASecteur> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                         rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#Feu> ;
+                                                         rdfs:label "Feu à Secteur"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#Flot
+<http://data.shom.fr/def/navigation_cotiere#Flot> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                  rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#CourantDeMaree> ,
+                                                                  <http://sweetontology.net/phenOceanDynamics/TidalCurrent> ;
+                                                  rdfs:comment "Le courant de flot est le courant créé par la marée montante. Le flot ne coïncide pas exactement avec la marée montante."@fr ;
+                                                  rdfs:label "Flot"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#IndicationMeteo
+<http://data.shom.fr/def/navigation_cotiere#IndicationMeteo> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                             rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#ConditionLocale> ;
+                                                             rdfs:label "Indication Météorologique"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#IndicationOceano
+<http://data.shom.fr/def/navigation_cotiere#IndicationOceano> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                              rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#ConditionLocale> ;
+                                                              rdfs:label "Indication Océanographique"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#IndicationTemporelle
+<http://data.shom.fr/def/navigation_cotiere#IndicationTemporelle> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                                  rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#ConditionLocale> ;
+                                                                  rdfs:label "Indication Temporelle"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#Information
+<http://data.shom.fr/def/navigation_cotiere#Information> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                         rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#ConsigneDeNavigation> ;
+                                                         rdfs:label "Information"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#Instruction
+<http://data.shom.fr/def/navigation_cotiere#Instruction> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                         rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#ConsigneDeNavigation> ;
+                                                         rdfs:label "Instruction"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#Interdiction
+<http://data.shom.fr/def/navigation_cotiere#Interdiction> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                          rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#ConsigneDeNavigation> ;
+                                                          rdfs:label "Interdiction"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#InterieurDesTerres
+<http://data.shom.fr/def/navigation_cotiere#InterieurDesTerres> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                                rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#ZoneDuDomaineTerrestre> ;
+                                                                rdfs:comment "À l'intérieur des terres, dans l'arrière-pays ou assez loin de la côte, par opposition au bord de mer (https://www.larousse.fr/dictionnaires/francais/terre/77443#175925)."@fr ;
+                                                                rdfs:label "Intérieur des Terres"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#Jusant
+<http://data.shom.fr/def/navigation_cotiere#Jusant> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                    rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#CourantDeMaree> ,
+                                                                    <http://sweetontology.net/phenOceanDynamics/TidalCurrent> ;
+                                                    rdfs:comment "Le courant de jusant est le courant créé par la marée descendante. Le le jusant ne coïncide pas exactement avec la marée descendante."@fr ;
+                                                    rdfs:label "Jusant"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#Large
+<http://data.shom.fr/def/navigation_cotiere#Large> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                   rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#ZoneDuDomaineMaritime> ;
+                                                   rdfs:comment "La haute mer (https://www.larousse.fr/dictionnaires/francais/large/46283)."@fr ;
+                                                   rdfs:label "Large"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#LieuDeStationnement
+<http://data.shom.fr/def/navigation_cotiere#LieuDeStationnement> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                                 rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#EntiteGeographique> ;
+                                                                 rdfs:label "Lieu de Stationnement"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#Littoral
+<http://data.shom.fr/def/navigation_cotiere#Littoral> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                      rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#ZoneDuDomaineMaritime> ,
+                                                                      [ rdf:type owl:Restriction ;
+                                                                        owl:onProperty <http://data.shom.fr/def/navigation_cotiere#aPourElement> ;
+                                                                        owl:someValuesFrom <http://data.shom.fr/def/navigation_cotiere#Cote>
+                                                                      ] ;
+                                                      rdfs:comment "Zone côtière en bordure immédiate de la MER. Source : S-32 IHO - Hydrographic Dictionary"@fr ,
+                                                                   "Zone sinueuse où s'établit le contact entre la mer ou un lac et la terre. (Le terme a un sens plus large que rivage et côte, qui désignent respectivement les domaines du littoral soumis directement ou indirectement à l'action de la mer.) (https://www.larousse.fr/dictionnaires/francais/littoral/47506)."@fr ;
+                                                      rdfs:label "Littoral"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#Marque
+<http://data.shom.fr/def/navigation_cotiere#Marque> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                    rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#EntiteGeographique> ;
+                                                    rdfs:label "Marque"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#MarqueCardinale
+<http://data.shom.fr/def/navigation_cotiere#MarqueCardinale> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                             owl:equivalentClass [ owl:intersectionOf ( [ rdf:type owl:Class ;
+                                                                                                          owl:unionOf ( <http://data.shom.fr/def/navigation_cotiere#Balise>
+                                                                                                                        <http://data.shom.fr/def/navigation_cotiere#Bouee>
+                                                                                                                        <http://data.shom.fr/def/navigation_cotiere#Marque>
+                                                                                                                        <http://data.shom.fr/def/navigation_cotiere#Tourelle>
+                                                                                                                      )
+                                                                                                        ]
+                                                                                                        [ rdf:type owl:Restriction ;
+                                                                                                          owl:onProperty <http://data.shom.fr/def/navigation_cotiere#aPourTypeCardinal> ;
+                                                                                                          owl:someValuesFrom <http://data.shom.fr/def/navigation_cotiere#DirectionCardinaleSimple>
+                                                                                                        ]
+                                                                                                      ) ;
+                                                                                   rdf:type owl:Class
+                                                                                 ] ,
+                                                                                 [ rdf:type owl:Class ;
+                                                                                   owl:unionOf ( [ rdf:type owl:Restriction ;
+                                                                                                   owl:onProperty <http://data.shom.fr/def/navigation_cotiere#aPourMotif> ;
+                                                                                                   owl:hasValue <http://data.shom.fr/id/codes/nav/typedemotif/MotifCardinalEst>
+                                                                                                 ]
+                                                                                                 [ rdf:type owl:Restriction ;
+                                                                                                   owl:onProperty <http://data.shom.fr/def/navigation_cotiere#aPourMotif> ;
+                                                                                                   owl:hasValue <http://data.shom.fr/id/codes/nav/typedemotif/MotifCardinalNord>
+                                                                                                 ]
+                                                                                                 [ rdf:type owl:Restriction ;
+                                                                                                   owl:onProperty <http://data.shom.fr/def/navigation_cotiere#aPourMotif> ;
+                                                                                                   owl:hasValue <http://data.shom.fr/id/codes/nav/typedemotif/MotifCardinalOuest>
+                                                                                                 ]
+                                                                                                 [ rdf:type owl:Restriction ;
+                                                                                                   owl:onProperty <http://data.shom.fr/def/navigation_cotiere#aPourMotif> ;
+                                                                                                   owl:hasValue <http://data.shom.fr/id/codes/nav/typedemotif/MotifCardinalSud>
+                                                                                                 ]
+                                                                                               )
+                                                                                 ] ;
+                                                             rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#Marque> ,
+                                                                             [ rdf:type owl:Restriction ;
+                                                                               owl:onProperty <http://data.shom.fr/def/navigation_cotiere#aPourTypeCardinal> ;
+                                                                               owl:someValuesFrom <http://data.shom.fr/def/navigation_cotiere#DirectionCardinaleSimple>
+                                                                             ] ;
+                                                             rdfs:comment """Les marques cardinales, dont l’emploi est associé à celui du compas du navire, indiquent où le navire peut trouver des eaux saines. Elles sont partout les mêmes, quelle que soit la région, A ou B.
+Une marque cardinale peut être utilisée par exemple :
+– pour indiquer que les eaux les plus profondes se trouvent dans la direction (Nord, Est, Sud ou Ouest) désignée par le nom de la marque ;
+– pour indiquer de quel côté d’un danger se trouvent les eaux saines ;
+– pour attirer l’attention sur une configuration particulière d’un chenal telle qu’un coude, une jonction, une bifurcation ou l’extrémité d’un banc.
+Les quadrants Nord, Est, Sud et Ouest sont respectivement limités par les azimuts vrais NW-NE, NE-SE, SE-SW et SW-NW dont l’origine est le point à marquer (point d’intérêt).
+Une marque cardinale reçoit le nom du quadrant dans lequel elle est placée.
+Le nom d’une marque cardinale indique qu’il convient de passer, par rapport à la marque, dans le quadrant qui porte ce nom.
+Dans le code standard, les revêtements rétroréfléchissants des marques cardinales sont constitués d’une ou plusieurs bandes horizontales, lettres, chiffres ou symboles blancs.
+Dans le code détaillé, les revêtements rétroréfléchissants des marques cardinales sont constitués comme suit :
+– marques cardinales Nord : une bande horizontale bleue sur la partie noire de la marque et une bande horizontale jaune (jaune citron, d’aspect blanc de nuit lorsque éclairé par un projecteur) sur la partie jaune de la marque ;
+– marques cardinales Est : deux bandes horizontales bleues sur la partie supérieure noire de la marque ;
+– marques cardinales Sud : une bande horizontale jaune sur la partie jaune de la marque et une bande horizontale bleue sur la partie noire de la marque ;
+– marques cardinale Ouest : deux bandes horizontales jaunes sur la partie supérieure jaune de la marque.
+[Source : Shom, 'Signalisation maritime', 2016]"""@fr ;
+                                                             rdfs:label "Marque Cardinale"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#MarqueCardinaleEst
+<http://data.shom.fr/def/navigation_cotiere#MarqueCardinaleEst> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                                owl:equivalentClass [ owl:intersectionOf ( [ rdf:type owl:Class ;
+                                                                                                             owl:unionOf ( <http://data.shom.fr/def/navigation_cotiere#AideALaNavigation>
+                                                                                                                           <http://data.shom.fr/def/navigation_cotiere#Marque>
+                                                                                                                         )
+                                                                                                           ]
+                                                                                                           [ rdf:type owl:Restriction ;
+                                                                                                             owl:onProperty <http://data.shom.fr/def/navigation_cotiere#aPourTypeCardinal> ;
+                                                                                                             owl:hasValue <http://data.shom.fr/id/codes/nav/typededirection/Est>
+                                                                                                           ]
+                                                                                                         ) ;
+                                                                                      rdf:type owl:Class
+                                                                                    ] ,
+                                                                                    [ rdf:type owl:Restriction ;
+                                                                                      owl:onProperty <http://data.shom.fr/def/navigation_cotiere#aPourMotif> ;
+                                                                                      owl:hasValue <http://data.shom.fr/id/codes/nav/typedemotif/MotifCardinalEst>
+                                                                                    ] ;
+                                                                rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#MarqueCardinale> ,
+                                                                                [ rdf:type owl:Restriction ;
+                                                                                  owl:onProperty <http://data.shom.fr/def/navigation_cotiere#aPourTypeCardinal> ;
+                                                                                  owl:hasValue <http://data.shom.fr/id/codes/nav/typededirection/Est>
+                                                                                ] ;
+                                                                rdfs:label "Marque Cardinale Est"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#MarqueCardinaleNord
+<http://data.shom.fr/def/navigation_cotiere#MarqueCardinaleNord> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                                 owl:equivalentClass [ owl:intersectionOf ( [ rdf:type owl:Class ;
+                                                                                                              owl:unionOf ( <http://data.shom.fr/def/navigation_cotiere#AideALaNavigation>
+                                                                                                                            <http://data.shom.fr/def/navigation_cotiere#Marque>
+                                                                                                                          )
+                                                                                                            ]
+                                                                                                            [ rdf:type owl:Restriction ;
+                                                                                                              owl:onProperty <http://data.shom.fr/def/navigation_cotiere#aPourTypeCardinal> ;
+                                                                                                              owl:hasValue <http://data.shom.fr/id/codes/nav/typededirection/Nord>
+                                                                                                            ]
+                                                                                                          ) ;
+                                                                                       rdf:type owl:Class
+                                                                                     ] ,
+                                                                                     [ rdf:type owl:Restriction ;
+                                                                                       owl:onProperty <http://data.shom.fr/def/navigation_cotiere#aPourMotif> ;
+                                                                                       owl:hasValue <http://data.shom.fr/id/codes/nav/typedemotif/MotifCardinalNord>
+                                                                                     ] ;
+                                                                 rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#MarqueCardinale> ,
+                                                                                 [ rdf:type owl:Restriction ;
+                                                                                   owl:onProperty <http://data.shom.fr/def/navigation_cotiere#aPourTypeCardinal> ;
+                                                                                   owl:hasValue <http://data.shom.fr/id/codes/nav/typededirection/Nord>
+                                                                                 ] ;
+                                                                 rdfs:label "Marque Cardinale Nord"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#MarqueCardinaleOuest
+<http://data.shom.fr/def/navigation_cotiere#MarqueCardinaleOuest> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                                  owl:equivalentClass [ owl:intersectionOf ( [ rdf:type owl:Class ;
+                                                                                                               owl:unionOf ( <http://data.shom.fr/def/navigation_cotiere#AideALaNavigation>
+                                                                                                                             <http://data.shom.fr/def/navigation_cotiere#Marque>
+                                                                                                                           )
+                                                                                                             ]
+                                                                                                             [ rdf:type owl:Restriction ;
+                                                                                                               owl:onProperty <http://data.shom.fr/def/navigation_cotiere#aPourTypeCardinal> ;
+                                                                                                               owl:hasValue <http://data.shom.fr/id/codes/nav/typededirection/Ouest>
+                                                                                                             ]
+                                                                                                           ) ;
+                                                                                        rdf:type owl:Class
+                                                                                      ] ,
+                                                                                      [ rdf:type owl:Restriction ;
+                                                                                        owl:onProperty <http://data.shom.fr/def/navigation_cotiere#aPourMotif> ;
+                                                                                        owl:hasValue <http://data.shom.fr/id/codes/nav/typedemotif/MotifCardinalOuest>
+                                                                                      ] ;
+                                                                  rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#MarqueCardinale> ,
+                                                                                  [ rdf:type owl:Restriction ;
+                                                                                    owl:onProperty <http://data.shom.fr/def/navigation_cotiere#aPourTypeCardinal> ;
+                                                                                    owl:hasValue <http://data.shom.fr/id/codes/nav/typededirection/Ouest>
+                                                                                  ] ;
+                                                                  rdfs:label "Marque Cardinale Ouest"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#MarqueCardinaleSud
+<http://data.shom.fr/def/navigation_cotiere#MarqueCardinaleSud> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                                owl:equivalentClass [ owl:intersectionOf ( [ rdf:type owl:Class ;
+                                                                                                             owl:unionOf ( <http://data.shom.fr/def/navigation_cotiere#AideALaNavigation>
+                                                                                                                           <http://data.shom.fr/def/navigation_cotiere#Marque>
+                                                                                                                         )
+                                                                                                           ]
+                                                                                                           [ rdf:type owl:Restriction ;
+                                                                                                             owl:onProperty <http://data.shom.fr/def/navigation_cotiere#aPourTypeCardinal> ;
+                                                                                                             owl:hasValue <http://data.shom.fr/id/codes/nav/typededirection/Sud>
+                                                                                                           ]
+                                                                                                         ) ;
+                                                                                      rdf:type owl:Class
+                                                                                    ] ,
+                                                                                    [ rdf:type owl:Restriction ;
+                                                                                      owl:onProperty <http://data.shom.fr/def/navigation_cotiere#aPourMotif> ;
+                                                                                      owl:hasValue <http://data.shom.fr/id/codes/nav/typedemotif/MotifCardinalSud>
+                                                                                    ] ;
+                                                                rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#MarqueCardinale> ,
+                                                                                [ rdf:type owl:Restriction ;
+                                                                                  owl:onProperty <http://data.shom.fr/def/navigation_cotiere#aPourTypeCardinal> ;
+                                                                                  owl:hasValue <http://data.shom.fr/id/codes/nav/typededirection/Sud>
+                                                                                ] ;
+                                                                rdfs:label "Marque Cardinale Sud"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#MarqueDEauxSaines
+<http://data.shom.fr/def/navigation_cotiere#MarqueDEauxSaines> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                               rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#Marque> ,
+                                                                               [ owl:intersectionOf ( [ rdf:type owl:Restriction ;
+                                                                                                        owl:onProperty <http://data.shom.fr/def/navigation_cotiere#estDeCouleur> ;
+                                                                                                        owl:hasValue <http://data.shom.fr/id/codes/nav/typedecouleur/Blanc>
+                                                                                                      ]
+                                                                                                      [ rdf:type owl:Restriction ;
+                                                                                                        owl:onProperty <http://data.shom.fr/def/navigation_cotiere#estDeCouleur> ;
+                                                                                                        owl:hasValue <http://data.shom.fr/id/codes/nav/typedecouleur/Rouge>
+                                                                                                      ]
+                                                                                                    ) ;
+                                                                                 rdf:type owl:Class
+                                                                               ] ;
+                                                               rdfs:comment """Une marque d’eaux saines indique que les eaux sont saines tout autour d’elle.
+Une marque d’eaux saines sert à définir l’axe d’un chenal et le milieu du chenal. Elle peut aussi être utilisée pour indiquer un atterrissage.
+Dans le code standard, les revêtements rétroréfléchissants des marques d’eaux saines sont constitués d’une ou plusieurs bandes horizontales, lettres, chiffres ou symboles, blancs ; dans le code détaillé, de paires de bandes horizontales ou verticales rouges et blanches.
+[Source : Shom, 'Signalisation maritime', 2016]"""@fr ;
+                                                               rdfs:label "Marque d'Eaux Saines"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#MarqueDeChenalPrefere
+<http://data.shom.fr/def/navigation_cotiere#MarqueDeChenalPrefere> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                                   owl:equivalentClass [ rdf:type owl:Class ;
+                                                                                         owl:unionOf ( [ rdf:type owl:Restriction ;
+                                                                                                         owl:onProperty <http://data.shom.fr/def/navigation_cotiere#aPourMotif> ;
+                                                                                                         owl:hasValue <http://data.shom.fr/id/codes/nav/typedemotif/MotifChenalPrefereBabordRegionA>
+                                                                                                       ]
+                                                                                                       [ rdf:type owl:Restriction ;
+                                                                                                         owl:onProperty <http://data.shom.fr/def/navigation_cotiere#aPourMotif> ;
+                                                                                                         owl:hasValue <http://data.shom.fr/id/codes/nav/typedemotif/MotifChenalPrefereTribordRegionA>
+                                                                                                       ]
+                                                                                                     )
+                                                                                       ] ;
+                                                                   rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#MarqueLaterale> ,
+                                                                                   [ rdf:type owl:Restriction ;
+                                                                                     owl:onProperty <http://data.shom.fr/def/navigation_cotiere#aPourTypeLateral> ;
+                                                                                     owl:someValuesFrom <http://data.shom.fr/def/navigation_cotiere#DirectionLaterale>
+                                                                                   ] ;
+                                                                   rdfs:comment """Lorsqu’un chenal se divise, une marque latérale peut être utilisée pour indiquer la route qu’il convient de suivre de préférence (chenal préféré).
+Les marques latérales diffèrent suivant qu’elles sont employées dans l’une ou l’autre des régions de balisage A et B.
+[Source : Shom, 'Signalisation maritime', 2016]"""@fr ;
+                                                                   rdfs:label "Marque de Chenal Préféré"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#MarqueDeChenalPrefereBabordRegionA
+<http://data.shom.fr/def/navigation_cotiere#MarqueDeChenalPrefereBabordRegionA> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                                                rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#MarqueDeChenalPrefere> ,
+                                                                                                [ rdf:type owl:Restriction ;
+                                                                                                  owl:onProperty <http://data.shom.fr/def/navigation_cotiere#aPourTypeLateral> ;
+                                                                                                  owl:hasValue <http://data.shom.fr/id/codes/nav/typededirection/Babord>
+                                                                                                ] ;
+                                                                                rdfs:label "Marque de Chenal Préféré Bâbord Région A"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#MarqueDeChenalPrefereTribordRegionA
+<http://data.shom.fr/def/navigation_cotiere#MarqueDeChenalPrefereTribordRegionA> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                                                 rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#MarqueDeChenalPrefere> ,
+                                                                                                 [ rdf:type owl:Restriction ;
+                                                                                                   owl:onProperty <http://data.shom.fr/def/navigation_cotiere#aPourTypeLateral> ;
+                                                                                                   owl:hasValue <http://data.shom.fr/id/codes/nav/typededirection/Tribord>
+                                                                                                 ] ;
+                                                                                 rdfs:label "Marque de Chenal Préféré Tribord Région A"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#MarqueDeDangerIsole
+<http://data.shom.fr/def/navigation_cotiere#MarqueDeDangerIsole> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                                 rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#Marque> ,
+                                                                                 [ owl:intersectionOf ( [ rdf:type owl:Restriction ;
+                                                                                                          owl:onProperty <http://data.shom.fr/def/navigation_cotiere#estDeCouleur> ;
+                                                                                                          owl:hasValue <http://data.shom.fr/id/codes/nav/typedecouleur/Noir>
+                                                                                                        ]
+                                                                                                        [ rdf:type owl:Restriction ;
+                                                                                                          owl:onProperty <http://data.shom.fr/def/navigation_cotiere#estDeCouleur> ;
+                                                                                                          owl:hasValue <http://data.shom.fr/id/codes/nav/typedecouleur/Rouge>
+                                                                                                        ]
+                                                                                                      ) ;
+                                                                                   rdf:type owl:Class
+                                                                                 ] ;
+                                                                 rdfs:comment """Une marque de danger isolé indique un danger isolé d’étendue limitée autour duquel les eaux sont saines.
+Dans le code standard, les revêtements rétroréfléchissants des marques de danger isolé sont constitués d’une ou plusieurs bandes horizontales, lettres, chiffres ou symboles, blancs ; dans le code détaillé, de paires de bandes horizontales bleues et rouges.
+[Source : Shom, 'Signalisation maritime', 2016]"""@fr ;
+                                                                 rdfs:label "Marque de Danger Isolé"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#MarqueLaterale
+<http://data.shom.fr/def/navigation_cotiere#MarqueLaterale> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                            owl:equivalentClass [ owl:intersectionOf ( [ rdf:type owl:Class ;
+                                                                                                         owl:unionOf ( <http://data.shom.fr/def/navigation_cotiere#Balise>
+                                                                                                                       <http://data.shom.fr/def/navigation_cotiere#Bouee>
+                                                                                                                       <http://data.shom.fr/def/navigation_cotiere#Marque>
+                                                                                                                       <http://data.shom.fr/def/navigation_cotiere#Tourelle>
+                                                                                                                     )
+                                                                                                       ]
+                                                                                                       [ rdf:type owl:Restriction ;
+                                                                                                         owl:onProperty <http://data.shom.fr/def/navigation_cotiere#aPourTypeLateral> ;
+                                                                                                         owl:someValuesFrom <http://data.shom.fr/def/navigation_cotiere#DirectionLaterale>
+                                                                                                       ]
+                                                                                                     ) ;
+                                                                                  rdf:type owl:Class
+                                                                                ] ;
+                                                            rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#Marque> ,
+                                                                            [ rdf:type owl:Restriction ;
+                                                                              owl:onProperty <http://data.shom.fr/def/navigation_cotiere#aPourTypeLateral> ;
+                                                                              owl:someValuesFrom <http://data.shom.fr/def/navigation_cotiere#DirectionLaterale>
+                                                                            ] ;
+                                                            rdfs:comment """Les marques latérales, dont l’emploi est associé à un « sens conventionnel de balisage », sont généralement utilisées pour des chenaux bien définis. Ces marques indiquent les côtés bâbord et tribord de la route à suivre.
+Lorsqu’un chenal se divise, une marque latérale peut être utilisée pour indiquer la route qu’il convient de suivre de préférence (chenal préféré).
+Les marques latérales diffèrent suivant qu’elles sont employées dans l’une ou l’autre des régions de balisage A et B.
+Lorsque les marques ne sont pas identifiables d’après leur forme cylindrique ou conique, elles doivent, dans la mesure du possible, porter le voyant approprié.
+Si des marques latérales de rive de chenal sont identifiées par des numéros ou des lettres, la succession des numéros (impairs à tribord et pairs à bâbord) ou des lettres suit le sens conventionnel du balisage.
+Dans les codes standard et détaillé, les revêtements rétroréfléchissants des marques latérales sont constitués
+comme suit :
+– marques latérales vertes : une bande horizontale verte ou une forme verte identique à celle du voyant ;
+– marques latérales rouges : une bande horizontale rouge ou une forme rouge identique à celle du voyant.
+[Source : Shom, 'Signalisation maritime', 2016]"""@fr ;
+                                                            rdfs:label "Marque Latérale"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#MarqueLateraleBabordRegionA
+<http://data.shom.fr/def/navigation_cotiere#MarqueLateraleBabordRegionA> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                                         owl:equivalentClass [ owl:intersectionOf ( [ rdf:type owl:Class ;
+                                                                                                                      owl:unionOf ( <http://data.shom.fr/def/navigation_cotiere#Balise>
+                                                                                                                                    <http://data.shom.fr/def/navigation_cotiere#Bouee>
+                                                                                                                                    <http://data.shom.fr/def/navigation_cotiere#Marque>
+                                                                                                                                    <http://data.shom.fr/def/navigation_cotiere#Tourelle>
+                                                                                                                                  )
+                                                                                                                    ]
+                                                                                                                    [ rdf:type owl:Restriction ;
+                                                                                                                      owl:onProperty <http://data.shom.fr/def/navigation_cotiere#aPourTypeLateral> ;
+                                                                                                                      owl:hasValue <http://data.shom.fr/id/codes/nav/typededirection/Babord>
+                                                                                                                    ]
+                                                                                                                    [ rdf:type owl:Restriction ;
+                                                                                                                      owl:onProperty <http://data.shom.fr/def/navigation_cotiere#estDeCouleur> ;
+                                                                                                                      owl:hasValue <http://data.shom.fr/id/codes/nav/typedecouleur/Rouge>
+                                                                                                                    ]
+                                                                                                                  ) ;
+                                                                                               rdf:type owl:Class
+                                                                                             ] ,
+                                                                                             [ owl:intersectionOf ( [ rdf:type owl:Class ;
+                                                                                                                      owl:unionOf ( <http://data.shom.fr/def/navigation_cotiere#Balise>
+                                                                                                                                    <http://data.shom.fr/def/navigation_cotiere#Bouee>
+                                                                                                                                    <http://data.shom.fr/def/navigation_cotiere#Marque>
+                                                                                                                                    <http://data.shom.fr/def/navigation_cotiere#Tourelle>
+                                                                                                                                  )
+                                                                                                                    ]
+                                                                                                                    [ rdf:type owl:Restriction ;
+                                                                                                                      owl:onProperty <http://data.shom.fr/def/navigation_cotiere#aPourTypeLateral> ;
+                                                                                                                      owl:hasValue <http://data.shom.fr/id/codes/nav/typededirection/Babord>
+                                                                                                                    ]
+                                                                                                                    [ rdf:type owl:Restriction ;
+                                                                                                                      owl:onProperty <http://data.shom.fr/def/navigation_cotiere#aPourMotif> ;
+                                                                                                                      owl:maxCardinality "0"^^xsd:nonNegativeInteger
+                                                                                                                    ]
+                                                                                                                  ) ;
+                                                                                               rdf:type owl:Class
+                                                                                             ] ;
+                                                                         rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#MarqueLaterale> ,
+                                                                                         [ rdf:type owl:Restriction ;
+                                                                                           owl:onProperty <http://data.shom.fr/def/navigation_cotiere#aPourTypeLateral> ;
+                                                                                           owl:hasValue <http://data.shom.fr/id/codes/nav/typededirection/Babord>
+                                                                                         ] ,
+                                                                                         [ rdf:type owl:Restriction ;
+                                                                                           owl:onProperty <http://data.shom.fr/def/navigation_cotiere#estDeCouleur> ;
+                                                                                           owl:hasValue <http://data.shom.fr/id/codes/nav/typedecouleur/Rouge>
+                                                                                         ] ;
+                                                                         rdfs:label "Marque Latérale Bâbord Région A"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#MarqueLateraleTribordRegionA
+<http://data.shom.fr/def/navigation_cotiere#MarqueLateraleTribordRegionA> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                                          owl:equivalentClass [ owl:intersectionOf ( [ rdf:type owl:Class ;
+                                                                                                                       owl:unionOf ( <http://data.shom.fr/def/navigation_cotiere#Balise>
+                                                                                                                                     <http://data.shom.fr/def/navigation_cotiere#Bouee>
+                                                                                                                                     <http://data.shom.fr/def/navigation_cotiere#Marque>
+                                                                                                                                     <http://data.shom.fr/def/navigation_cotiere#Tourelle>
+                                                                                                                                   )
+                                                                                                                     ]
+                                                                                                                     [ rdf:type owl:Restriction ;
+                                                                                                                       owl:onProperty <http://data.shom.fr/def/navigation_cotiere#aPourTypeLateral> ;
+                                                                                                                       owl:hasValue <http://data.shom.fr/id/codes/nav/typededirection/Tribord>
+                                                                                                                     ]
+                                                                                                                     [ rdf:type owl:Restriction ;
+                                                                                                                       owl:onProperty <http://data.shom.fr/def/navigation_cotiere#estDeCouleur> ;
+                                                                                                                       owl:hasValue <http://data.shom.fr/id/codes/nav/typedecouleur/Vert>
+                                                                                                                     ]
+                                                                                                                   ) ;
+                                                                                                rdf:type owl:Class
+                                                                                              ] ,
+                                                                                              [ owl:intersectionOf ( [ rdf:type owl:Class ;
+                                                                                                                       owl:unionOf ( <http://data.shom.fr/def/navigation_cotiere#Balise>
+                                                                                                                                     <http://data.shom.fr/def/navigation_cotiere#Bouee>
+                                                                                                                                     <http://data.shom.fr/def/navigation_cotiere#Marque>
+                                                                                                                                     <http://data.shom.fr/def/navigation_cotiere#Tourelle>
+                                                                                                                                   )
+                                                                                                                     ]
+                                                                                                                     [ rdf:type owl:Restriction ;
+                                                                                                                       owl:onProperty <http://data.shom.fr/def/navigation_cotiere#aPourTypeLateral> ;
+                                                                                                                       owl:hasValue <http://data.shom.fr/id/codes/nav/typededirection/Tribord>
+                                                                                                                     ]
+                                                                                                                     [ rdf:type owl:Restriction ;
+                                                                                                                       owl:onProperty <http://data.shom.fr/def/navigation_cotiere#aPourMotif> ;
+                                                                                                                       owl:maxCardinality "0"^^xsd:nonNegativeInteger
+                                                                                                                     ]
+                                                                                                                   ) ;
+                                                                                                rdf:type owl:Class
+                                                                                              ] ;
+                                                                          rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#MarqueLaterale> ,
+                                                                                          [ rdf:type owl:Restriction ;
+                                                                                            owl:onProperty <http://data.shom.fr/def/navigation_cotiere#aPourTypeLateral> ;
+                                                                                            owl:hasValue <http://data.shom.fr/id/codes/nav/typededirection/Tribord>
+                                                                                          ] ,
+                                                                                          [ rdf:type owl:Restriction ;
+                                                                                            owl:onProperty <http://data.shom.fr/def/navigation_cotiere#estDeCouleur> ;
+                                                                                            owl:hasValue <http://data.shom.fr/id/codes/nav/typedecouleur/Vert>
+                                                                                          ] ;
+                                                                          rdfs:label "Marque Latérale Tribord Région A"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#MarqueSpeciale
+<http://data.shom.fr/def/navigation_cotiere#MarqueSpeciale> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                            rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#Marque> ,
+                                                                            [ rdf:type owl:Restriction ;
+                                                                              owl:onProperty <http://data.shom.fr/def/navigation_cotiere#estDeCouleur> ;
+                                                                              owl:hasValue <http://data.shom.fr/id/codes/nav/typedecouleur/Jaune>
+                                                                            ] ;
+                                                            rdfs:comment """Ces marques n’ont pas pour but principal d’aider la navigation mais elles indiquent une zone spéciale ou une configuration mentionnée dans les documents nautiques appropriés. Ce sont par exemple, des :
+– marques des stations d’acquisition de données océaniques (ODAS) ;
+– marques de séparation du trafic là où le balisage classique du chenal peut prêter à confusion ;
+– marques indiquant les dépôts de matériaux ;
+– marques indiquant des zones de pêche interdite ou de cultures marines ;
+– marques indiquant des zones utilisées pour les exercices militaires ;
+– marques indiquant la présence de câbles ou d’oléoducs ;
+– marques indiquant des zones réservées à des activités nautiques de loisir.
+Elles ne prêtent pas à confusion avec les marques donnant des informations relatives à la navigation et sont mentionnées dans les documents nautiques appropriés.
+En France, les marques spéciales sont classées en deux catégories : marques durables et marques occasionnelles. Les marques spéciales durables sont surmontées d’un voyant en forme de X, jaune.
+Dans les codes standard et détaillé, les revêtements rétroréfléchissants des marques spéciales sont constitués d’une bande horizontale, d’un X ou d’un symbole jaunes.
+[Source : Shom, 'Signalisation maritime', 2016]"""@fr ;
+                                                            rdfs:label "Marque Speciale"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#Navire
+<http://data.shom.fr/def/navigation_cotiere#Navire> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                    rdfs:label "Navire"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#Organisation
+<http://data.shom.fr/def/navigation_cotiere#Organisation> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                          rdfs:label "Organisation"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#OuvrageIN
+<http://data.shom.fr/def/navigation_cotiere#OuvrageIN> rdf:type owl:Class .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#Phare
+<http://data.shom.fr/def/navigation_cotiere#Phare> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                   rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#AideALaNavigation> ,
+                                                                   <http://data.shom.fr/def/navigation_cotiere#Amer> ;
+                                                   rdfs:label "Phare"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#PhenomeneMeteorologique
+<http://data.shom.fr/def/navigation_cotiere#PhenomeneMeteorologique> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                                     owl:equivalentClass <http://sweetontology.net/phenAtmo/MeteorologicalPhenomena> ;
+                                                                     rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#PhenomeneMeteorologiqueOuOceanographique> .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#PhenomeneMeteorologiqueOuOceanographique
+<http://data.shom.fr/def/navigation_cotiere#PhenomeneMeteorologiqueOuOceanographique> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                                                      rdfs:label "Phénomène Météorologique ou Océanographique"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#PhenomeneOceanographique
+<http://data.shom.fr/def/navigation_cotiere#PhenomeneOceanographique> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                                      rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#PhenomeneMeteorologiqueOuOceanographique> .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#Reglement
+<http://data.shom.fr/def/navigation_cotiere#Reglement> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                       rdfs:label "Règlement"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#Relevement
+<http://data.shom.fr/def/navigation_cotiere#Relevement> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                        owl:equivalentClass <http://sweetontology.net/propSpaceDirection/Bearing> ;
+                                                        rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#AideVirtuelleALaNavigation> ;
+                                                        rdfs:comment "Le relèvement est la détermination de l'angle que fait, dans le plan horizontal, la ligne d'un observateur vers un objet avec celle d'une direction de référence fixe. En général, le relèvement se fait par rapport au Nord vrai ou géographique : positif dans le sens horaire (wikipédia)."@fr ;
+                                                        rdfs:label "Bearing"@en ,
+                                                                   "Relèvement"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#Renseignement
+<http://data.shom.fr/def/navigation_cotiere#Renseignement> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                           rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#ConsigneDeNavigation> ;
+                                                           rdfs:label "Renseignement"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#Renverse
+<http://data.shom.fr/def/navigation_cotiere#Renverse> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                      rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#CourantDeMaree> ,
+                                                                      <http://sweetontology.net/phenOceanDynamics/TidalCurrent> ;
+                                                      rdfs:comment "Entre le flot et le jusant, le courant devient nul durant une période variable selon le lieu : c'est l'étale ou renverse."@fr ;
+                                                      rdfs:label "Renverse"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#Reperage
+<http://data.shom.fr/def/navigation_cotiere#Reperage> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                      rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#AideVirtuelleALaNavigation> ;
+                                                      rdfs:label "Repérage"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#Ressac
+<http://data.shom.fr/def/navigation_cotiere#Ressac> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                    rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#Vague> ;
+                                                    rdfs:comment "Aller et retour violent des vagues sur elles-mêmes, lorsqu'elles se brisent contre un obstacle (https://www.cnrtl.fr/definition/ressac)."@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#Route
+<http://data.shom.fr/def/navigation_cotiere#Route> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                   rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#AideVirtuelleALaNavigation> ;
+                                                   rdfs:label "Route"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#Secteur
+<http://data.shom.fr/def/navigation_cotiere#Secteur> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                     rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#AideVirtuelleALaNavigation> ,
+                                                                     <http://data.shom.fr/def/navigation_cotiere#ZoneDuDomaineMaritime> ;
+                                                     rdfs:comment "Le secteur désigné par un feu à secteur."@fr ;
+                                                     rdfs:isDefinedBy <http://data.shom.fr/def/navigation_cotiere#> ;
+                                                     rdfs:label "Secteur"@fr ,
+                                                                "Sector"@en .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#Terre
+<http://data.shom.fr/def/navigation_cotiere#Terre> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                   rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#ZoneDuDomaineTerrestre> ;
+                                                   rdfs:label "Terre"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#Tourelle
+<http://data.shom.fr/def/navigation_cotiere#Tourelle> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                      rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#AideALaNavigation> ,
+                                                                      <http://data.shom.fr/def/navigation_cotiere#Amer> ;
+                                                      rdfs:label "Tourelle"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#TypeDAction
+<http://data.shom.fr/def/navigation_cotiere#TypeDAction> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                         rdfs:subClassOf <http://www.w3.org/2004/02/skos/core#Concept> ;
+                                                         rdfs:label "Type d'Action"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#TypeDAmer
+<http://data.shom.fr/def/navigation_cotiere#TypeDAmer> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                       rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#TypeDEntiteGeographique> ;
+                                                       rdfs:label "Type d'Amer"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#TypeDEntiteGeographique
+<http://data.shom.fr/def/navigation_cotiere#TypeDEntiteGeographique> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                                     rdfs:subClassOf <http://www.w3.org/2004/02/skos/core#Concept> ;
+                                                                     rdfs:isDefinedBy <http://data.shom.fr/def/navigation_cotiere#> ;
+                                                                     rdfs:label "Type d'Entité Géographique"@fr ,
+                                                                                "Type of Geographic Entity"@en .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#TypeDEquipement
+<http://data.shom.fr/def/navigation_cotiere#TypeDEquipement> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                             rdfs:subClassOf <http://www.w3.org/2004/02/skos/core#Concept> ;
+                                                             rdfs:label "Type d'Équipement"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#TypeDEtat
+<http://data.shom.fr/def/navigation_cotiere#TypeDEtat> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                       rdfs:subClassOf <http://www.w3.org/2004/02/skos/core#Concept> ;
+                                                       rdfs:label "Type d'État"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#TypeDIndicationMeteorologique
+<http://data.shom.fr/def/navigation_cotiere#TypeDIndicationMeteorologique> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                                           rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#TypeDeConditionLocale> ;
+                                                                           rdfs:label "Type d'Indication Météorologique"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#TypeDIndicationOceanographique
+<http://data.shom.fr/def/navigation_cotiere#TypeDIndicationOceanographique> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                                            rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#TypeDeConditionLocale> ;
+                                                                            rdfs:label "Type d'Indication Océanographique"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#TypeDIndicationTemporelle
+<http://data.shom.fr/def/navigation_cotiere#TypeDIndicationTemporelle> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                                       rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#TypeDeConditionLocale> ;
+                                                                       rdfs:label "Type d'Indication Temporelle"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#TypeDeCargaison
+<http://data.shom.fr/def/navigation_cotiere#TypeDeCargaison> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                             rdfs:subClassOf <http://www.w3.org/2004/02/skos/core#Concept> ;
+                                                             rdfs:label "Type de Cargaison"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#TypeDeConditionLocale
+<http://data.shom.fr/def/navigation_cotiere#TypeDeConditionLocale> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                                   rdfs:subClassOf <http://www.w3.org/2004/02/skos/core#Concept> ;
+                                                                   rdfs:label "Type de Condition Locale"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#TypeDeCouleur
+<http://data.shom.fr/def/navigation_cotiere#TypeDeCouleur> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                           rdfs:subClassOf <http://www.w3.org/2004/02/skos/core#Concept> ;
+                                                           rdfs:isDefinedBy <http://data.shom.fr/def/navigation_cotiere#> ;
+                                                           rdfs:label "Type de Couleur"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#TypeDeCourant
+<http://data.shom.fr/def/navigation_cotiere#TypeDeCourant> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                           rdfs:subClassOf <http://www.w3.org/2004/02/skos/core#Concept> ;
+                                                           rdfs:label "Type de Courant"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#TypeDeDanger
+<http://data.shom.fr/def/navigation_cotiere#TypeDeDanger> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                          rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#TypeDEntiteGeographique> ;
+                                                          rdfs:label "Type de Danger"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#TypeDeForme
+<http://data.shom.fr/def/navigation_cotiere#TypeDeForme> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                         rdfs:subClassOf <http://www.w3.org/2004/02/skos/core#Concept> ;
+                                                         rdfs:label "Type de Forme"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#TypeDeLieuDeStationnement
+<http://data.shom.fr/def/navigation_cotiere#TypeDeLieuDeStationnement> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                                       rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#TypeDEntiteGeographique> ;
+                                                                       rdfs:label "Type de Lieu de Stationnement"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#TypeDeMotif
+<http://data.shom.fr/def/navigation_cotiere#TypeDeMotif> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                         rdfs:subClassOf <http://www.w3.org/2004/02/skos/core#Concept> ;
+                                                         rdfs:label "Type de Motif"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#TypeDeNavire
+<http://data.shom.fr/def/navigation_cotiere#TypeDeNavire> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                          rdfs:subClassOf <http://www.w3.org/2004/02/skos/core#Concept> ;
+                                                          rdfs:isDefinedBy <http://data.shom.fr/def/navigation_cotiere#> ;
+                                                          rdfs:label "Type de Navire"@fr ,
+                                                                     "Type of Ship"@en .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#TypeDeTaille
+<http://data.shom.fr/def/navigation_cotiere#TypeDeTaille> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                          rdfs:subClassOf <http://www.w3.org/2004/02/skos/core#Concept> ;
+                                                          rdfs:label "Type de Taille"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#Vague
+<http://data.shom.fr/def/navigation_cotiere#Vague> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                   rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#PhenomeneOceanographique> .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#Vent
+<http://data.shom.fr/def/navigation_cotiere#Vent> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                  owl:equivalentClass <http://sweetontology.net/phenAtmoWind/Wind> ,
+                                                                      <https://bimerr.iot.linkeddata.es/def/weather#Wind> ;
+                                                  rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#PhenomeneMeteorologique> ,
+                                                                  <http://sweetontology.net/phenAtmo/MeteorologicalPhenomena> .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#ZoneDePilotage
+<http://data.shom.fr/def/navigation_cotiere#ZoneDePilotage> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                            rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#ZoneDuDomaineMaritime> ;
+                                                            rdfs:label "Zone de Pilotage"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#ZoneDuDomaineMaritime
+<http://data.shom.fr/def/navigation_cotiere#ZoneDuDomaineMaritime> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                                   rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#EntiteGeographique> ;
+                                                                   rdfs:label "Zone du Domaine Maritime"@fr .
+
+
+###  http://data.shom.fr/def/navigation_cotiere#ZoneDuDomaineTerrestre
+<http://data.shom.fr/def/navigation_cotiere#ZoneDuDomaineTerrestre> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                                    rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#EntiteGeographique> ;
+                                                                    rdfs:label "Zone du Domaine Terrestre"@fr .
+
+
+###  http://sweetontology.net/phenAtmo/MeteorologicalPhenomena
+<http://sweetontology.net/phenAtmo/MeteorologicalPhenomena> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                            rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#PhenomeneMeteorologiqueOuOceanographique> .
+
+
+###  http://sweetontology.net/phenAtmoWind/Wind
+<http://sweetontology.net/phenAtmoWind/Wind> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                             owl:equivalentClass <https://bimerr.iot.linkeddata.es/def/weather#Wind> ;
+                                             rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#PhenomeneMeteorologique> ,
+                                                             <http://sweetontology.net/phenAtmo/MeteorologicalPhenomena> .
+
+
+###  http://sweetontology.net/phenOceanDynamics/TidalCurrent
+<http://sweetontology.net/phenOceanDynamics/TidalCurrent> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                          rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#Courant> ,
+                                                                          <http://www.ontotext.com/proton/protonext#WaterCurrent> .
+
+
+###  http://sweetontology.net/propSpaceDirection/Bearing
+<http://sweetontology.net/propSpaceDirection/Bearing> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                      rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#AideVirtuelleALaNavigation> .
+
+
+###  http://sweetontology.net/realmHydroBody/Channel
+<http://sweetontology.net/realmHydroBody/Channel> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                  owl:equivalentClass <http://www.ontotext.com/proton/protonext#Channel> ;
+                                                  rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#ZoneDuDomaineMaritime> .
+
+
+###  http://www.ontotext.com/proton/protonext#Beacon
+<http://www.ontotext.com/proton/protonext#Beacon> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                  rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#AideALaNavigation> ,
+                                                                  <http://data.shom.fr/def/navigation_cotiere#Amer> .
+
+
+###  http://www.ontotext.com/proton/protonext#Channel
+<http://www.ontotext.com/proton/protonext#Channel> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                   rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#ZoneDuDomaineMaritime> .
+
+
+###  http://www.ontotext.com/proton/protonext#Coast
+<http://www.ontotext.com/proton/protonext#Coast> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                 rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#ZoneDuDomaineTerrestre> .
+
+
+###  http://www.ontotext.com/proton/protonext#LightHouse
+<http://www.ontotext.com/proton/protonext#LightHouse> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                      rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#AideALaNavigation> ,
+                                                                      <http://data.shom.fr/def/navigation_cotiere#Amer> .
+
+
+###  http://www.ontotext.com/proton/protonext#WaterCurrent
+<http://www.ontotext.com/proton/protonext#WaterCurrent> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                        rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#PhenomeneOceanographique> .
+
+
+###  http://www.opengis.net/ont/geosparql#Feature
+<http://www.opengis.net/ont/geosparql#Feature> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                               rdfs:comment "A feature is simply any entity in the real world with some spatial location. This could be a park, an airport, a monument, a restaurant,etc. A feature can have a spatial location that cannot be precisely defined, such as a swamp or a mountain range (GeoSPARQL: Enabling a GeospatialSemantic Web by Robert Battle and Dave Kolas)."@en ;
+                                               rdfs:label "Feature"@en ;
+                                               rdfs:label "Feature"@fr .
+
+
+###  http://www.w3.org/1999/02/22-rdf-syntax-ns#Bag
+rdf:Bag rdf:type owl:Class .
+
+
+###  http://www.w3.org/1999/02/22-rdf-syntax-ns#Seq
+rdf:Seq rdf:type owl:Class .
+
+
+###  http://www.w3.org/2004/02/skos/core#Concept
+<http://www.w3.org/2004/02/skos/core#Concept> rdf:type owl:Class .
+
+
+###  http://www.w3.org/2004/02/skos/core#ConceptScheme
+<http://www.w3.org/2004/02/skos/core#ConceptScheme> rdf:type owl:Class .
+
+
+###  https://bimerr.iot.linkeddata.es/def/weather#Wind
+<https://bimerr.iot.linkeddata.es/def/weather#Wind> rdf:type owl:Class ;
+rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                    rdfs:subClassOf <http://data.shom.fr/def/navigation_cotiere#PhenomeneMeteorologique> ,
+                                                                    <http://sweetontology.net/phenAtmo/MeteorologicalPhenomena> .
+
+
+#################################################################
+#    Individuals
+#################################################################
+
+:base_request a owl:NamedIndividual , <http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource> ;
+	<http://data.sparna.fr/ontologies/sparnatural-config-datasources#queryString> """SELECT DISTINCT ?uri ?label
+WHERE {
+{
+  SELECT DISTINCT ?uri 
+  WHERE {
+    ?domain a $domain.
+    ?domain $property ?uri .
+    ?uri rdfs:label ?label
+  }
+  GROUP BY ?uri
+}
+}""" .
+
+
+:type_action a owl:NamedIndividual , <http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource> ;
+	<http://data.sparna.fr/ontologies/sparnatural-config-datasources#queryString> """SELECT DISTINCT ?uri ?label
+WHERE {
+    ?domain a $domain .
+    ?domain $property ?uri.
+    ?uri <http://www.w3.org/2004/02/skos/core#prefLabel> ?label
+}""" .
+
+:type_cargaison a owl:NamedIndividual , <http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource> ;
+	<http://data.sparna.fr/ontologies/sparnatural-config-datasources#queryString> """SELECT DISTINCT ?uri ?label
+WHERE {
+    ?domain a $domain .
+    ?domain $property ?uri.
+    ?uri <http://www.w3.org/2004/02/skos/core#prefLabel> ?label
+}""" .
+
+:type_navire a owl:NamedIndividual , <http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource> ;
+	<http://data.sparna.fr/ontologies/sparnatural-config-datasources#queryString> """SELECT DISTINCT ?uri ?label
+WHERE {
+    ?domain a $domain .
+    ?domain $property ?uri.
+    ?uri <http://www.w3.org/2004/02/skos/core#prefLabel> ?label
+}""" .
+
+:type_etat a owl:NamedIndividual , <http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource> ;
+	<http://data.sparna.fr/ontologies/sparnatural-config-datasources#queryString> """SELECT DISTINCT ?uri ?label
+WHERE {
+    ?domain a $domain .
+    ?domain $property ?uri.
+    ?uri <http://www.w3.org/2004/02/skos/core#prefLabel> ?label
+}""" .
+
+:type_forme a owl:NamedIndividual , <http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource> ;
+	<http://data.sparna.fr/ontologies/sparnatural-config-datasources#queryString> """SELECT DISTINCT ?uri ?label
+WHERE {
+    ?domain a $domain .
+    ?domain $property ?uri.
+    BIND(STRAFTER(str(?uri), 'http://data.shom.fr/id/codes/nav/typedeforme/') AS ?label)
+}""" .
+
+:type_motif a owl:NamedIndividual , <http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource> ;
+	<http://data.sparna.fr/ontologies/sparnatural-config-datasources#queryString> """SELECT DISTINCT ?uri ?label
+WHERE {
+    ?domain a $domain .
+    ?domain $property ?uri.
+    BIND(STRAFTER(str(?uri), 'http://data.shom.fr/id/codes/nav/typedemotif/') AS ?label)
+}""" .
+
+:type_entitegeo a owl:NamedIndividual , <http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource> ;
+	<http://data.sparna.fr/ontologies/sparnatural-config-datasources#queryString> """SELECT DISTINCT ?uri ?label
+WHERE {
+    ?domain a $domain .
+    ?domain $property ?uri.
+    ?uri <http://www.w3.org/2004/02/skos/core#prefLabel> ?label
+}""" .
+
+:type_taille a owl:NamedIndividual , <http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource> ;
+	<http://data.sparna.fr/ontologies/sparnatural-config-datasources#queryString> """SELECT DISTINCT ?uri ?label
+WHERE {
+    ?domain a $domain .
+    ?domain $property ?uri.
+    ?uri <http://www.w3.org/2004/02/skos/core#prefLabel> ?label
+}""" .
+
+:type_courant a owl:NamedIndividual , <http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource> ;
+	<http://data.sparna.fr/ontologies/sparnatural-config-datasources#queryString> """SELECT DISTINCT ?uri ?label
+WHERE {
+    ?domain a $domain .
+    ?domain $property ?uri.
+    ?uri <http://www.w3.org/2004/02/skos/core#prefLabel> ?label
+}""" .
+
+:type_danger a owl:NamedIndividual , <http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource> ;
+	<http://data.sparna.fr/ontologies/sparnatural-config-datasources#queryString> """SELECT DISTINCT ?uri ?label
+WHERE {
+    ?domain a $domain .
+    ?domain $property ?uri.
+    ?uri <http://www.w3.org/2004/02/skos/core#prefLabel> ?label
+}""" .
+
+:type_stationnement a owl:NamedIndividual , <http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource> ;
+	<http://data.sparna.fr/ontologies/sparnatural-config-datasources#queryString> """SELECT DISTINCT ?uri ?label
+WHERE {
+    ?domain a $domain .
+    ?domain $property ?uri.
+    ?uri <http://www.w3.org/2004/02/skos/core#prefLabel> ?label
+}""" .
+
+:type_couleur a owl:NamedIndividual , <http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource> ;
+	<http://data.sparna.fr/ontologies/sparnatural-config-datasources#queryString> """SELECT DISTINCT ?uri ?label
+WHERE {
+    ?domain a $domain .
+    ?domain $property ?uri.
+    ?uri <http://www.w3.org/2004/02/skos/core#prefLabel> ?label
+}""" .
+
+:type_equipement a owl:NamedIndividual , <http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource> ;
+	<http://data.sparna.fr/ontologies/sparnatural-config-datasources#queryString> """SELECT DISTINCT ?uri ?label
+WHERE {
+    ?domain a $domain .
+    ?domain $property ?uri.
+    ?uri <http://www.w3.org/2004/02/skos/core#prefLabel> ?label
+}""" .
+
+:list_feature a owl:NamedIndividual , <http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource> ;
+	<http://data.sparna.fr/ontologies/sparnatural-config-datasources#queryString> """SELECT DISTINCT ?uri ?label
+WHERE {
+    ?domain a $domain .
+    ?domain $property ?uri.
+    ?uri <http://www.w3.org/2000/01/rdf-schema#label> ?label
+}""" .
+
+:dir_cardinales a owl:NamedIndividual , <http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource> ;
+	<http://data.sparna.fr/ontologies/sparnatural-config-datasources#queryString> """SELECT DISTINCT ?uri ?label
+WHERE {
+    ?domain a $domain .
+    ?domain $property ?uri.
+    ?uri <http://www.w3.org/2000/01/rdf-schema#label> ?label
+}""" .
+
+:dir_laterales a owl:NamedIndividual , <http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource> ;
+	<http://data.sparna.fr/ontologies/sparnatural-config-datasources#queryString> """SELECT DISTINCT ?uri ?label
+WHERE {
+    ?domain a $domain .
+    ?domain $property ?uri.
+    ?uri <http://www.w3.org/2000/01/rdf-schema#label> ?label
+}""" .
+
+:entite_geo a owl:NamedIndividual , <http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource> ;
+	<http://data.sparna.fr/ontologies/sparnatural-config-datasources#queryString> """SELECT DISTINCT ?uri ?label
+WHERE {
+    ?domain a $domain .
+    ?domain $property ?uri.
+    ?uri <http://www.w3.org/2000/01/rdf-schema#label> ?label
+}""" .
+
+:list_reglement a owl:NamedIndividual , <http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource> ;
+	<http://data.sparna.fr/ontologies/sparnatural-config-datasources#queryString> """SELECT DISTINCT ?uri ?label
+WHERE {
+    ?domain a $domain .
+    ?domain $property ?uri.
+    ?uri <http://www.w3.org/2000/01/rdf-schema#label> ?label
+}""" .
+
+:list_marquepar a owl:NamedIndividual , <http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource> ;
+	<http://data.sparna.fr/ontologies/sparnatural-config-datasources#queryString> """SELECT DISTINCT ?uri ?label
+WHERE {
+    ?domain a $domain .
+    ?domain $property ?uri.
+    ?uri <http://www.w3.org/2000/01/rdf-schema#label> ?label
+}""" .
+
+:list_aidenav a owl:NamedIndividual , <http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource> ;
+	<http://data.sparna.fr/ontologies/sparnatural-config-datasources#queryString> """SELECT DISTINCT ?uri ?label
+WHERE {
+    ?domain a $domain .
+    ?domain $property ?uri.
+    ?uri <http://www.w3.org/2000/01/rdf-schema#label> ?label
+}""" .
+###  Generated by the OWL API (version 4.5.9.2019-02-01T07:24:44Z) https://github.com/owlcs/owlapi
