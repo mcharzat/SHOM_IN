@@ -109,15 +109,17 @@ export default {
     addSelectAreaBbox(queryString) {
       // ex bbox : -3.530592318234245,47.13401849882367,-2.8469636918917662,47.492171405800896
       queryString = queryString.replace(new RegExp('}$'),
-      ` ?ent geom:hasGeometry ?eGeom .
-        ?eGeom gsp:asWKT ?wkt.
-        FILTER (geof:sfWithin(?wkt, '''
-            <http://www.opengis.net/def/crs/OGC/1.3/CRS84>
-                Polygon ((${this.coordsBboxArea[1]} ${this.coordsBboxArea[0]},
-                ${this.coordsBboxArea[1]} ${this.coordsBboxArea[2]},
-                ${this.coordsBboxArea[3]} ${this.coordsBboxArea[2]},
-                ${this.coordsBboxArea[3]} ${this.coordsBboxArea[0]},
-                ${this.coordsBboxArea[1]} ${this.coordsBboxArea[0]}))'''^^gsp:wktLiteral))\n}`);
+      `  OPTIONAL {
+          ?this geom:hasGeometry ?eGeom .
+          ?eGeom gsp:asWKT ?wkt.
+          FILTER (geof:sfWithin(?wkt, '''
+              <http://www.opengis.net/def/crs/OGC/1.3/CRS84>
+                  Polygon ((${this.coordsBboxArea[1]} ${this.coordsBboxArea[0]},
+                  ${this.coordsBboxArea[1]} ${this.coordsBboxArea[2]},
+                  ${this.coordsBboxArea[3]} ${this.coordsBboxArea[2]},
+                  ${this.coordsBboxArea[3]} ${this.coordsBboxArea[0]},
+                  ${this.coordsBboxArea[1]} ${this.coordsBboxArea[0]}))'''^^gsp:wktLiteral))\n}
+          }`);
       return queryString;
     },
     prefixesPostProcess(queryString) {
