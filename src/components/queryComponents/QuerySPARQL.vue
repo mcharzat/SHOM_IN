@@ -1,7 +1,7 @@
 <template>
     <div class="container-fluid">
       <div id="ui-search"></div>
-      <div id="yasqe" style="display:none"></div>
+      <div id="yasqe"></div>
       <div id="yasr" style="display:none"></div>
     </div>  
 </template>
@@ -81,7 +81,7 @@ export default {
 
     // link yasqe and yasr
     yasqe.on("queryResponse", (_yasqe, response, duration) => {
-      this.$emit("myQueryResult", JSON.parse(response.text));
+      this.emitResults(response.text);
       yasr.setResponse(response, duration);
       this.sparnatural.disableLoading() ;
     });
@@ -117,6 +117,55 @@ export default {
         queryString = this.prefixesPostProcess(queryString);
         queryString = this.sparnatural.expandSparql(queryString);
         return queryString;
+    },
+    emitResults (response) {
+      let results = JSON.parse(response).results.bindings;
+
+      const state = this.getStateOfResults(results);
+      results = this.synthesizeResults(state, results);
+
+      this.$emit("myQueryResult", results);
+    },
+    getStateOfResults(results) {
+      const state = {};
+      results.forEach((result, i) => {
+        if (Object.keys(state).includes(result.this.value)) {
+          state[result.this.value].push(i);
+        } else {
+          state[result.this.value] = [i];
+        }
+      })
+      return state;
+    },
+    synthesizeResults(config, data) {
+      const results = [];
+
+      for (const element in config) {
+        const result = {};
+
+        config[element].forEach(index => {
+          
+          Object.keys(data[index]).forEach(field => {
+            const datum = data[index][field];
+            const lang = Object.keys(datum).includes("xml:lang");
+            if (Object.keys(result).includes(field)) {
+              if (!result[field].value.includes(datum.value)){
+                result[field].value.push(datum.value);
+                if (lang) {
+                result[field]["xml:lang"].push(datum["xml:lang"]);
+                }
+              }
+            } else {
+              result[field] = {type: datum.type, value: [datum.value]};
+              if (lang) {
+                result[field]["xml:lang"] = [datum["xml:lang"]];
+              }
+            }
+          })
+        })
+        results.push(result);
+      }
+      return results;
     }
   }
 }

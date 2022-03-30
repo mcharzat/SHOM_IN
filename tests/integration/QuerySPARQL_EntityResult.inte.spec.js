@@ -5,43 +5,32 @@ import DisplayResearch from "@/components/DisplayResearch.vue";
 import EntityResult from "@/components/queryComponents/EntityResult.vue";
 
 describe("EntityResult.vue", () => {
-    const data = {
-        "head" : {
-            "vars" : [
-                "uri",
-                "literal",
-                "bnode"
-            ]
+    const data = [ 
+        {"uri" : {
+            "type" : "uri",
+            "value" : ["http://www.w3.org/1999/02/22-rdf-syntax-ns#type"]
         },
-        "results" : {
-            "bindings" : [ 
-                {"uri" : {
-                    "type" : "uri",
-                    "value" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
-                },
-                "literal" : {
-                    "type" : "literal",
-                    "value" : "Consigne de Navigation"
-                },
-                "bnode" : {
-                    "type" : "bnode",
-                    "value" : "bnode11221"
-                }},
-                {"uri" : {
-                    "type" : "uri",
-                    "value" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#typeA"
-                },
-                "literal" : {
-                    "type" : "literal",
-                    "value" : "Consigne de Navigation en eaux troubles"
-                },
-                "bnode" : {
-                    "type" : "bnode",
-                    "value" : "bnode785469"
-                }}
-            ]
-        }
-    };
+        "literal" : {
+            "type" : "literal",
+            "value" : ["Consigne de Navigation"]
+        },
+        "bnode" : {
+            "type" : "bnode",
+            "value" : ["bnode11221"]
+        }},
+        {"uri" : {
+            "type" : "uri",
+            "value" : ["http://www.w3.org/1999/02/22-rdf-syntax-ns#typeA"]
+        },
+        "literal" : {
+            "type" : "literal",
+            "value" : ["Consigne de Navigation en eaux troubles"]
+        },
+        "bnode" : {
+            "type" : "bnode",
+            "value" : ["bnode785469"]
+        }}
+    ];
 
     it("EntityResult receive signal from QuerySPARQL", async () => {
         const wrapper = shallowMount(App, {
@@ -62,11 +51,11 @@ describe("EntityResult.vue", () => {
 
         await wrapperResearch.vm.conveyResult(data);
         
-        expect(wrapperDisplay.vm.data).toMatchObject(data.results.bindings);
+        expect(wrapperDisplay.vm.queryResult).toMatchObject(data);
 
         expect(wrapperDisplay.findComponent(EntityResult).exists()).toBeTruthy();
         const wrapperEntity = wrapperDisplay.findAllComponents(EntityResult);
-        expect(wrapperEntity[0].vm.values).toMatchObject(data.results.bindings[0]);
-        expect(wrapperEntity[1].vm.values).toMatchObject(data.results.bindings[1]);
+        expect(wrapperEntity[0].vm.values).toMatchObject(data[0]);
+        expect(wrapperEntity[1].vm.values).toMatchObject(data[1]);
     });
 });
