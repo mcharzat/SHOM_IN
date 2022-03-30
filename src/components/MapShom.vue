@@ -64,23 +64,12 @@ export default {
       userLocation: {},
       onMap: false,
       selectionArea: "",
-      map: true,
       layerManager : L.control.layers(),
       layersManaged : L.layerGroup(),
       layerResearchedElements: L.featureGroup(),
       layerDefaultElements: L.featureGroup(),
       layerGeoElements: L.featureGroup(),
       layerAdviceElements: L.featureGroup(),
-    }
-  },
-  watch: {
-    queryResult: function (results) {
-      if ((results.head.vars.includes("lat") 
-          && results.head.vars.includes("lng")) 
-          || results.head.vars.includes("wkt")) {
-        this.data = results.results.bindings;
-        this.displayResult();
-      }
     }
   },
   mounted() {
@@ -90,10 +79,17 @@ export default {
     this.setupSelectArea(map);
     this.setupResults(map);
 
+    this.$watch('queryResult', (results) => {
+      if ((results.head.vars.includes("lat") 
+          && results.head.vars.includes("lng")) 
+          || results.head.vars.includes("wkt")) {
+        this.data = results.results.bindings;
+        this.displayResult(map);
+      }
+    })
+
     //Connexion à la fonction au déplacement de la souris
     map.on('mousemove', this.getMousePosition, this);
-
-    this.map = map;
   },
   methods: {
     setupMap() {
@@ -174,39 +170,39 @@ export default {
 
       this.layerResearchedElements.addTo(map);
     },
-    displayResult() { 
+    displayResult(map) { 
       this.clearResearchLayer();
       this.data.forEach(element => {
         if (Object.keys(element).includes("lat")
             && element.lat.type == "literal"
             && Object.keys(element).includes("lng")
             && element.lng.type == "literal") {
-          this.displayResultGeo(element);
+          this.displayResultGeo(element, map);
         } else if (Object.keys(element).includes("wkt")
                   && element.wkt.type == "literal") {
-          this.displayResultWkt(element);
+          this.displayResultWkt(element, map);
         }
       })
-      this.map.fitBounds(this.layerResearchedElements.getBounds());
+      map.fitBounds(this.layerResearchedElements.getBounds());
     },
-    displayResultGeo(element) {
+    displayResultGeo(element, map) {
       if (element.lat.value.includes("°")) {
         const lat = this.convertDegreeToLatlng(element.lat.value);
         const lng = this.convertDegreeToLatlng(element.lng.value);
-        this.displayElement([lat, lng], element);
+        this.displayElement([lat, lng], element, map);
       } else {
         this.displayElement(
           [parseFloat(element.lat.value), parseFloat(element.lng.value)],
-          element);
+          element, map);
       }
     },
-    displayResultWkt(element) {
+    displayResultWkt(element, map) {
       const upperCoord = element.wkt.value.toUpperCase();
       let coord = this.checkEPSGWkt(element.wkt.value);
       if (coord) {
         if (upperCoord.includes("POINT")) {
           const coords = this.extractCoordPointWkt(coord);
-          this.displayElement(coords, element);
+          this.displayElement(coords, element, map);
         } else if (upperCoord.includes("LINESTRING")) {
           let coords = [];
           if (upperCoord.includes("MULTILINESTRING")) {
@@ -214,10 +210,10 @@ export default {
           } else {
             coords = this.extractCoordLineWkt(coord);
           }
-          this.displayLineElement(coords, element);
+          this.displayLineElement(coords, element, map);
         } else if (upperCoord.includes("POLYGON")) {
           const coords = this.extractCoordPolygonWkt(coord);
-          this.displayPolygonElement(coords, element);
+          this.displayPolygonElement(coords, element, map);
         }
       }
     },
@@ -267,49 +263,49 @@ export default {
       }
       return coord;
     },
-    displayElement(coord, element) {
+    displayElement(coord, element, map) {
       const category = "toDo";
       switch (category) {
         case "geo":
           this.createMarker(
             coord, "geo", [38, 50],
-            element, this.layerGeoElements, "Geographic Entities"
+            element, this.layerGeoElements, "Geographic Entities", map
           );
           break;
         case "advice":
           this.createMarker(
             coord, "advice", [40, 30],
-            element, this.layerAdviceElements, "Advice Entities"
+            element, this.layerAdviceElements, "Advice Entities", map
           );
           break;
         default:
           this.createMarker(
             coord, "default", [50, 40],
-            element, this.layerDefaultElements, "Research Elements"
+            element, this.layerDefaultElements, "Research Elements", map
           );
       }
     },
-    createMarker(coord, iconName, iconSize, element, layer, layerName) {
+    createMarker(coord, iconName, iconSize, element, layer, layerName, map) {
       const icon = L.icon({iconUrl: "markerIcons/" + iconName + ".png", iconSize: iconSize});
       const marker = L.marker(coord, {icon: icon});
 
       this.createPopup(marker, element);
       layer.addLayer(marker);
-      this.addResearchToLayerControl(layer, layerName);
+      this.addResearchToLayerControl(layer, layerName, map);
     },
-    displayLineElement(coords, element) {
+    displayLineElement(coords, element, map) {
       const line = L.polyline(coords);
 
       this.createPopup(line, element);
       this.layerGeoElements.addLayer(line);
-      this.addResearchToLayerControl(this.layerGeoElements, "Geographic Entities");
+      this.addResearchToLayerControl(this.layerGeoElements, "Geographic Entities", map);
     },
-    displayPolygonElement(coords, element) {
+    displayPolygonElement(coords, element, map) {
       const polygone = L.polygon(coords);
 
       this.createPopup(polygone, element);
       this.layerGeoElements.addLayer(polygone);
-      this.addResearchToLayerControl(this.layerGeoElements, "Geographic Entities");
+      this.addResearchToLayerControl(this.layerGeoElements, "Geographic Entities", map);
     },
     createPopup(symbol, element) {
       symbol.on("click", async () => {
@@ -320,9 +316,9 @@ export default {
         symbol.openPopup();
       })
     },
-    addResearchToLayerControl(layer, name) {
+    addResearchToLayerControl(layer, name, map) {
       if (!this.layersManaged.hasLayer(layer)) {
-        layer.addTo(this.map);
+        layer.addTo(map);
         this.layersManaged.addLayer(layer);
         this.layerManager.addOverlay(layer, name);
       }

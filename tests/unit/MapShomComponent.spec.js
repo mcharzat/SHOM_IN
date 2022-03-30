@@ -86,4 +86,14 @@ describe("MapShom.vue", () => {
 
         expect(coord1).toEqual(expect.arrayContaining(coord));
     });
+
+    it("extract coord from wkt polygon", () => {
+        const wrapper = mount(mapShom);
+        const wkt = "POLYGON (((48.7442339 -4.0096052, 48.73301 -3.970418, 48.7442339 -4.0096052, 48.73301 -3.970418, 48.7442339 -4.0096052)))";
+        const coord = [[[[-4.0096052 ,48.7442339],[-3.970418, 48.73301],[-4.0096052 ,48.7442339],[-3.970418, 48.73301]]]];
+
+        const coord1 = wrapper.vm.extractCoordPolygonWkt(wrapper.vm.checkEPSGWkt(wkt));
+
+        expect(coord1).toEqual(expect.arrayContaining(coord));
+    });
 });
