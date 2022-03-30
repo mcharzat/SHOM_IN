@@ -45,8 +45,10 @@ export default {
       },
       localCacheDataTtl: 1000 * 60 * 60 * 24, // 24 hours in miiseconds
       filterConfigOnEndpoint : false,
-      onQueryUpdated: (queryString) => {
+      onQueryUpdated: (queryString) =>  {
         queryString = this.semanticPostProcess(queryString);
+        queryString = this.labelDescriptionSelectionPostProcess(queryString);
+        queryString = this.optionalQueriesPostProcess(queryString);
         $('#sparql code').html(queryString.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"));
         yasqe.setValue(queryString);
       },
@@ -87,12 +89,32 @@ export default {
   methods: {
     prefixesPostProcess(queryString) {
       if(queryString.indexOf("rdf-schema#") == -1) {
-          queryString = queryString.replace("SELECT ", "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> \nSELECT ");
+          queryString = queryString.replace("SELECT ", 
+                "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> \n"+
+                "PREFIX nav: <http://data.shom.fr/def/navigation_cotiere#>\n"+
+                "PREFIX geom: <http://data.ign.fr/def/geometrie#>\n"+
+                "PREFIX skos: <http://www.w3.org/2004/02/skos/core#>"+
+                "PREFIX gsp: <http://www.opengis.net/ont/geosparql#>\n SELECT ");
       }       
       return queryString;
     },
+    labelDescriptionSelectionPostProcess(queryString) {
+        queryString = queryString.replace("SELECT DISTINCT ?this", "SELECT DISTINCT ?this ?label ?description ?information ?wkt ?lat ?lng");
+        return queryString;
+    },
+    optionalQueriesPostProcess(queryString) {
+        queryString = queryString.replace(new RegExp('}$'), 
+                "OPTIONAL{?this rdfs:label ?label}.\n"+
+                "OPTIONAL{?this skos:prefLabel ?label}.\n"+
+                "OPTIONAL{?this nav:aPourTexteAssocie ?description}.\n"+
+                "OPTIONAL{?this nav:aPourInfo ?information}.\n"+
+                "OPTIONAL{?this nav:aPourLat ?lat}.\n"+
+                "OPTIONAL{?this nav:aPourLng ?lng}.\n"+
+                "OPTIONAL{?this geom:hasGeometry ?geom.\n ?geom gsp:asWKT ?wkt\n}\n}");
+        return queryString;
+    },
     semanticPostProcess(queryString) {
-      queryString = this.prefixesPostProcess(queryString);
+        queryString = this.prefixesPostProcess(queryString);
         queryString = this.sparnatural.expandSparql(queryString);
         return queryString;
     }
