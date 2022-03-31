@@ -4,6 +4,7 @@
     <MapShom
       :queryResultMap="result"
       @bboxSelectionArea="conveyBbox"
+      @suppressBboxSelectionArea="conveyStateBbox"
     />
     <DisplayResearch 
       :queryResult="result"
@@ -42,6 +43,9 @@ export default {
     },
     conveyBbox (bbox) {
       this.bbox = bbox;
+    },
+    conveyStateBbox (bboxState) {
+      this.bboxState = bboxState;
     }
   },
   components: {

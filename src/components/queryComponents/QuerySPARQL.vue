@@ -9,7 +9,7 @@
           </div>
       </div>
       
-      <div id="yasqe" class="yasr_header"></div>
+      <div id="yasqe" class=""></div>
       <div id="yasr" class="yasr_header"></div>
     </div>  
 </template>
@@ -34,8 +34,7 @@ export default {
       querySelectBbox: "",
       bboxState: true,
       bboxArea: [],
-      yasqe: null,
-      yasr: null
+      tripleStoreLink: "http://172.31.58.17:7200/repositories/test_shom",
     }
   },
   computed : {
@@ -54,12 +53,12 @@ export default {
   },
   mounted() {         
     $.urlParam = function(name){
-        var results = new RegExp('[\\?&amp;]' + name + '=([^&amp;#]*)').exec(window.location.href);
+        const results = new RegExp('[\\?&amp;]' + name + '=([^&amp;#]*)').exec(window.location.href);
         if(results == null) { return null; }
         return results[1] || 0;
       }
 
-    var lang = ($.urlParam('lang') != null)?$.urlParam('lang'):'fr';
+    const lang = ($.urlParam('lang') != null)?$.urlParam('lang'):'fr';
 
     this.sparnatural = document.getElementById('ui-search').Sparnatural({
       config: this.config ,
@@ -71,7 +70,7 @@ export default {
       backgroundBaseColor: '2,184,117',
       autocomplete : null,
       list : null,
-      defaultEndpoint: "http://172.31.58.17:7200/repositories/test_shom",
+      defaultEndpoint: this.tripleStoreLink,
       sparqlPrefixes : {
         "dbpedia" : "http://dbpedia.org/ontology/"
       },
@@ -91,7 +90,7 @@ export default {
 >>>>>>> refractor(selection): move querySelection to onSubmit
     
         $('#sparql code').html(queryString.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"));
-        this.yasqe.setValue(queryString);
+        yasqe.setValue(queryString);
       },
       tooltipConfig : {
         delay: [800, 100],
@@ -103,29 +102,33 @@ export default {
 =======
       onSubmit: (form) => {
 
-        this.filterQueryBySelection();
+        this.filterQueryBySelection(yasqe);
 
 >>>>>>> refractor(selection): move querySelection to onSubmit
         // enable loader on button
         form.sparnatural.enableLoading() ; 
         // trigger the query from YasQE
-        this.yasqe.query();
+        yasqe.query();
       }
     });
 
-    this.yasqe = this.constructYasqe();
-    this.yasr = this.constructYasr();
+    const yasqe = this.constructYasqe();
+    const yasr = this.constructYasr(yasqe);
 
     // link yasqe and yasr
     yasqe.on("queryResponse", (_yasqe, response, duration) => {
+<<<<<<< HEAD
       this.emitResults(response.text);
+=======
+      this.$emit("myQueryResult", JSON.parse(response.text));
+>>>>>>> bug(querysparql): resolve a bug
       yasr.setResponse(response, duration);
       this.sparnatural.disableLoading() ;
     });
   },
   methods: {
-    filterQueryBySelection() {
-      let queryString = this.yasqe.getValue();
+    filterQueryBySelection(yasqe) {
+      let queryString = yasqe.getValue();
 
       if (this.bboxArea.length != 0) {
         queryString = this.addSelectAreaBbox(queryString);
@@ -134,17 +137,17 @@ export default {
         queryString = this.suppressAreaBbox(queryString);
         this.bboxArea = [];
       }
-      this.yasqe.setValue(queryString);
+      yasqe.setValue(queryString);
     },
     constructYasqe() {
       return new Yasqe(document.getElementById("yasqe"), {
-      requestConfig: { endpoint: "http://172.31.58.17:7200/repositories/test_shom" },
+      requestConfig: { endpoint: this.tripleStoreLink },
       copyEndpointOnNewTab: false});
     },
-    constructYasr() {
+    constructYasr(yasqe) {
       return new Yasr(document.getElementById("yasr"), {
       //this way, the URLs in the results are prettified using the defined prefixes in the query
-      getUsedPrefixes : this.yasqe.getPrefixesFromQuery,
+      getUsedPrefixes : yasqe.getPrefixesFromQuery,
       "drawOutputSelector": false,
       "drawDownloadIcon": false,
       // avoid persistency side-effects
