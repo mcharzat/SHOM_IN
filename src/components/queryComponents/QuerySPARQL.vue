@@ -1,6 +1,14 @@
 <template>
     <div class="container-fluid">
-      <div id="ui-search"></div>
+      <div id="ui-search">
+          <div v-if="!displaySelect" id="displaySelect" class="displaySelect">
+            <div class="selection">
+              <img src="../../assets/valide_selection.png" height ="20" width="20"/>
+              Sélection activée
+            </div>
+          </div>
+      </div>
+      
       <div id="yasqe"></div>
       <!--<div id="yasqe" style="display:none"></div>-->
       <div id="yasr" style="display:none"></div>
@@ -23,7 +31,16 @@ export default {
   data () {
     return {
       config: ontology,
-      sparnatural: {}
+      sparnatural: {},
+      querySelectBbox: "",
+      bboxState: true,
+      bboxArea: []
+    }
+  },
+  computed : {
+    displaySelect() {
+      console.log('coucou');
+      return this.bboxState;
     }
   },
   watch: {
@@ -229,5 +246,20 @@ export default {
 
   .yasr_header {
     display: none;
+  }
+  .bg-wrapper {
+    padding: 0;
+  }
+  .displaySelect {
+    padding-top: 12px;
+    background: rgba(0, 0, 0, 0) linear-gradient(rgba(2, 184, 117, 0.1) 0px, rgba(2, 184, 117, 0.1) 116px)
+  }
+  .selection {
+    margin-left: 42px;
+    padding: 2px;
+    background: rgba(2,184,117);
+    width: 20%;
+    font-size: 0.8em;
+    border-radius: 3px;
   }
 </style>
