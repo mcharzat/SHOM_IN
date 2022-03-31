@@ -9,7 +9,7 @@
           </div>
       </div>
       
-      <div id="yasqe" class=""></div>
+      <div id="yasqe" class="yasr_header"></div>
       <div id="yasr" class="yasr_header"></div>
     </div>  
 </template>
@@ -148,17 +148,10 @@ export default {
     },
     addSelectAreaBbox(queryString) {
       this.querySelectBbox = 
-      `  OPTIONAL {
-          ?this geom:hasGeometry ?eGeom .
-          ?eGeom gsp:asWKT ?wkt.
-          FILTER (geof:sfWithin(?wkt, '''
-              <http://www.opengis.net/def/crs/OGC/1.3/CRS84>
-                  Polygon ((${this.coordsBboxArea[0]} ${this.coordsBboxArea[1]},
-                  ${this.coordsBboxArea[2]} ${this.coordsBboxArea[1]},
-                  ${this.coordsBboxArea[2]} ${this.coordsBboxArea[3]},
-                  ${this.coordsBboxArea[0]} ${this.coordsBboxArea[3]},
-                  ${this.coordsBboxArea[0]} ${this.coordsBboxArea[1]}))'''^^gsp:wktLiteral))\n}
-          }`;
+      ` ?this geom:hasGeometry ?eGeom .
+        ?eGeom gsp:asWKT ?wkt.
+        FILTER (geof:sfWithin(?wkt, '''<http://www.opengis.net/def/crs/EPSG/0/4326> Polygon ((${this.coordsBboxArea[0]} ${this.coordsBboxArea[1]},${this.coordsBboxArea[0]} ${this.coordsBboxArea[3]},${this.coordsBboxArea[2]} ${this.coordsBboxArea[3]},${this.coordsBboxArea[2]} ${this.coordsBboxArea[1]},${this.coordsBboxArea[0]} ${this.coordsBboxArea[1]}))'''^^gsp:wktLiteral))
+      }`;
       queryString = queryString.replace(new RegExp('}$'), this.querySelectBbox);
       return queryString;
     },

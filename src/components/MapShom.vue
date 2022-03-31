@@ -338,6 +338,7 @@ export default {
       this.layerResearchedElements.eachLayer((layer) => {
         if (layer.getLayers().length > 0) {
           map.fitBounds(this.layerResearchedElements.getBounds());
+          map.setZoom(map.getZoom()-1);
           return;
         }
       })
