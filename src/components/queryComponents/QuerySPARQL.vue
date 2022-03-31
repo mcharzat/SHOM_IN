@@ -9,7 +9,7 @@
           </div>
       </div>
       
-      <div id="yasqe" class="yasr_header"></div>
+      <div id="yasqe" class=""></div>
       <div id="yasr" class="yasr_header"></div>
     </div>  
 </template>
@@ -79,6 +79,7 @@ export default {
       filterConfigOnEndpoint : false,
       onQueryUpdated: (queryString) =>  {
         queryString = this.semanticPostProcess(queryString);
+<<<<<<< HEAD
         queryString = this.labelDescriptionSelectionPostProcess(queryString);
         queryString = this.optionalQueriesPostProcess(queryString);
         queryString = this.anyEntitiesPostProcess(queryString);
@@ -86,6 +87,8 @@ export default {
         if (this.coordsBboxArea.length != 0) {
           queryString = this.addSelectAreaBbox(queryString);
         }
+=======
+>>>>>>> refractor(selection): move querySelection to onSubmit
     
         $('#sparql code').html(queryString.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"));
         this.yasqe.setValue(queryString);
@@ -95,7 +98,14 @@ export default {
         duration: [100, 100],
       },
       // triggered when "play" button is clicked
+<<<<<<< HEAD
       onSubmit: function(form) {
+=======
+      onSubmit: (form) => {
+
+        this.filterQueryBySelection();
+
+>>>>>>> refractor(selection): move querySelection to onSubmit
         // enable loader on button
         form.sparnatural.enableLoading() ; 
         // trigger the query from YasQE
@@ -114,6 +124,18 @@ export default {
     });
   },
   methods: {
+    filterQueryBySelection() {
+      let queryString = this.yasqe.getValue();
+
+      if (this.bboxArea.length != 0) {
+        queryString = this.addSelectAreaBbox(queryString);
+      }
+      if (this.bboxState) {
+        queryString = this.suppressAreaBbox(queryString);
+        this.bboxArea = [];
+      }
+      this.yasqe.setValue(queryString);
+    },
     constructYasqe() {
       return new Yasqe(document.getElementById("yasqe"), {
       requestConfig: { endpoint: "http://172.31.58.17:7200/repositories/test_shom" },
