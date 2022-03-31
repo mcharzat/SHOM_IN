@@ -5,6 +5,7 @@
   <div class="research" :hidden="!displayPanel">
     <QuerySPARQL 
       :coordsBboxArea="bboxArea"
+      :suppressBbox="bboxState"
       @myQueryResult="conveyResult"
       />
   </div>
@@ -27,6 +28,10 @@ export default {
     bboxArea: {
       type: Array,
       default: () => []
+    },
+    bboxState: {
+      type: String,
+      default: ""
     }
   },
   data() {

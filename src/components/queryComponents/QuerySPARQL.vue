@@ -9,7 +9,7 @@
           </div>
       </div>
       
-      <div id="yasqe" class=""></div>
+      <div id="yasqe" class="yasr_header"></div>
       <div id="yasr" class="yasr_header"></div>
     </div>  
 </template>
@@ -26,6 +26,10 @@ export default {
       type: Array,
       default: () => []
     },
+    suppressBbox: {
+      type: String,
+      default: ""
+    }
   },
   data () {
     return {
@@ -34,7 +38,7 @@ export default {
       querySelectBbox: "",
       bboxState: true,
       bboxArea: [],
-      tripleStoreLink: "http://172.31.58.17:7200/repositories/test_shom",
+      tripleStoreLink: "http://172.31.58.17:7200/repositories/test_shom"
     }
   },
   computed : {
@@ -78,16 +82,9 @@ export default {
       filterConfigOnEndpoint : false,
       onQueryUpdated: (queryString) =>  {
         queryString = this.semanticPostProcess(queryString);
-<<<<<<< HEAD
         queryString = this.labelDescriptionSelectionPostProcess(queryString);
         queryString = this.optionalQueriesPostProcess(queryString);
         queryString = this.anyEntitiesPostProcess(queryString);
-
-        if (this.coordsBboxArea.length != 0) {
-          queryString = this.addSelectAreaBbox(queryString);
-        }
-=======
->>>>>>> refractor(selection): move querySelection to onSubmit
     
         $('#sparql code').html(queryString.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"));
         yasqe.setValue(queryString);
@@ -97,14 +94,10 @@ export default {
         duration: [100, 100],
       },
       // triggered when "play" button is clicked
-<<<<<<< HEAD
-      onSubmit: function(form) {
-=======
       onSubmit: (form) => {
 
         this.filterQueryBySelection(yasqe);
 
->>>>>>> refractor(selection): move querySelection to onSubmit
         // enable loader on button
         form.sparnatural.enableLoading() ; 
         // trigger the query from YasQE
@@ -117,11 +110,7 @@ export default {
 
     // link yasqe and yasr
     yasqe.on("queryResponse", (_yasqe, response, duration) => {
-<<<<<<< HEAD
       this.emitResults(response.text);
-=======
-      this.$emit("myQueryResult", JSON.parse(response.text));
->>>>>>> bug(querysparql): resolve a bug
       yasr.setResponse(response, duration);
       this.sparnatural.disableLoading() ;
     });

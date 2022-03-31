@@ -13,6 +13,7 @@
     <SPARQLResearch 
       :widthPdf="widthPdf"
       :bboxArea="bbox"
+      :bboxState="bboxState"
       @sparnaResult="conveyResult"
     />
   </div>
@@ -31,7 +32,8 @@ export default {
     return {
       widthPdf: false,
       result: [],
-      bbox: []
+      bbox: [],
+      bboxState: "",
     }
   },
   methods: {
