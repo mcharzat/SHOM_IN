@@ -25,6 +25,7 @@
 <script>
 import { createApp } from 'vue';
 import SwalDocumentationVue from './SwalDocumentation.vue';
+import OtherShomWebsiteVue from './OtherShomWebsites.vue';
 
 export default {
   name: 'navBar',
@@ -53,6 +54,19 @@ export default {
 
       this.$swal({
         titleText: this.title,
+        showCloseButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        width: 800,
+        html: '<div id="modal"></div>'
+      })
+      doc.mount("#modal");
+    },
+    displayShom: function () {
+      const doc = createApp(OtherShomWebsiteVue);
+
+      this.$swal({
+        titleText: "Voir les sites du SHOM",
         showCloseButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
