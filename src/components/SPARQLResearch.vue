@@ -3,7 +3,11 @@
     <img src="../assets/research.png" height ="35" width="35"/>
   </button>
   <div class="research" :hidden="!displayPanel">
-    <QuerySPARQL @myQueryResult="conveyResult"/>
+    <QuerySPARQL 
+      :coordsBboxArea="bboxArea"
+      :suppressBbox="bboxState"
+      @myQueryResult="conveyResult"
+      />
   </div>
 </template>
 
@@ -21,10 +25,18 @@ export default {
       type: Boolean,
       default: false
     },
+    bboxArea: {
+      type: Array,
+      default: () => []
+    },
+    bboxState: {
+      type: String,
+      default: ""
+    }
   },
   data() {
     return {
-      isDisplayed: true,
+      isDisplayed: true
     }
   },
   computed : {

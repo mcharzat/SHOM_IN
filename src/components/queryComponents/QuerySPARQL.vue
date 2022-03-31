@@ -1,33 +1,68 @@
 <template>
     <div class="container-fluid">
-      <div id="ui-search"></div>
-      <div id="yasqe" style="display:none"></div>
-      <div id="yasr" style="display:none"></div>
+      <div id="ui-search">
+          <div v-if="!displaySelect" id="displaySelect" class="displaySelect">
+            <div class="selection">
+              <img src="../../assets/valide_selection.png" height ="20" width="20"/>
+              Sélection activée
+            </div>
+          </div>
+      </div>
+      
+      <div id="yasqe" class="yasr_header"></div>
+      <div id="yasr" class="yasr_header"></div>
     </div>  
 </template>
 
 <script>
-import data from '../../assets/sparnatural_config/atlantis-sparnaconfig.ttl'
+import ontology from '../../assets/sparnatural_config/atlantis-sparnaconfig.ttl'
 import {Yasr,Yasqe} from '@triply/yasgui'
 
 export default {
   name: 'QuerySPARQL',
   emits: ['myQueryResult'],
+  props: {
+    coordsBboxArea:  {
+      type: Array,
+      default: () => []
+    },
+    suppressBbox: {
+      type: String,
+      default: ""
+    }
+  },
   data () {
     return {
-      config: data,
-      sparnatural:{},
-
+      config: ontology,
+      sparnatural: {},
+      querySelectBbox: "",
+      bboxState: true,
+      bboxArea: [],
+      tripleStoreLink: "http://172.31.58.17:7200/repositories/test_shom"
+    }
+  },
+  computed : {
+    displaySelect() {
+      return this.bboxState;
+    }
+  },
+  watch: {
+    coordsBboxArea: function (bbox) {
+      this.bboxState = false;
+      this.bboxArea = bbox;
+    },
+    suppressBbox: function () {
+      this.bboxState = true;
     }
   },
   mounted() {         
     $.urlParam = function(name){
-        var results = new RegExp('[\\?&amp;]' + name + '=([^&amp;#]*)').exec(window.location.href);
+        const results = new RegExp('[\\?&amp;]' + name + '=([^&amp;#]*)').exec(window.location.href);
         if(results == null) { return null; }
         return results[1] || 0;
       }
 
-    var lang = ($.urlParam('lang') != null)?$.urlParam('lang'):'fr';
+    const lang = ($.urlParam('lang') != null)?$.urlParam('lang'):'fr';
 
     this.sparnatural = document.getElementById('ui-search').Sparnatural({
       config: this.config ,
@@ -39,7 +74,7 @@ export default {
       backgroundBaseColor: '2,184,117',
       autocomplete : null,
       list : null,
-      defaultEndpoint: "http://172.31.58.17:7200/repositories/test_shom",
+      defaultEndpoint: this.tripleStoreLink,
       sparqlPrefixes : {
         "dbpedia" : "http://dbpedia.org/ontology/"
       },
@@ -50,6 +85,7 @@ export default {
         queryString = this.labelDescriptionSelectionPostProcess(queryString);
         queryString = this.optionalQueriesPostProcess(queryString);
         queryString = this.anyEntitiesPostProcess(queryString);
+    
         $('#sparql code').html(queryString.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"));
         yasqe.setValue(queryString);
       },
@@ -58,7 +94,10 @@ export default {
         duration: [100, 100],
       },
       // triggered when "play" button is clicked
-      onSubmit: function(form) {
+      onSubmit: (form) => {
+
+        this.filterQueryBySelection(yasqe);
+
         // enable loader on button
         form.sparnatural.enableLoading() ; 
         // trigger the query from YasQE
@@ -66,19 +105,8 @@ export default {
       }
     });
 
-    const yasqe = new Yasqe(document.getElementById("yasqe"), {
-      requestConfig: { endpoint: "http://172.31.58.17:7200/repositories/test_shom" },
-      copyEndpointOnNewTab: false  
-    });
-
-    const yasr = new Yasr(document.getElementById("yasr"), {
-      //this way, the URLs in the results are prettified using the defined prefixes in the query
-      getUsedPrefixes : yasqe.getPrefixesFromQuery,
-      "drawOutputSelector": false,
-      "drawDownloadIcon": false,
-      // avoid persistency side-effects
-      "persistency": { "prefix": false, "results": { "key": false }}
-    });
+    const yasqe = this.constructYasqe();
+    const yasr = this.constructYasr(yasqe);
 
     // link yasqe and yasr
     yasqe.on("queryResponse", (_yasqe, response, duration) => {
@@ -88,6 +116,45 @@ export default {
     });
   },
   methods: {
+    filterQueryBySelection(yasqe) {
+      let queryString = yasqe.getValue();
+
+      if (this.bboxArea.length != 0) {
+        queryString = this.addSelectAreaBbox(queryString);
+      }
+      if (this.bboxState) {
+        queryString = this.suppressAreaBbox(queryString);
+        this.bboxArea = [];
+      }
+      yasqe.setValue(queryString);
+    },
+    constructYasqe() {
+      return new Yasqe(document.getElementById("yasqe"), {
+      requestConfig: { endpoint: this.tripleStoreLink },
+      copyEndpointOnNewTab: false});
+    },
+    constructYasr(yasqe) {
+      return new Yasr(document.getElementById("yasr"), {
+      //this way, the URLs in the results are prettified using the defined prefixes in the query
+      getUsedPrefixes : yasqe.getPrefixesFromQuery,
+      "drawOutputSelector": false,
+      "drawDownloadIcon": false,
+      // avoid persistency side-effects
+      "persistency": { "prefix": false, "results": { "key": false }}});
+    },
+    suppressAreaBbox(queryString) {
+      queryString = queryString.replace(this.querySelectBbox, "");
+      return queryString;
+    },
+    addSelectAreaBbox(queryString) {
+      this.querySelectBbox = 
+      ` ?this geom:hasGeometry ?eGeom .
+        ?eGeom gsp:asWKT ?wkt.
+        FILTER (geof:sfWithin(?wkt, '''<http://www.opengis.net/def/crs/EPSG/0/4326> Polygon ((${this.coordsBboxArea[0]} ${this.coordsBboxArea[1]},${this.coordsBboxArea[0]} ${this.coordsBboxArea[3]},${this.coordsBboxArea[2]} ${this.coordsBboxArea[3]},${this.coordsBboxArea[2]} ${this.coordsBboxArea[1]},${this.coordsBboxArea[0]} ${this.coordsBboxArea[1]}))'''^^gsp:wktLiteral))
+      }`;
+      queryString = queryString.replace(new RegExp('}$'), this.querySelectBbox);
+      return queryString;
+    },
     prefixesPostProcess(queryString) {
       if(queryString.indexOf("rdf-schema#") == -1) {
           queryString = queryString.replace("SELECT ", 
@@ -95,6 +162,7 @@ export default {
                 "PREFIX nav: <http://data.shom.fr/def/navigation_cotiere#>\n"+
                 "PREFIX geom: <http://data.ign.fr/def/geometrie#>\n"+
                 "PREFIX skos: <http://www.w3.org/2004/02/skos/core#>"+
+                "PREFIX geof: <http://www.opengis.net/def/function/geosparql/>"+
                 "PREFIX gsp: <http://www.opengis.net/ont/geosparql#>\n SELECT ");
       }       
       return queryString;
@@ -130,9 +198,9 @@ export default {
       return queryString;
     },
     semanticPostProcess(queryString) {
-        queryString = this.prefixesPostProcess(queryString);
-        queryString = this.sparnatural.expandSparql(queryString);
-        return queryString;
+      queryString = this.prefixesPostProcess(queryString);
+      queryString = this.sparnatural.expandSparql(queryString);
+      return queryString;
     },
     emitResults (response) {
       let results = JSON.parse(response).results.bindings;
@@ -194,5 +262,22 @@ export default {
 
   .yasr_header {
     display: none;
+  }
+  .bg-wrapper {
+    padding: 0;
+  }
+  .displaySelect {
+    padding-top: 12px;
+    background: rgba(0, 0, 0, 0) linear-gradient(rgba(2, 184, 117, 0.1) 0px, rgba(2, 184, 117, 0.1) 116px)
+  }
+  .selection {
+    margin-left: 42px;
+    padding: 2px;
+    background: rgba(2,184,117);
+    width: 20%;
+    font-size: 0.8em;
+    border-radius: 3px;
+    color: white;
+    font-weight: bold;
   }
 </style>
