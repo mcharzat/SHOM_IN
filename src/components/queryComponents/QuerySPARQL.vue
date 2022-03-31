@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import ontology from '../../assets/sparnatural_config/atlantis-sparnaconfig.ttl'
+import data from '../../assets/sparnatural_config/atlantis-config.ttl'
 import {Yasr,Yasqe} from '@triply/yasgui'
 
 export default {
@@ -84,8 +84,6 @@ export default {
         queryString = this.semanticPostProcess(queryString);
         queryString = this.labelDescriptionSelectionPostProcess(queryString);
         queryString = this.optionalQueriesPostProcess(queryString);
-        queryString = this.anyEntitiesPostProcess(queryString);
-    
         $('#sparql code').html(queryString.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"));
         yasqe.setValue(queryString);
       },
