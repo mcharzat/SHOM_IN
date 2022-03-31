@@ -68,8 +68,9 @@ export default {
       layersManaged : L.layerGroup(),
       layerResearchedElements: L.featureGroup(),
       layerDefaultElements: L.featureGroup(),
-      layerGeoElements: L.featureGroup(),
-      layerAdviceElements: L.featureGroup(),
+      layerAmerElements: L.featureGroup(),
+      layerMaritimeElements: L.featureGroup(),
+      layerPhenomenonElements: L.featureGroup(),
     }
   },
   mounted() {
@@ -161,8 +162,9 @@ export default {
     },
     setupResults (map) {
       this.layerResearchedElements.addLayer(this.layerDefaultElements);
-      this.layerResearchedElements.addLayer(this.layerGeoElements);
-      this.layerResearchedElements.addLayer(this.layerAdviceElements);
+      this.layerResearchedElements.addLayer(this.layerAmerElements);
+      this.layerResearchedElements.addLayer(this.layerMaritimeElements);
+      this.layerResearchedElements.addLayer(this.layerPhenomenonElements);
 
       this.layerResearchedElements.addTo(map);
     },
@@ -183,23 +185,25 @@ export default {
       this.checkFitBounds(map);
     },
     displayResultGeo(element, map) {
+      const category = this.determineCategory(element.category.value);
       if (element.lat.value[0].includes("°")) {
         const lat = this.convertDegreeToLatlng(element.lat.value[0]);
         const lng = this.convertDegreeToLatlng(element.lng.value[0]);
-        this.displayElement([lat, lng], element, map);
+        this.displayElement([lat, lng], element, category, map);
       } else {
         this.displayElement(
           [parseFloat(element.lat.value[0]), parseFloat(element.lng.value[0])],
-          element, map);
+          element, category, map);
       }
     },
     displayResultWkt(element, map) {
       const upperCoord = element.wkt.value[0].toUpperCase();
       let coord = this.checkEPSGWkt(element.wkt.value[0]);
       if (coord) {
+        const category = this.determineCategory(element.category.value);
         if (upperCoord.includes("POINT")) {
           const coords = this.extractCoordPointWkt(coord);
-          this.displayElement(coords, element, map);
+          this.displayElement(coords, element, category, map);
         } else if (upperCoord.includes("LINESTRING")) {
           let coords = [];
           if (upperCoord.includes("MULTILINESTRING")) {
@@ -207,7 +211,7 @@ export default {
           } else {
             coords = this.extractCoordLineWkt(coord);
           }
-          this.displayLineElement(coords, element, map);
+          this.displayLineElement(coords, element, category.layer, map);
         } else if (upperCoord.includes("POLYGON")) {
           let coords = [];
           if (upperCoord.includes("MULTIPOLYGON")) {
@@ -215,7 +219,7 @@ export default {
           } else {
             coords = this.extractCoordMultiLineWkt(coord);
           }
-          this.displayPolygonElement(coords, element, map);
+          this.displayPolygonElement(coords, element, category.layer, map);
         }
       }
     },
@@ -265,25 +269,30 @@ export default {
       }
       return coord;
     },
-    displayElement(coord, element, map) {
-      const category = "toDo";
-      switch (category) {
-        case "geo":
+    displayElement(coord, element, category, map) {
+      switch (category.title) {
+        case "amer":
           this.createMarker(
-            coord, "geo", [38, 50],
-            element, this.layerGeoElements, "Geographic Entities", map
+            coord, "amer", [38, 50],
+            element, category.layer, "Amers", map
           );
           break;
-        case "advice":
+        case "domaineMaritime":
           this.createMarker(
-            coord, "advice", [40, 30],
-            element, this.layerAdviceElements, "Advice Entities", map
+            coord, "maritime", [40, 40],
+            element, category.layer, "domaine Maritime", map
+          );
+          break;
+        case "phenomenon":
+          this.createMarker(
+            coord, "phenomenon", [60, 30],
+            element, category.layer, "Phénomènes naturels", map
           );
           break;
         default:
           this.createMarker(
             coord, "default", [50, 40],
-            element, this.layerDefaultElements, "Research Elements", map
+            element, this.layerDefaultElements, "Entités", map
           );
       }
     },
@@ -295,19 +304,19 @@ export default {
       layer.addLayer(marker);
       this.addResearchToLayerControl(layer, layerName, map);
     },
-    displayLineElement(coords, element, map) {
+    displayLineElement(coords, element, layer, map) {
       const line = L.polyline(coords);
 
       this.createPopup(line, element);
-      this.layerGeoElements.addLayer(line);
-      this.addResearchToLayerControl(this.layerGeoElements, "Geographic Entities", map);
+      layer.addLayer(line);
+      this.addResearchToLayerControl(layer, "Geographic Entities", map);
     },
-    displayPolygonElement(coords, element, map) {
+    displayPolygonElement(coords, element, layer, map) {
       const polygone = L.polygon(coords);
 
       this.createPopup(polygone, element);
-      this.layerGeoElements.addLayer(polygone);
-      this.addResearchToLayerControl(this.layerGeoElements, "Geographic Entities", map);
+      layer.addLayer(polygone);
+      this.addResearchToLayerControl(layer, "Geographic Entities", map);
     },
     createPopup(symbol, element) {
       symbol.on("click", async () => {
@@ -333,6 +342,34 @@ export default {
           this.layerManager.removeLayer(layer);
         }
       })
+    },
+    determineCategory(categories) {
+      const category = {};
+      console.log(categories);
+
+      const amer = [
+        "http://data.shom.fr/def/navigation_cotiere#Amer", 
+        "http://data.shom.fr/def/navigation_cotiere#AideALaNavigation"
+      ];
+      const domaineMaritime = [
+        "http://data.shom.fr/def/navigation_cotiere#ZoneDuDomaineMaritime"];
+      const phenomenon = [
+        "http://data.shom.fr/def/navigation_cotiere#PhenomeneMeteorologiqueOuOceanographique"]
+      
+      if (categories.includes(amer[0]) || categories.includes(amer[1])) {
+        category["title"] = "amer";
+        category['layer'] = this.layerAmerElements;
+      } else if (categories.includes(domaineMaritime[0])) {
+        category["title"] = "domaineMaritime";
+        category['layer'] = this.layerMaritimeElements;
+      } else if (categories.includes(phenomenon[0])) {
+        category["title"] = "phenomenon";
+        category['layer'] = this.layerPhenomenonElements;
+      } else {
+        category["title"] = "default";
+        category['layer'] = this.layerDefaultElements;
+      }
+      return category;
     },
     checkFitBounds(map) {
       this.layerResearchedElements.eachLayer((layer) => {

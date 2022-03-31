@@ -82,8 +82,19 @@ export default {
       filterConfigOnEndpoint : false,
       onQueryUpdated: (queryString) =>  {
         queryString = this.semanticPostProcess(queryString);
+<<<<<<< HEAD
         queryString = this.labelDescriptionSelectionPostProcess(queryString);
         queryString = this.optionalQueriesPostProcess(queryString);
+=======
+        queryString = this.SelectorsPostProcess(queryString);
+        queryString = this.optionalClassPostProcess(queryString);
+        queryString = this.optionalLabelPostProcess(queryString);
+        queryString = this.optionalDescriptionPostProcess(queryString);
+        queryString = this.optionalGeomPostProcess(queryString);
+
+        queryString = this.anyEntitiesPostProcess(queryString);
+    
+>>>>>>> feat(categories): Add structure to dispatch result in layers
         $('#sparql code').html(queryString.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"));
         yasqe.setValue(queryString);
       },
@@ -165,23 +176,53 @@ export default {
       }       
       return queryString;
     },
-    labelDescriptionSelectionPostProcess(queryString) {
+    SelectorsPostProcess(queryString) {
         queryString = queryString.replace(
           "SELECT DISTINCT ?this",
+<<<<<<< HEAD
           "SELECT DISTINCT ?this ?label ?description ?information ?wkt ?lat ?lng ?lumineux ?amer");
+=======
+          "SELECT DISTINCT ?this ?type ?category ?label ?description ?information ?wkt ?lat ?lng");
+>>>>>>> feat(categories): Add structure to dispatch result in layers
         return queryString;
     },
-    optionalQueriesPostProcess(queryString) {
-        queryString = queryString.replace(new RegExp('}$'), 
+    optionalLabelPostProcess(queryString) {
+      queryString = queryString.replace(new RegExp('}$'), 
                 "OPTIONAL{?this rdfs:label ?label}.\n"+
-                "OPTIONAL{?this skos:prefLabel ?label}.\n"+
+                "OPTIONAL{?this skos:prefLabel ?label}.\n}");
+        return queryString;
+    },
+    optionalDescriptionPostProcess(queryString) {
+      queryString = queryString.replace(new RegExp('}$'), 
                 "OPTIONAL{?this nav:aPourTexteAssocie ?description}.\n"+
-                "OPTIONAL{?this nav:aPourInfo ?information}.\n"+
+                "OPTIONAL{?this nav:aPourInfo ?information}.\n}");
+      return queryString;
+    },
+    optionalGeomPostProcess(queryString) {
+        queryString = queryString.replace(new RegExp('}$'), 
                 "OPTIONAL{?this nav:aPourLat ?lat}.\n"+
                 "OPTIONAL{?this nav:aPourLng ?lng}.\n"+
                 "OPTIONAL{?this nav:estUnRepereLumineux ?lumineux}.\n"+
                 "OPTIONAL{?this geom:hasGeometry ?geom.\n ?geom gsp:asWKT ?wkt\n}\n}");
         return queryString;
+    },
+    optionalClassPostProcess(queryString) {
+      const entity = [...queryString.matchAll(new RegExp("this rdf:type ([<].*[>])", "gm"))];
+      queryString = queryString.replace(
+                "rdf:type " + entity[0][1],
+                "rdf:type ?realType.\n"+
+                "?realType rdfs:subClassOf " + entity[0][1]);
+      queryString = queryString.replace(new RegExp('}$'),
+                "BIND(?realType AS ?category).\n"+
+                "OPTIONAL{?realType rdfs:label ?type}.\n"+
+                "OPTIONAL{?realType skos:prefLabel ?type}.\n"+
+                "OPTIONAL{?realType rdfs:subClassOf nav:AideALaNavigation.\n"+
+                "BIND('<http://data.shom.fr/def/navigation_cotiere#AideALaNavigation>' AS ?category)}.\n"+
+                "OPTIONAL{?realType rdfs:subClassOf nav:ZoneDuDomaineMaritime.\n"+
+                "BIND('<http://data.shom.fr/def/navigation_cotiere#ZoneDuDomaineMaritime>' AS ?category)}.\n"+
+                "OPTIONAL{?realType rdfs:subClassOf nav:PhenomeneMeteorologiqueOuOceanographique.\n"+
+                "BIND('<http://data.shom.fr/def/navigation_cotiere#PhenomeneMeteorologiqueOuOceanographique>' AS ?category)}\n}");
+      return queryString;
     },
     anyEntitiesPostProcess(queryString) {
       const entity = [...queryString.matchAll(new RegExp("([a-zA-Z]*_[0-9]).* WHERE", "gm"))];
