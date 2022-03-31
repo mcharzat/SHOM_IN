@@ -1,13 +1,13 @@
 <template>
     <div class="container-fluid">
       <div id="ui-search"></div>
-      <div id="yasqe" style="display:none"></div>
+      <div id="yasqe"></div>
       <div id="yasr" style="display:none"></div>
     </div>  
 </template>
 
 <script>
-import data from '../../assets/sparnatural_config/atlantis-sparnaconfig.ttl'
+import data from '../../assets/sparnatural_config/atlantis-config.ttl'
 import {Yasr,Yasqe} from '@triply/yasgui'
 
 export default {

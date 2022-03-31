@@ -23,6 +23,7 @@
     "jquery": "^3.6.0",
     "leaflet": "^1.7.1",
     "leaflet-draw": "^1.0.4",
+    "npm": "^8.5.5",
     "vue": "^3.2.13",
     "vue-sweetalert2": "^5.0.2"
   },
