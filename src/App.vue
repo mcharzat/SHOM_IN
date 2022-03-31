@@ -2,7 +2,7 @@
   <div class="containerAppa">
     <NavBar />
     <MapShom
-      :queryResult="result"
+      :queryResultMap="result"
     />
     <DisplayResearch 
       :queryResult="result"
@@ -27,7 +27,7 @@ export default {
   data() {
     return {
       widthPdf: false,
-      result: {}
+      result: []
     }
   },
   methods: {

@@ -4,7 +4,7 @@
       <div v-if="checkType(field)">
         <h5 class="field"> {{ field }} </h5>
         <ul>
-          <li> {{ values[field].value }} </li>
+          <li v-for="datum in values[field].value" :key="datum"> {{ datum }} </li>
         </ul>
       </div>
     </ul>
@@ -27,7 +27,7 @@ export default {
   },
   methods: {
     checkType(field) {
-      return !["uri", "bnode"].includes(this.values[field].type);
+      return !["uri", "bnode"].includes(this.values[field].type) && !["wkt"].includes(field);
     }
   },
 }

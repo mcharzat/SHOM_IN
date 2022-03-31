@@ -4,7 +4,7 @@
     </button>
     <div v-if="moveSidePanel" class="resultSidepanelOpen">
       <h1>Results</h1>
-      <EntityResult v-for="(result, i) in data" :values="result" :key="i"></EntityResult>
+      <EntityResult v-for="(result, i) in queryResult" :values="result" :key="i"></EntityResult>
     </div>
 </template>
 
@@ -18,19 +18,13 @@ export default {
   },
   props: {
     queryResult:  {
-      type: Object,
-      default: () => {}
+      type: Array,
+      default: () => []
     },
   },
   data() {
     return {
       infSidePanel: false,
-      data: [],
-    }
-  },
-  watch: {
-    queryResult: function (results) {
-      this.data = results.results.bindings;
     }
   },
   computed : {
@@ -46,7 +40,6 @@ export default {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 
 .displayResearch {

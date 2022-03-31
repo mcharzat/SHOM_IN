@@ -5,15 +5,15 @@ describe("EntityResult.vue", () => {
     const data = {
         "uri" : {
             "type" : "uri",
-            "value" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+            "value" : ["http://www.w3.org/1999/02/22-rdf-syntax-ns#type"]
         },
         "literal" : {
             "type" : "literal",
-            "value" : "Consigne de Navigation"
+            "value" : ["Consigne de Navigation"]
         },
         "bnode" : {
             "type" : "bnode",
-            "value" : "bnode11221"
+            "value" : ["bnode11221"]
         }
     };
     const fields = ["uri", "literal", "bnode"];
