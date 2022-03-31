@@ -1,8 +1,8 @@
 <template>
   <nav class=navBar>
     <div class=navBarLeft>
-      <div class="logo"><img src="../assets/logo.png"></div>
-      <div class="name">Nom du site</div>
+      <div class="logo"><img src="../assets/logo_shom_white.png"></div>
+      <div class="name">Nérée</div>
     </div>
     <div v-if="!isLog" class="navBarMiddle notLogged"> 
         <label for="login">Login:</label>
@@ -16,6 +16,7 @@
         <input class="navBarButton" type="submit" @click.prevent="deconnect" value="Déconnexion">
     </div>
     <div class=navBarRight>
+        <button class="navBarButton menuButton" title='Sites du SHOM' @click.prevent="displayShom">SHOM</button>
         <button class="navBarButton helpButton" title='Aide' @click.prevent="displayHelp">?</button>
     </div>
 </nav>
@@ -24,6 +25,7 @@
 <script>
 import { createApp } from 'vue';
 import SwalDocumentationVue from './SwalDocumentation.vue';
+import OtherShomWebsiteVue from './OtherShomWebsites.vue';
 
 export default {
   name: 'navBar',
@@ -56,6 +58,19 @@ export default {
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
         width: 800,
+        html: '<div id="modal"></div>'
+      })
+      doc.mount("#modal");
+    },
+    displayShom: function () {
+      const doc = createApp(OtherShomWebsiteVue);
+
+      this.$swal({
+        titleText: "Voir les sites du SHOM",
+        showCloseButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        width: 400,
         html: '<div id="modal"></div>'
       })
       doc.mount("#modal");
@@ -106,7 +121,7 @@ export default {
 
   .navBarMiddle{
     position: fixed;
-    right: 150px;
+    right: 175px;
     height: 50px;
     display: flex;
   }
@@ -141,8 +156,14 @@ export default {
   .helpButton{
     height: 40px;
     width: 40px;
-    font-size:30px;
+    font-size:20px;
     border-radius: 50%;
+  }
+  .menuButton{
+    height: 40px;
+    width: 80px;
+    font-size:20px;
+    border-radius: 10%;
   }
   
 </style>
