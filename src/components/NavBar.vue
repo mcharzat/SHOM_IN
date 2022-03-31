@@ -16,6 +16,7 @@
         <input class="navBarButton" type="submit" @click.prevent="deconnect" value="Déconnexion">
     </div>
     <div class=navBarRight>
+        <button class="navBarButton menuButton" title='Sites du SHOM' @click.prevent="displayShom">SHOM</button>
         <button class="navBarButton helpButton" title='Aide' @click.prevent="displayHelp">?</button>
     </div>
 </nav>
@@ -106,7 +107,7 @@ export default {
 
   .navBarMiddle{
     position: fixed;
-    right: 150px;
+    right: 175px;
     height: 50px;
     display: flex;
   }
@@ -141,8 +142,14 @@ export default {
   .helpButton{
     height: 40px;
     width: 40px;
-    font-size:30px;
+    font-size:20px;
     border-radius: 50%;
+  }
+  .menuButton{
+    height: 40px;
+    width: 80px;
+    font-size:20px;
+    border-radius: 10%;
   }
   
 </style>
