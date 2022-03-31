@@ -80,7 +80,7 @@ export default {
     left: 0;
     width: 100%;
     margin: 0 auto;
-    background: rgba(7, 110, 140,0.8);
+    background: #076e8c;
     padding: 10px;
     display: flex;
     z-index: 10;
