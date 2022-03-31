@@ -1,7 +1,7 @@
 <template>
     <div class="container-fluid">
       <div id="ui-search"></div>
-      <div id="yasqe"></div>
+      <div id="yasqe" style="display:none"></div>
       <div id="yasr" style="display:none"></div>
     </div>  
 </template>
@@ -49,6 +49,7 @@ export default {
         queryString = this.semanticPostProcess(queryString);
         queryString = this.labelDescriptionSelectionPostProcess(queryString);
         queryString = this.optionalQueriesPostProcess(queryString);
+        queryString = this.anyEntitiesPostProcess(queryString);
         $('#sparql code').html(queryString.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"));
         yasqe.setValue(queryString);
       },
@@ -99,7 +100,9 @@ export default {
       return queryString;
     },
     labelDescriptionSelectionPostProcess(queryString) {
-        queryString = queryString.replace("SELECT DISTINCT ?this", "SELECT DISTINCT ?this ?label ?description ?information ?wkt ?lat ?lng");
+        queryString = queryString.replace(
+          "SELECT DISTINCT ?this",
+          "SELECT DISTINCT ?this ?label ?description ?information ?wkt ?lat ?lng");
         return queryString;
     },
     optionalQueriesPostProcess(queryString) {
@@ -112,6 +115,19 @@ export default {
                 "OPTIONAL{?this nav:aPourLng ?lng}.\n"+
                 "OPTIONAL{?this geom:hasGeometry ?geom.\n ?geom gsp:asWKT ?wkt\n}\n}");
         return queryString;
+    },
+    anyEntitiesPostProcess(queryString) {
+      const entity = [...queryString.matchAll(new RegExp("([a-zA-Z]*_[0-9]).* WHERE", "gm"))];
+      if(entity.length > 0) {
+        const exp = "this [<].*#([a-zA-Z]+)[>] ." + entity[0][1];
+        const property = [...queryString.matchAll(new RegExp(exp, "gm"))];
+        queryString = queryString.replace(entity[0][1], property[0][1]);
+
+        queryString = queryString.replace(new RegExp('}$'), 
+                "OPTIONAL{?" + entity[0][1] + " rdfs:label ?" + property[0][1] + "}.\n"+
+                "OPTIONAL{?" + entity[0][1] + " skos:prefLabel ?" + property[0][1] + "}\n}");
+      }
+      return queryString;
     },
     semanticPostProcess(queryString) {
         queryString = this.prefixesPostProcess(queryString);
