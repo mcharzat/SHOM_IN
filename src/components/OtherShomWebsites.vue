@@ -1,12 +1,29 @@
 <template>
     <div>
-        <a href="https://www.shom.fr/" target="_blank">Site institutionnel</a>
+        <a class=link href="https://www.shom.fr/" target="_blank">Site institutionnel</a>
         <br>
-        <a href="https://data.shom.fr/" target="_blank">Portail data.shom.fr</a>
+        <a class=link href="https://data.shom.fr/" target="_blank">Portail data.shom.fr</a>
         <br>
-        <a href="https://diffusion.shom.fr/" target="_blank">Espace de diffusion</a>
+        <a class=link href="https://diffusion.shom.fr/" target="_blank">Espace de diffusion</a>
         <br>
-        <a href="https://maree.shom.fr/" target="_blank">Portail horaire des marées</a>
+        <a class=link href="https://maree.shom.fr/" target="_blank">Portail horaire des marées</a>
         <br>
     </div>
 </template>
+
+<style scoped>
+    div{
+        line-height: 150%;
+    }
+    .link{
+        color: #076E8C;
+    }
+    .link:hover{
+        font-weight: bold;
+        color: #076E8C;
+    }
+    .link:active{
+        font-weight: bold;
+        color: #0a3745;
+    }
+</style>
