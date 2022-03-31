@@ -27,6 +27,11 @@ export default {
       infSidePanel: false,
     }
   },
+  watch: {
+    queryResult: function () {
+      this.infSidePanel = true;
+    }
+  },
   computed : {
     moveSidePanel() {
       return this.infSidePanel;
