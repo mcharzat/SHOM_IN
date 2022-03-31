@@ -6,6 +6,7 @@
     />
     <DisplayResearch 
       :queryResult="result"
+      :actionSidePanel="actionSidePanel"
     />
     <PDFManager @pdfOpenState="updatedPdfState"/>
     <SPARQLResearch 
@@ -36,6 +37,9 @@ export default {
     },
     conveyResult (result) {
       this.result = result;
+    },
+    querySent() {
+      this.actionSidePanel;
     }
   },
   components: {

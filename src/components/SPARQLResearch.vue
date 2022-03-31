@@ -12,7 +12,7 @@ import QuerySPARQL from './queryComponents/QuerySPARQL.vue'
 
 export default {
   name: 'SPARQLResearch',
-  emits: ['sparnaResult'],
+  emits: ['sparnaResult','querySent'],
   components: {
       QuerySPARQL
   },
