@@ -29,8 +29,8 @@ export default {
     }
   },
   watch: {
-    queryResult: function (results) {
-      this.data = results.results.bindings;
+    queryResult: function () {
+      this.infSidePanel = true;
     }
   },
   computed : {
