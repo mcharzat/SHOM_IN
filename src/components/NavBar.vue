@@ -2,7 +2,7 @@
   <nav class=navBar>
     <div class=navBarLeft>
       <div class="logo"><img src="../assets/logo_shom_white.png"></div>
-      <div class="name">Nérée</div>
+      <div class="name">AtlanTSIde</div>
     </div>
     <div v-if="!isLog" class="navBarMiddle notLogged"> 
         <label for="login">Login:</label>

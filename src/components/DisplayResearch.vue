@@ -51,7 +51,7 @@ export default {
     position: absolute;
     height: 50px;
     width: 50px;
-    top: 100px;
+    top: 155px;
     left: 5px;
     z-index: 30;
     

@@ -58,14 +58,13 @@ export default {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .researchManager {
   position: absolute;
   height: 50px;
   width: 50px;
-  top: 155px;
-  right: 5px;
+  top: 100px;
+  left: 5px;
   z-index: 35;
   
   background-color:white;
