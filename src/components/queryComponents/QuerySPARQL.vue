@@ -9,9 +9,8 @@
           </div>
       </div>
       
-      <div id="yasqe"></div>
-      <!--<div id="yasqe" style="display:none"></div>-->
-      <div id="yasr" style="display:none"></div>
+      <div id="yasqe" class="yasr_header"></div>
+      <div id="yasr" class="yasr_header"></div>
     </div>  
 </template>
 
@@ -34,20 +33,23 @@ export default {
       sparnatural: {},
       querySelectBbox: "",
       bboxState: true,
-      bboxArea: []
+      bboxArea: [],
+      yasqe: null,
+      yasr: null
     }
   },
   computed : {
     displaySelect() {
-      console.log('coucou');
       return this.bboxState;
     }
   },
   watch: {
     coordsBboxArea: function (bbox) {
-      console.log(bbox);
-      
-      //this.sparnatural.onQueryUpdated();
+      this.bboxState = false;
+      this.bboxArea = bbox;
+    },
+    suppressBbox: function () {
+      this.bboxState = true;
     }
   },
   mounted() {         
@@ -86,7 +88,7 @@ export default {
         }
     
         $('#sparql code').html(queryString.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"));
-        yasqe.setValue(queryString);
+        this.yasqe.setValue(queryString);
       },
       tooltipConfig : {
         delay: [800, 100],
@@ -97,23 +99,12 @@ export default {
         // enable loader on button
         form.sparnatural.enableLoading() ; 
         // trigger the query from YasQE
-        yasqe.query();
+        this.yasqe.query();
       }
     });
 
-    const yasqe = new Yasqe(document.getElementById("yasqe"), {
-      requestConfig: { endpoint: "http://172.31.58.17:7200/repositories/test_shom" },
-      copyEndpointOnNewTab: false  
-    });
-
-    const yasr = new Yasr(document.getElementById("yasr"), {
-      //this way, the URLs in the results are prettified using the defined prefixes in the query
-      getUsedPrefixes : yasqe.getPrefixesFromQuery,
-      "drawOutputSelector": false,
-      "drawDownloadIcon": false,
-      // avoid persistency side-effects
-      "persistency": { "prefix": false, "results": { "key": false }}
-    });
+    this.yasqe = this.constructYasqe();
+    this.yasr = this.constructYasr();
 
     // link yasqe and yasr
     yasqe.on("queryResponse", (_yasqe, response, duration) => {
@@ -123,6 +114,20 @@ export default {
     });
   },
   methods: {
+    constructYasqe() {
+      return new Yasqe(document.getElementById("yasqe"), {
+      requestConfig: { endpoint: "http://172.31.58.17:7200/repositories/test_shom" },
+      copyEndpointOnNewTab: false});
+    },
+    constructYasr() {
+      return new Yasr(document.getElementById("yasr"), {
+      //this way, the URLs in the results are prettified using the defined prefixes in the query
+      getUsedPrefixes : this.yasqe.getPrefixesFromQuery,
+      "drawOutputSelector": false,
+      "drawDownloadIcon": false,
+      // avoid persistency side-effects
+      "persistency": { "prefix": false, "results": { "key": false }}});
+    },
     addSelectAreaBbox(queryString) {
       // ex bbox : -3.530592318234245,47.13401849882367,-2.8469636918917662,47.492171405800896
       queryString = queryString.replace(new RegExp('}$'),
@@ -261,5 +266,7 @@ export default {
     width: 20%;
     font-size: 0.8em;
     border-radius: 3px;
+    color: white;
+    font-weight: bold;
   }
 </style>
