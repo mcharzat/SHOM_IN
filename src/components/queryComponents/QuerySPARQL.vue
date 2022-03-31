@@ -9,7 +9,7 @@
           </div>
       </div>
       
-      <div id="yasqe" class=""></div>
+      <div id="yasqe" class="yasr_header"></div>
       <div id="yasr" class="yasr_header"></div>
     </div>  
 </template>
