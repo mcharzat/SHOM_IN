@@ -35,7 +35,6 @@ export default {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 
 .pdfManager {
@@ -67,6 +66,7 @@ export default {
   max-height: calc(100% - 125px);
   top : 100px;
   z-index: 1000;
+  scrollbar-width: none;
   resize: horizontal;
   overflow: auto;
   direction: rtl;

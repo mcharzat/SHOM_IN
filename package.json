@@ -5,6 +5,7 @@
   "description": "```\r npm install\r ```",
   "author": "",
   "scripts": {
+    "postinstall": "cp .customModule/leaflet-src.js node_modules/leaflet/dist/leaflet-src.js",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
@@ -16,20 +17,15 @@
   "main": "babel.config.js",
   "dependencies": {
     "@chenfengyuan/datepicker": "^1.0.10",
-    "@rdfjs/data-model": "^2.0.0",
     "@triply/yasgui": "^4.2.21",
     "core-js": "^3.8.3",
+    "file-loader": "^6.2.0",
     "jquery": "^3.6.0",
-    "jquery-nice-select": "^1.1.0",
     "leaflet": "^1.7.1",
     "leaflet-draw": "^1.0.4",
-    "n3": "^1.14.0",
-    "rdf-parse": "^2.0.0",
-    "rdf-store-stream": "^1.3.0",
-    "sparqljs": "^3.5.1",
-    "streamify-string": "^1.0.1",
-    "tippy.js": "^6.3.7",
-    "vue": "^3.2.13"
+    "npm": "^8.5.5",
+    "vue": "^3.2.13",
+    "vue-sweetalert2": "^5.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
@@ -43,6 +39,7 @@
     "babel-jest": "^27.0.6",
     "eslint": "^7.32.0",
     "eslint-plugin-vue": "^8.0.3",
+    "file-loader": "^6.2.0",
     "jest": "^27.5.1"
   },
   "eslintConfig": {
@@ -83,7 +80,7 @@
   "jest": {
     "collectCoverage": false,
     "moduleNameMapper": {
-      "^.+\\.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2)$": "jest-transform-stub"
+      "^.+\\.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2|ttl)$": "jest-transform-stub"
     },
     "transformIgnorePatterns": [
       "node_modules/(?!vue-picture-input)"

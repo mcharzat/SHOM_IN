@@ -1,8 +1,8 @@
 <template>
   <nav class=navBar>
     <div class=navBarLeft>
-      <div class="logo"><img src="../assets/logo.png"></div>
-      <div class="name">Nom du site</div>
+      <div class="logo"><img src="../assets/logo_shom_white.png"></div>
+      <div class="name">Nérée</div>
     </div>
     <div v-if="!isLog" class="navBarMiddle notLogged"> 
         <label for="login">Login:</label>
@@ -16,19 +16,26 @@
         <input class="navBarButton" type="submit" @click.prevent="deconnect" value="Déconnexion">
     </div>
     <div class=navBarRight>
+        <button class="navBarButton menuButton" title='Sites du SHOM' @click.prevent="displayShom">SHOM</button>
         <button class="navBarButton helpButton" title='Aide' @click.prevent="displayHelp">?</button>
     </div>
 </nav>
 </template>
 
 <script>
+import { createApp } from 'vue';
+import SwalDocumentationVue from './SwalDocumentation.vue';
+import OtherShomWebsiteVue from './OtherShomWebsites.vue';
+
 export default {
   name: 'navBar',
   data() {
     return {
       login: "login",
       pwd: "pwd",
-      clientLog: false
+      clientLog: false,
+      title: "Documentation titre",
+      doc: "Documentation"
     }
   },
   mounted() {
@@ -43,7 +50,30 @@ export default {
       this.clientLog = false;
     },
     displayHelp: function () {
-      
+      const doc = createApp(SwalDocumentationVue);
+
+      this.$swal({
+        titleText: this.title,
+        showCloseButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        width: 800,
+        html: '<div id="modal"></div>'
+      })
+      doc.mount("#modal");
+    },
+    displayShom: function () {
+      const doc = createApp(OtherShomWebsiteVue);
+
+      this.$swal({
+        titleText: "Voir les sites du SHOM",
+        showCloseButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        width: 400,
+        html: '<div id="modal"></div>'
+      })
+      doc.mount("#modal");
     }
   },
   computed: {
@@ -57,7 +87,6 @@ export default {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 
   .navBar{
@@ -65,15 +94,12 @@ export default {
     top: 0;
     left: 0;
     width: 100%;
-    height: 50px;
     margin: 0 auto;
-    background: rgba(7, 110, 140,0.8);
+    background: #076e8c;
     padding: 10px;
     display: flex;
     z-index: 10;
   }
-
-
 
   .navBarLeft{
     height: 50px;
@@ -93,10 +119,9 @@ export default {
     margin : auto 10px;
   }
 
-
   .navBarMiddle{
     position: fixed;
-    right: 150px;
+    right: 175px;
     height: 50px;
     display: flex;
   }
@@ -113,7 +138,7 @@ export default {
     margin : auto 10px;
     height: 30px;
     background: white;
-    text-color: #076E8C;
+    color: #076E8C;
   }
   .logged p{
     margin : auto 10px;
@@ -131,8 +156,14 @@ export default {
   .helpButton{
     height: 40px;
     width: 40px;
-    font-size:30px;
+    font-size:20px;
     border-radius: 50%;
   }
-
+  .menuButton{
+    height: 40px;
+    width: 80px;
+    font-size:20px;
+    border-radius: 10%;
+  }
+  
 </style>

@@ -3,7 +3,11 @@
     <img src="../assets/research.png" height ="35" width="35"/>
   </button>
   <div class="research" :hidden="!displayPanel">
-    <QuerySPARQL />
+    <QuerySPARQL 
+      :coordsBboxArea="bboxArea"
+      :suppressBbox="bboxState"
+      @myQueryResult="conveyResult"
+      />
   </div>
 </template>
 
@@ -12,6 +16,7 @@ import QuerySPARQL from './queryComponents/QuerySPARQL.vue'
 
 export default {
   name: 'SPARQLResearch',
+  emits: ['sparnaResult'],
   components: {
       QuerySPARQL
   },
@@ -20,10 +25,18 @@ export default {
       type: Boolean,
       default: false
     },
+    bboxArea: {
+      type: Array,
+      default: () => []
+    },
+    bboxState: {
+      type: String,
+      default: ""
+    }
   },
   data() {
     return {
-      isDisplayed: true,
+      isDisplayed: true
     }
   },
   computed : {
@@ -37,6 +50,9 @@ export default {
   methods: {
     actionResearchPanel() {
       this.isDisplayed = !this.isDisplayed;
+    },
+    conveyResult (result) {
+      this.$emit('sparnaResult', result);
     }
   },
 }
@@ -50,7 +66,7 @@ export default {
   width: 50px;
   top: 155px;
   right: 5px;
-  z-index: 25;
+  z-index: 35;
   
   background-color:white;
   border:solid;
@@ -61,9 +77,9 @@ export default {
 .research {
   position: absolute;
   height: 100px;
-  width: 50%;
+  width: 70%;
   top: 100px;
-  left: 100px;
+  left: 50px;
   z-index: 25;
 }
 
