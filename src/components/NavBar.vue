@@ -16,7 +16,7 @@
         <input class="navBarButton" type="submit" @click.prevent="deconnect" value="Déconnexion">
     </div>
     <div class=navBarRight>
-        <button class="navBarButton menuButton" title='Sites du SHOM' @click.prevent="displayShom">SHOM</button>
+        <button class="navBarButton menuButton" title='Sites du SHOM' @click.prevent="displayShom">Le SHOM</button>
         <button class="navBarButton helpButton" title='Aide' @click.prevent="displayHelp">?</button>
     </div>
 </nav>
@@ -132,14 +132,37 @@ export default {
   }
   .notLogged input{
     margin : auto 10px;
-    height: 30px;
+    height: 40px;
+    
   }
+
+  .notLogged .navBarButton{
+    width : 40px;
+    
+  }
+
+  input:focus {
+    outline: 2px solid #073763;
+    border : 1px solid #073763;
+    border-radius: 1px;
+
+  }
+
   .navBarButton{
+    height: 40px;
+    width : auto;
+
     margin : auto 10px;
-    height: 30px;
+    padding : 3px;
+
     background: white;
     color: #076E8C;
+
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.19), 0 0 5px rgba(0,0,0,0.19)
   }
+
+
   .logged p{
     margin : auto 10px;
     color: white;
@@ -153,17 +176,23 @@ export default {
     height: 50px;
     display: flex;
   }
+
   .helpButton{
     height: 40px;
     width: 40px;
     font-size:20px;
     border-radius: 50%;
+    box-shadow: 0 0 5px rgba(0,0,0,0.19), 0 0 5px rgba(0,0,0,0.19)
   }
+
   .menuButton{
     height: 40px;
-    width: 80px;
+    width: auto;
+    padding : 3px;
     font-size:20px;
-    border-radius: 10%;
+
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.19), 0 0 5px rgba(0,0,0,0.19)
   }
   
 </style>
