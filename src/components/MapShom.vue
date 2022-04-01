@@ -11,6 +11,7 @@ import "leaflet/dist/leaflet.css";
 import "leaflet-draw/dist/leaflet.draw.css";
 import 'leaflet';
 import "leaflet-draw";
+import proj4 from 'proj4';
 
 import EntityResult from "./queryComponents/EntityResult.vue";
 
@@ -202,72 +203,67 @@ export default {
       if (coord) {
         const category = this.determineCategory(element.category.value);
         if (upperCoord.includes("POINT")) {
-          const coords = this.extractCoordPointWkt(coord);
+          const coords = this.extractCoordPointWkt(coord.value, coord.epsg);
           this.displayElement(coords, element, category, map);
         } else if (upperCoord.includes("LINESTRING")) {
           let coords = [];
           if (upperCoord.includes("MULTILINESTRING")) {
-            coords = this.extractCoordMultiLineWkt(coord);
+            coords = this.extractCoordMultiLineWkt(coord.value, coord.epsg);
           } else {
-            coords = this.extractCoordLineWkt(coord);
+            coords = this.extractCoordLineWkt(coord.value, coord.epsg);
           }
           this.displayLineElement(coords, element, category.layer, map);
         } else if (upperCoord.includes("POLYGON")) {
           let coords = [];
           if (upperCoord.includes("MULTIPOLYGON")) {
-            coords = this.extractCoordPolygonWkt(coord);
+            coords = this.extractCoordPolygonWkt(coord.value, coord.epsg);
           } else {
-            coords = this.extractCoordMultiLineWkt(coord);
+            coords = this.extractCoordMultiLineWkt(coord.value, coord.epsg);
           }
           this.displayPolygonElement(coords, element, category.layer, map);
         }
       }
     },
-    extractCoordPointWkt(coord) {
+    extractCoordPointWkt(coord, epsg) {
       coord = coord.replace(/^ /i, "").replace(' (', "(").split(" ");
 
-      const lng = parseFloat(coord[0].split("(")[coord[0].includes("(") ? 1 : 0]);
-      const lat = parseFloat(coord[1].split(")")[0]);
+      let lng = parseFloat(coord[0].split("(")[coord[0].includes("(") ? 1 : 0]);
+      let lat = parseFloat(coord[1].split(")")[0]);
+
+      if (epsg == 2154) {
+        const coords = this.convertLambToWGS([lng, lat]);
+        lat = coords[1];
+        lng = coords[0];
+      }
+
       return [lat, lng];
     },
-    extractCoordLineWkt(coord, poly=false) {
+    extractCoordLineWkt(coord, epsg, poly=false) {
       coord = coord.split("(")[coord.includes("(") ? 1 : 0].split(")")[0].split(",");
       const listPoints = [];
       
       for (let k = 0; k < coord.length - (poly ? 1 : 0); k++) {    
-        listPoints.push(this.extractCoordPointWkt(coord[k]));
+        listPoints.push(this.extractCoordPointWkt(coord[k], epsg));
       }
       return listPoints;
     },
-    extractCoordMultiLineWkt(coord, poly=false) {
+    extractCoordMultiLineWkt(coord, epsg, poly=false) {
       coord = coord.split("((")[coord.includes("((") ? 1 : 0].split("))")[0].split("),(");
       const listCoords = [];
 
       for (let k = 0; k < coord.length; k++) {
-        listCoords.push(this.extractCoordLineWkt(coord[k], poly));
+        listCoords.push(this.extractCoordLineWkt(coord[k], epsg, poly));
       }
       return listCoords;
     },
-    extractCoordPolygonWkt(coord) {
+    extractCoordPolygonWkt(coord, epsg) {
       coord = coord.split("(((")[1].split(")))")[0].split(")),((");
       const listPoints = [];
 
       for (let k = 0; k < coord.length; k++) {
-        listPoints.push(this.extractCoordMultiLineWkt(coord[k], true));
+        listPoints.push(this.extractCoordMultiLineWkt(coord[k], epsg, true));
       }
       return listPoints;
-    },
-    checkEPSGWkt(coord) {
-      coord = coord.split("> ");
-
-      if (coord.length > 1 && !coord[0].includes("4326")) {
-        return;
-      } else if (coord.length > 1) {
-        coord = coord[1];
-      } else {
-        coord = coord[0];
-      }
-      return coord;
     },
     displayElement(coord, element, category, map) {
       switch (category.title) {
@@ -389,6 +385,24 @@ export default {
     removeCoord() {
       this.onMap=false;
     },
+    checkEPSGWkt(coord) {
+      const coordCrs = {};
+      coord = coord.split("> ");
+
+      if (coord[0].includes("4326") || coord[0].includes("WGS84")) {
+        coordCrs["epsg"] = 4326;
+        coordCrs["value"] = coord[1];
+      } else if (coord[0].includes("2154") || coord[0].includes("LAMB93")) {
+        coordCrs["epsg"] = 2154;
+        coordCrs["value"] = coord[1];
+      } else if (coord.length == 1) {
+        coordCrs["epsg"] = 2154;
+        coordCrs["value"] = coord[0];
+      } else {
+        return;
+      }
+      return coordCrs;
+    },
     convertDegreeToLatlng(coord) {
       const firstCut = coord.replace(" ", "").split("°");
       let latLng = parseFloat(firstCut[0]);
@@ -403,7 +417,20 @@ export default {
       
       latLng *= coord.includes('N') || coord.includes('E') ? 1 : -1;
       return latLng;
-    }
+    },
+    convertLambToWGS(coord) {
+      proj4.defs([
+      [
+        'EPSG:4326',
+        '+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees'],
+      [
+        'EPSG:2154',
+        '+title=LAMB 93 +proj=lcc +lat_1=49 +lat_2=44 +lat_0=46.5 +lon_0=3 +x_0=700000 +y_0=6600000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs']
+      ]);
+      coord = proj4('EPSG:2154', 'EPSG:4326', coord);
+
+      return coord;
+    },
   },
   computed: {
     getUrl () {
