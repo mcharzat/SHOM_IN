@@ -34,7 +34,7 @@ export default {
       login: "login",
       pwd: "pwd",
       clientLog: false,
-      title: "Documentation titre",
+      title: "Documentation",
       doc: "Documentation"
     }
   },
