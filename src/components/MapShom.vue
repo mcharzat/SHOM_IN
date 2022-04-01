@@ -80,6 +80,7 @@ export default {
     this.setupControls(map);
     this.setupSelectArea(map);
     this.setupResults(map);
+    this.setupProj4();
 
     this.$watch('queryResultMap', () => {
       this.displayResult(map);
@@ -156,7 +157,10 @@ export default {
       map.on(L.Draw.Event.CREATED, (event) => {
         const layer = event.layer;
         this.selectionArea = layer.getBounds().toBBoxString();
-        this.$emit("bboxSelectionArea", this.selectionArea.split(','));
+        const coordWGS = this.selectionArea.split(',');
+        const coord1LAMB = this.convertWGSToLamb([parseFloat(coordWGS[0]), parseFloat(coordWGS[1])]);
+        const coord2LAMB = this.convertWGSToLamb([parseFloat(coordWGS[2]), parseFloat(coordWGS[3])]);
+        this.$emit("bboxSelectionArea", coord1LAMB.concat(coord2LAMB));
         drawnItems.addLayer(layer).addTo(map);
         this.layerManager.addOverlay(drawnItems, "Selection");
       });
@@ -168,6 +172,16 @@ export default {
       this.layerResearchedElements.addLayer(this.layerPhenomenonElements);
 
       this.layerResearchedElements.addTo(map);
+    },
+    setupProj4() {
+      proj4.defs([
+      [
+        'EPSG:4326',
+        '+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees +no_defs'],
+      [
+        'EPSG:2154',
+        '+title=LAMB 93 +proj=lcc +lat_1=49 +lat_2=44 +lat_0=46.5 +lon_0=3 +x_0=700000 +y_0=6600000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs']
+      ]);
     },
     displayResult(map) { 
       this.clearResearchLayer();
@@ -418,15 +432,14 @@ export default {
       latLng *= coord.includes('N') || coord.includes('E') ? 1 : -1;
       return latLng;
     },
+    convertWGSToLamb(coord) {
+      
+      coord = proj4('EPSG:4326', 'EPSG:2154', coord);
+
+      return coord;
+    },
     convertLambToWGS(coord) {
-      proj4.defs([
-      [
-        'EPSG:4326',
-        '+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees'],
-      [
-        'EPSG:2154',
-        '+title=LAMB 93 +proj=lcc +lat_1=49 +lat_2=44 +lat_0=46.5 +lon_0=3 +x_0=700000 +y_0=6600000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs']
-      ]);
+      
       coord = proj4('EPSG:2154', 'EPSG:4326', coord);
 
       return coord;

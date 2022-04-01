@@ -154,7 +154,7 @@ export default {
       this.querySelectBbox = 
       ` ?this geom:hasGeometry ?eGeom .
         ?eGeom gsp:asWKT ?wkt.
-        FILTER (geof:sfWithin(?wkt, '''<http://www.opengis.net/def/crs/EPSG/0/4326> Polygon ((${this.coordsBboxArea[0]} ${this.coordsBboxArea[1]},${this.coordsBboxArea[0]} ${this.coordsBboxArea[3]},${this.coordsBboxArea[2]} ${this.coordsBboxArea[3]},${this.coordsBboxArea[2]} ${this.coordsBboxArea[1]},${this.coordsBboxArea[0]} ${this.coordsBboxArea[1]}))'''^^gsp:wktLiteral))
+        FILTER (geof:sfWithin(?wkt, '''<http://data.ign.fr/id/ignf/crs/RGF93LAMB93> Polygon ((${this.coordsBboxArea[0]} ${this.coordsBboxArea[1]},${this.coordsBboxArea[0]} ${this.coordsBboxArea[3]},${this.coordsBboxArea[2]} ${this.coordsBboxArea[3]},${this.coordsBboxArea[2]} ${this.coordsBboxArea[1]},${this.coordsBboxArea[0]} ${this.coordsBboxArea[1]}))'''^^gsp:wktLiteral))
       }`;
       queryString = queryString.replace(new RegExp('}$'), this.querySelectBbox);
       return queryString;
@@ -210,8 +210,8 @@ export default {
         qs += "OPTIONAL{" + entity[0][1] + " rdfs:subClassOf nav:" + category + ".\n"+
               "BIND(<http://data.shom.fr/def/navigation_cotiere#" + category + "> AS ?category)}.\n"
       })
-      qs += "OPTIONAL{BIND(" + entity[0][1] + " AS ?category)}.\n"
-      queryString = queryString.replace(new RegExp('}$'), qs + "}");
+      qs += "OPTIONAL{BIND(" + entity[0][1] + " AS ?category)}.\n}"
+      queryString = queryString.replace(new RegExp('}$'), qs);
       return queryString;
     },
     anyEntitiesPostProcess(queryString) {
