@@ -31,6 +31,9 @@ export default {
   watch: {
     queryResult: function () {
       this.infSidePanel = true;
+    },
+    infSidePanel: function () {
+      this.$emit('resultOpenState', this.infSidePanel);
     }
   },
   computed : {
@@ -41,7 +44,6 @@ export default {
   methods: {
     actionSidePanel() {
       this.infSidePanel = !this.infSidePanel;
-      this.$emit('resultOpenState', this.infSidePanel);
     }
   },
 }
