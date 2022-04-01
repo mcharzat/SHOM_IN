@@ -82,10 +82,6 @@ export default {
       filterConfigOnEndpoint : false,
       onQueryUpdated: (queryString) =>  {
         queryString = this.semanticPostProcess(queryString);
-<<<<<<< HEAD
-        queryString = this.labelDescriptionSelectionPostProcess(queryString);
-        queryString = this.optionalQueriesPostProcess(queryString);
-=======
         queryString = this.SelectorsPostProcess(queryString);
         queryString = this.optionalClassPostProcess(queryString);
         queryString = this.optionalLabelPostProcess(queryString);
@@ -94,7 +90,6 @@ export default {
 
         queryString = this.anyEntitiesPostProcess(queryString);
     
->>>>>>> feat(categories): Add structure to dispatch result in layers
         $('#sparql code').html(queryString.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"));
         yasqe.setValue(queryString);
       },
@@ -170,8 +165,8 @@ export default {
                 "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> \n"+
                 "PREFIX nav: <http://data.shom.fr/def/navigation_cotiere#>\n"+
                 "PREFIX geom: <http://data.ign.fr/def/geometrie#>\n"+
-                "PREFIX skos: <http://www.w3.org/2004/02/skos/core#>"+
-                "PREFIX geof: <http://www.opengis.net/def/function/geosparql/>"+
+                "PREFIX skos: <http://www.w3.org/2004/02/skos/core#>\n"+
+                "PREFIX geof: <http://www.opengis.net/def/function/geosparql/>\n"+
                 "PREFIX gsp: <http://www.opengis.net/ont/geosparql#>\n SELECT ");
       }       
       return queryString;
@@ -179,11 +174,7 @@ export default {
     SelectorsPostProcess(queryString) {
         queryString = queryString.replace(
           "SELECT DISTINCT ?this",
-<<<<<<< HEAD
-          "SELECT DISTINCT ?this ?label ?description ?information ?wkt ?lat ?lng ?lumineux ?amer");
-=======
           "SELECT DISTINCT ?this ?type ?category ?label ?description ?information ?wkt ?lat ?lng");
->>>>>>> feat(categories): Add structure to dispatch result in layers
         return queryString;
     },
     optionalLabelPostProcess(queryString) {
@@ -208,20 +199,19 @@ export default {
     },
     optionalClassPostProcess(queryString) {
       const entity = [...queryString.matchAll(new RegExp("this rdf:type ([<].*[>])", "gm"))];
-      queryString = queryString.replace(
-                "rdf:type " + entity[0][1],
-                "rdf:type ?realType.\n"+
-                "?realType rdfs:subClassOf " + entity[0][1]);
-      queryString = queryString.replace(new RegExp('}$'),
-                "BIND(?realType AS ?category).\n"+
-                "OPTIONAL{?realType rdfs:label ?type}.\n"+
-                "OPTIONAL{?realType skos:prefLabel ?type}.\n"+
-                "OPTIONAL{?realType rdfs:subClassOf nav:AideALaNavigation.\n"+
-                "BIND('<http://data.shom.fr/def/navigation_cotiere#AideALaNavigation>' AS ?category)}.\n"+
-                "OPTIONAL{?realType rdfs:subClassOf nav:ZoneDuDomaineMaritime.\n"+
-                "BIND('<http://data.shom.fr/def/navigation_cotiere#ZoneDuDomaineMaritime>' AS ?category)}.\n"+
-                "OPTIONAL{?realType rdfs:subClassOf nav:PhenomeneMeteorologiqueOuOceanographique.\n"+
-                "BIND('<http://data.shom.fr/def/navigation_cotiere#PhenomeneMeteorologiqueOuOceanographique>' AS ?category)}\n}");
+      let qs = "OPTIONAL{" + entity[0][1] + " rdfs:label ?type}.\n"+
+              "OPTIONAL{" + entity[0][1] + " skos:prefLabel ?type}.\n"
+      const categories = [
+        "AideALaNavigation",
+        "ZoneDuDomaineMaritime",
+        "PhenomeneMeteorologiqueOuOceanographique"
+      ];
+      categories.forEach(category => {
+        qs += "OPTIONAL{" + entity[0][1] + " rdfs:subClassOf nav:" + category + ".\n"+
+              "BIND(<http://data.shom.fr/def/navigation_cotiere#" + category + "> AS ?category)}.\n"
+      })
+      qs += "OPTIONAL{BIND(" + entity[0][1] + " AS ?category)}.\n"
+      queryString = queryString.replace(new RegExp('}$'), qs + "}");
       return queryString;
     },
     anyEntitiesPostProcess(queryString) {

@@ -345,7 +345,6 @@ export default {
     },
     determineCategory(categories) {
       const category = {};
-      console.log(categories);
 
       const amer = [
         "http://data.shom.fr/def/navigation_cotiere#Amer", 
