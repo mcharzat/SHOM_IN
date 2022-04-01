@@ -21,7 +21,7 @@ export default {
       QuerySPARQL
   },
   props: {
-    widthPdf:  {
+    widthResult:  {
       type: Boolean,
       default: false
     },
@@ -44,7 +44,7 @@ export default {
       return this.isDisplayed;
     },
     moveButton() {
-      return this.widthPdf != 0;
+      return this.widthResult != 0;
     }
   },
   methods: {
@@ -83,6 +83,6 @@ export default {
 }
 
 .researchManagerOpen {
-  right: calc(36% + 10px)
+  left: calc(33% + 10px)
 }
 </style>

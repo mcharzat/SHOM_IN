@@ -13,6 +13,7 @@ import EntityResult from "./queryComponents/EntityResult.vue";
 
 export default {
   name: 'DisplayResearch',
+  emits: ['resultOpenState'],
   components : { 
     EntityResult,
   },
@@ -40,6 +41,7 @@ export default {
   methods: {
     actionSidePanel() {
       this.infSidePanel = !this.infSidePanel;
+      this.$emit('resultOpenState', this.infSidePanel);
     }
   },
 }

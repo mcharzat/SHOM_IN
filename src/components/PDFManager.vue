@@ -12,7 +12,6 @@ import PDF from './pdfComponents/PDF.vue'
 
 export default {
   name: 'PDFManager',
-  emits: ['pdfOpenState'],
   components: {
     PDF,
   },
@@ -29,7 +28,6 @@ export default {
   methods: {
     actionSidePanel() {
       this.infSidePanel = !this.infSidePanel;
-      this.$emit('pdfOpenState', this.infSidePanel);
     }
   },
 }

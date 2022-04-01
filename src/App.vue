@@ -8,10 +8,11 @@
     />
     <DisplayResearch 
       :queryResult="result"
+      @resultOpenState="updatedResultState"
     />
-    <PDFManager @pdfOpenState="updatedPdfState"/>
+    <PDFManager />
     <SPARQLResearch 
-      :widthPdf="widthPdf"
+      :widthResult="widthResult"
       :bboxArea="bbox"
       :bboxState="bboxState"
       @sparnaResult="conveyResult"
@@ -30,15 +31,15 @@ export default {
   name: 'App',
   data() {
     return {
-      widthPdf: false,
+      widthResult: false,
       result: [],
       bbox: [],
       bboxState: "",
     }
   },
   methods: {
-    updatedPdfState: function(width) {
-      this.widthPdf = width;
+    updatedResultState: function(width) {
+      this.widthResult = width;
     },
     conveyResult (result) {
       this.result = result;
