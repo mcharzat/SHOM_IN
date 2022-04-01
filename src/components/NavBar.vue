@@ -132,7 +132,7 @@ export default {
   }
   .notLogged input{
     margin : auto 10px;
-    height: 40px;
+    height: 35px;
     
   }
 
@@ -149,7 +149,7 @@ export default {
   }
 
   .navBarButton{
-    height: 40px;
+    height: 35px;
     width : auto;
 
     margin : auto 10px;
@@ -186,13 +186,15 @@ export default {
   }
 
   .menuButton{
-    height: 40px;
+    height: 35px;
     width: auto;
     padding : 3px;
-    font-size:20px;
+    font-size: 18px;
 
     border-radius: 5px;
-    box-shadow: 0 0 5px rgba(0,0,0,0.19), 0 0 5px rgba(0,0,0,0.19)
+    box-shadow: 0 0 5px rgba(0,0,0,0.19), 0 0 5px rgba(0,0,0,0.19);
+
+    vertical-align: middle;
   }
   
 </style>
