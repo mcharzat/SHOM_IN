@@ -63,6 +63,7 @@ export default {
 
     border:solid;
     border-color: white;
+    border-radius: 10%;
 
     box-shadow: 0 0 5px rgba(0,0,0,0.19), 0 0 5px rgba(0,0,0,0.19)
 }
