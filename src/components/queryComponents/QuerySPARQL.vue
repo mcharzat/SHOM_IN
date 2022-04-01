@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import data from '../../assets/sparnatural_config/atlantis-sparnaconfig.ttl'
+import data from '../../assets/sparnatural_config/atlantis-config.ttl'
 import {Yasr,Yasqe} from '@triply/yasgui'
 
 export default {
@@ -33,7 +33,7 @@ export default {
   },
   data () {
     return {
-      config: ontology,
+      config: data,
       sparnatural: {},
       querySelectBbox: "",
       bboxState: true,
@@ -168,7 +168,7 @@ export default {
     labelDescriptionSelectionPostProcess(queryString) {
         queryString = queryString.replace(
           "SELECT DISTINCT ?this",
-          "SELECT DISTINCT ?this ?label ?description ?information ?wkt ?lat ?lng");
+          "SELECT DISTINCT ?this ?label ?description ?information ?wkt ?lat ?lng ?lumineux ?amer");
         return queryString;
     },
     optionalQueriesPostProcess(queryString) {
@@ -179,6 +179,7 @@ export default {
                 "OPTIONAL{?this nav:aPourInfo ?information}.\n"+
                 "OPTIONAL{?this nav:aPourLat ?lat}.\n"+
                 "OPTIONAL{?this nav:aPourLng ?lng}.\n"+
+                "OPTIONAL{?this nav:estUnRepereLumineux ?lumineux}.\n"+
                 "OPTIONAL{?this geom:hasGeometry ?geom.\n ?geom gsp:asWKT ?wkt\n}\n}");
         return queryString;
     },

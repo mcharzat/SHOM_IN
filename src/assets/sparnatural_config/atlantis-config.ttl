@@ -16,7 +16,7 @@
 
 # http://ontologies.sparna.fr/sparnatural-demo-semapps#hasMember
 
-:hasMember a owl:ObjectProperty ;
+:RechercheAmer a owl:ObjectProperty ;
 	rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SearchProperty> ;
 	rdfs:domain [ rdf:type owl:Class ;
                             owl:unionOf ( :Phare
@@ -27,10 +27,46 @@
                                           :Balise
                                         )
                           ] ;
-	<http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "rdfs:label|skos:prefLabel" ;
 	rdfs:range :Search ;
-	rdfs:label "a pour membre"@fr .
+	<http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "rdfs:label|skos:prefLabel" ;
+	rdfs:label "Recherche"@fr .
 
+:RechercheConsigne a owl:ObjectProperty ;
+	rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+	rdfs:domain [ rdf:type owl:Class ;
+                            owl:unionOf ( :Interdiction
+                                          :Information
+                                          :Instruction
+                                          :Renseignement
+										  :Reglement
+                                        )
+                          ] ;
+	rdfs:range :Ile ;
+	<http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "rdfs:label|skos:prefLabel" ;
+	rdfs:label "Recherche"@fr .
+
+
+:RechercheChenal a owl:ObjectProperty ;
+	rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SearchProperty> ;
+	rdfs:domain :Chenal;
+	rdfs:range :Search ;
+	<http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "rdfs:label|skos:prefLabel" ;
+	rdfs:label "Recherche"@fr .
+
+:RechercheIle a owl:ObjectProperty ;
+	rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SearchProperty> ;
+	rdfs:domain :Ile;
+	rdfs:range :Search ;
+	<http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "rdfs:label|skos:prefLabel" ;
+	rdfs:label "Ile"@fr .
+
+:AmerdansIle a owl:Property ;
+	rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+	rdfs:domain :Ile;
+	rdfs:range :Amer;
+	<http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> 
+	"geom:hasGeometry ?geomi.\n?geom gsp:asWKT ?WKTi.\n?Amer_2 geom:hasGeometry ?geoma.\n ?geoma gsp:asWKT ?WKTa.\n OPTIONAL {?Amer_2 rdfs:label ?labelAmer}.\n FILTER(geof:sfContains(?WKTi,?WKTa) && !sameTerm(?geomi,?geoma)).\n ?Amer_2 rdfs:label ?amer.\n#";
+	rdfs:label "Amers dans le chenal"@fr .
 
 #################################################################
 #    Classes
@@ -38,46 +74,41 @@
 
 
 # http://ontologies.sparna.fr/sparnatural-demo-semapps#Search
-
 :Search a owl:Class ;
 	rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
 	<http://data.sparna.fr/ontologies/sparnatural-config-core#faIcon> "fas fa-search" ;
-	rdfs:label "Rechercher"@fr , "Search"@en .
+	<http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "?any" ;
 
-# http://ontologies.sparna.fr/sparnatural-demo-semapps#Search
-:Search a owl:Class ;
-	rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
-	<http://data.sparna.fr/ontologies/sparnatural-config-core#faIcon> "fas fa-search" ;
 	rdfs:label "Rechercher"@fr , "Search"@en .
 
 # Information
 :Information a owl:Class ;
 	rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
-	<http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<http://data.shom.fr/def/navigation_cotiere#Information>" ;
+	<http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<http://data.shom.fr/def/navigation_cotiere#Information>.\n?this nav:aPourLieuDEffet ?lieuDEffet" ;
 	rdfs:label "Information"@fr .
 
 # Instruction
 :Instruction a owl:Class ;
 	rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
-	<http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<http://data.shom.fr/def/navigation_cotiere#Instruction>" ;
+	<http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<http://data.shom.fr/def/navigation_cotiere#Instruction>.\n?this nav:aPourLieuDEffet ?lieuDEffet" ;
 	rdfs:label "Instruction"@fr .
 
 # Interdiction
 :Interdiction a owl:Class ;
 	rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
-	<http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<http://data.shom.fr/def/navigation_cotiere#Interdiction>" ;
+	<http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<http://data.shom.fr/def/navigation_cotiere#Interdiction>.\n?this nav:aPourLieuDEffet ?lieuDEffet" ;
 	rdfs:label "Interdiction"@fr .
 
 # Renseignement
 :Renseignement a owl:Class ;
 	rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
-	<http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<http://data.shom.fr/def/navigation_cotiere#Renseignement>" ;
+	<http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<http://data.shom.fr/def/navigation_cotiere#Renseignement>.\n?this nav:aPourLieuDEffet ?lieuDEffet" ;
 	rdfs:label "Renseignement"@fr .
 
 # Reglement
 :Reglement a owl:Class ;
 	rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
-	<http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<http://data.shom.fr/def/navigation_cotiere#Reglement>" ;
+	<http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<http://data.shom.fr/def/navigation_cotiere#Reglement>.\n?this nav:aPourLieuDEffet ?lieuDEffet" ;
 	rdfs:label "Reglement"@fr .
 
 # Amer
@@ -168,5 +199,23 @@
 :Tourelle a owl:Class ;
 	rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
 	<http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<http://data.shom.fr/def/navigation_cotiere#Tourelle>" ;
-	rdfs:label "Tourelle"@fr .													
+	rdfs:label "Tourelle"@fr .	
+
+# Chenal
+:Chenal a owl:Class ;
+	rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+	<http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<http://data.shom.fr/def/navigation_cotiere#Chenal>" ;
+	rdfs:label "Chenal"@fr .
+
+# Cote
+:Cote a owl:Class ;
+	rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+	<http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<http://data.shom.fr/def/navigation_cotiere#Cote>" ;
+	rdfs:label "Cote"@fr .	
+
+# Ile
+:Ile a owl:Class ;
+	rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+	<http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<http://data.shom.fr/def/navigation_cotiere#EntiteGeographique>.\n ?this nav:aPourNature <http://data.shom.fr/id/codes/nav/typedentitegeographique/Ile>" ;
+	rdfs:label "Ile"@fr .														
 ###  Generated by the OWL API (version 4.5.9.2019-02-01T07:24:44Z) https://github.com/owlcs/owlapi
