@@ -25,11 +25,4 @@ describe("PDFManager.vue", () => {
         expect(panel.exists()).toBeFalsy();
         expect(wrapper.vm.infSidePanel).toBeFalsy();
     });
-
-    it("emits a signal on click", async () => {
-        const wrapper = shallowMount(pdfManager);
-        await wrapper.find('button').trigger('click');
-
-        expect(wrapper.emitted().pdfOpenState).toBeTruthy();
-    })
 });

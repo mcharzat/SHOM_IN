@@ -25,4 +25,11 @@ describe("DisplayResearch.vue", () => {
         expect(panel.exists()).toBeFalsy();
         expect(wrapper.vm.infSidePanel).toBeFalsy();
     });
+
+    it("emits a signal on click", async () => {
+        const wrapper = shallowMount(displayResearch);
+        await wrapper.find('button').trigger('click');
+
+        expect(wrapper.emitted().resultOpenState).toBeTruthy();
+    })
 });
