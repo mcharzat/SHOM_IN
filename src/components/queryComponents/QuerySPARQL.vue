@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import data from '../../assets/sparnatural_config/atlantis-config.ttl'
+import data from '../../assets/sparnatural_config/atlantis-sparnaconfig.ttl'
 import {Yasr,Yasqe} from '@triply/yasgui'
 
 export default {
