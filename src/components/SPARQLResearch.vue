@@ -21,7 +21,7 @@ export default {
       QuerySPARQL
   },
   props: {
-    widthPdf:  {
+    widthResult:  {
       type: Boolean,
       default: false
     },
@@ -44,7 +44,7 @@ export default {
       return this.isDisplayed;
     },
     moveButton() {
-      return this.widthPdf != 0;
+      return this.widthResult != 0;
     }
   },
   methods: {
@@ -58,14 +58,13 @@ export default {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .researchManager {
   position: absolute;
   height: 50px;
   width: 50px;
-  top: 155px;
-  right: 5px;
+  top: 100px;
+  left: 5px;
   z-index: 35;
   
   background-color:white;
@@ -84,6 +83,6 @@ export default {
 }
 
 .researchManagerOpen {
-  right: calc(36% + 10px)
+  left: calc(33% + 10px)
 }
 </style>

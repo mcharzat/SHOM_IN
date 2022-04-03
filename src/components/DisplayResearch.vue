@@ -13,6 +13,7 @@ import EntityResult from "./queryComponents/EntityResult.vue";
 
 export default {
   name: 'DisplayResearch',
+  emits: ['resultOpenState'],
   components : { 
     EntityResult,
   },
@@ -30,6 +31,9 @@ export default {
   watch: {
     queryResult: function () {
       this.infSidePanel = true;
+    },
+    infSidePanel: function () {
+      this.$emit('resultOpenState', this.infSidePanel);
     }
   },
   computed : {
@@ -51,7 +55,7 @@ export default {
     position: absolute;
     height: 50px;
     width: 50px;
-    top: 100px;
+    top: 155px;
     left: 5px;
     z-index: 30;
     
