@@ -9,7 +9,9 @@
         :nameQuery="query.name"
         :key="i"
         @renameQuery="remaneAQuery($event, i)"
+        @displayQueryMap="handleStateDisplay"
         @displayQueryResult="refreshDisplayResult(i)"
+        @removeQuery="removeAQuery(i)"
         ></QueriesHistory>
     </div>
   </div>
@@ -20,7 +22,13 @@ import QueriesHistory from "./queryComponents/QueriesHistory.vue";
 
 export default {
     name: 'displayQueries',
-    emits: ['historyOpenState', 'refreshDisplayResult'],
+    emits: [
+        'historyOpenState',
+        'nameUpdated',
+        'stateDisplayQuery',
+        'refreshDisplayResult',
+        'removeQuery'
+    ],
     components : {
         QueriesHistory
     },
@@ -42,11 +50,16 @@ export default {
     },
     watch: {
         queryResult: function () {
+            let number =  this.queries.length + 1;
+            while (!this.checkName("Requête " + number)) {
+                number += 1;
+            }
             const query = {
-                name: "Requête " + (this.queries.length + 1),
+                name: "Requête " + number,
                 value: this.queryResult
             }
             this.queries.push(query);
+            this.conveyUpdatedName("newQuery", query.name);
         },
         moveSidePanel: function () {
             this.$emit('historyOpenState', this.moveSidePanel);
@@ -57,15 +70,44 @@ export default {
     },
     methods: {
         actionSidePanel() {
-        this.moveSidePanel = !this.moveSidePanel;
+            this.moveSidePanel = !this.moveSidePanel;
+        },
+        checkName(newName) {
+            let response = true;
+            this.queries.forEach(query => {
+                if (query.name == newName) {
+                    response = false;
+                }
+            })
+            return response;
+        },
+        conveyUpdatedName(oldName, newName) {
+            const data = {
+                time: Date.now(),
+                old: oldName,
+                new: newName
+            }
+            this.$emit('nameUpdated', data);
         },
         remaneAQuery (name, index) {
-            console.log(name, index);
-            this.queries[0].name = name;
+            if (this.checkName(name)) {
+                this.conveyUpdatedName(this.queries[index].name, name);
+                this.queries[index].name = name;
+            }
+        },
+        handleStateDisplay(stateDisplay) {
+            this.$emit("stateDisplayQuery", stateDisplay);
         },
         refreshDisplayResult(index) {
             this.$emit('refreshDisplayResult', this.queries[index].value);
-            this.moveSidePanel = false;
+        },
+        removeAQuery(index) {
+            const data = {
+                time: Date.now(),
+                name: this.queries[index].name
+            }
+            this.$emit('removeQuery', data);
+            this.queries.splice(index, 1);
         },
     },
 }

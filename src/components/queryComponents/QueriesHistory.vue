@@ -1,15 +1,16 @@
 <template>
   <div class="myQuery">
-      <input type="checkbox" :value="displayedMap" @change="displayMap">
-      <div v-if="stateNameEdition" @dblclick="editionMode">
+      <input type="checkbox" v-model="displayedMap">
+      <div v-if="stateNameEdition" class="name" @dblclick="editionMode">
           <p> {{ nameQuery }} </p>
       </div>
       <div v-else>
           <input type="text" v-model="newName" ref="rename"
-          @keypress.enter="submitRename" @keydown.esc="cancelRename">
+          @keypress.enter="submitRename" @keydown.esc="cancelRename"
+          @focusout="cancelRename">
       </div>
-      <button @click="displayResult">VR</button>
-      <button @click="removeQuery">x</button>
+      <button class="buttons" @click="displayResult">Afficher les résultats</button>
+      <button class="buttons" @click="removeQuery">x</button>
   </div>
 </template>
 
@@ -30,6 +31,11 @@ export default {
             newName: "",
         }
     },
+    watch: {
+        displayedMap: function () {
+            this.displayMap();
+        }
+    },
     methods: {
         async editionMode() {
             this.newName = this.nameQuery;
@@ -46,7 +52,11 @@ export default {
             this.stateNameEdition = true;
         },
         displayMap() {
-            this.$emit('displayQueryMap', this.displayedMap);
+            const data = {
+                name: this.nameQuery,
+                state: this.displayedMap
+            }
+            this.$emit('displayQueryMap', data);
         },
         displayResult() {
             this.$emit('displayQueryResult');
@@ -62,6 +72,27 @@ export default {
 .myQuery {
     display: flex;
     flex-direction: row;
+    align-content: center;
+    justify-content: space-between;
+
+    border-radius: 5px;
+
+    margin: 2px 5px 2px 15px;
+}
+
+.name {
+    display: flex;
+    align-content: center;
+}
+
+.name p{
+    display: flex;
+    align-self: center;
+}
+
+.buttons {
+    min-width: 35px;
+    min-height: 35px;
 
     border-radius: 5px;
 }

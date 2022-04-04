@@ -1,4 +1,5 @@
 <template>
+  <div>
     <button :class="{displayResearch: true, displayResearchOpen: moveSidePanel || stateHistory}"
     @click="actionSidePanel">
       <img src="../assets/results.png" height ="35" width="35"/>
@@ -9,6 +10,7 @@
         @pageOuvrage="conveyPageOuvrage">
       </EntityResult>
     </div>
+  </div>
 </template>
 
 <script>
@@ -29,6 +31,10 @@ export default {
       type: Array,
       default: () => []
     },
+    refresh:  {
+      type: Number,
+      default: 0
+    },
   },
   data() {
     return {
@@ -36,6 +42,9 @@ export default {
     }
   },
   watch: {
+    refresh: function () {
+      this.moveSidePanel = true;
+    },
     queryResult: function () {
       this.moveSidePanel = true;
     },

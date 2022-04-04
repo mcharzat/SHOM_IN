@@ -3,12 +3,16 @@
     <NavBar />
     <MapShom
       :queryResultMap="result"
+      :updateNameQuery="rename"
+      :stateDisplayQuery="stateDisplay"
+      :removeTheQuery="queryToRemove"
       @bboxSelectionArea="conveyBbox"
       @suppressBboxSelectionArea="conveyStateBbox"
     />
     <DisplayResearch 
       :stateHistory="stateHistory"
       :queryResult="resultDisplay"
+      :refresh="demandRefresh"
       @resultOpenState="updatedResultState"
       @pageOuvrage="conveyPageOuvrage"
     />
@@ -19,7 +23,10 @@
       :stateResult="stateResult"
       :queryResult="result"
       @historyOpenState="updatedHistoryState"
-      @refreshDisplayResult="conveyOldResult"
+      @nameUpdated="updateQueryName"
+      @stateDisplayQuery="conveyStateDisplay"
+      @refreshDisplayResult="conveyRefreshResult"
+      @removeQuery="conveyRemoveQuery"
     />
     <SPARQLResearch 
       :widthResult="stateResult || stateHistory"
@@ -42,13 +49,17 @@ export default {
   name: 'App',
   data() {
     return {
+      demandRefresh: null,
       stateResult: false,
       stateHistory: false,
+      rename: {},
+      stateDisplay: {},
       result: [],
       resultDisplay: [],
       bbox: [],
       bboxState: "",
-      pageOuvrage: ""
+      pageOuvrage: "",
+      queryToRemove: {},
     }
   },
   methods: {
@@ -58,11 +69,18 @@ export default {
     updatedHistoryState: function(state) {
       this.stateHistory = state;
     },
+    updateQueryName(renameData) {
+      this.rename = renameData;
+    },
+    conveyStateDisplay(stateDisplay) {
+      this.stateDisplay = stateDisplay;
+    },
     conveyResult (result) {
       this.result = this.resultDisplay = result;
     },
-    conveyOldResult (result) {
+    conveyRefreshResult (result) {
       this.resultDisplay = result;
+      this.demandRefresh = Date.now()
     },
     conveyBbox (bbox) {
       this.bbox = bbox;
@@ -72,7 +90,10 @@ export default {
     },
     conveyPageOuvrage (pageOuvrage) {
       this.pageOuvrage = pageOuvrage;
-    }
+    },
+    conveyRemoveQuery(name) {
+      this.queryToRemove = name;
+    },
   },
   components: {
     NavBar,
