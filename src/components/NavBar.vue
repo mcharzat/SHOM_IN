@@ -9,7 +9,7 @@
         <input type=text name=login v-model="login">
         <label for="pwd">Mdp:</label>
         <input type=password name=pwd v-model="pwd">
-        <input class="navBarButton" type="submit" @click.prevent="getAuth" value="OK">
+        <input class="navBarButton menuButton" type="submit" @click.prevent="getAuth" value="OK">
       </div>
       <div v-else class="navBarMiddle logged">
         <p> {{ messageLogger }}</p>
@@ -136,30 +136,33 @@ export default {
     
   }
 
-  .notLogged .navBarButton{
-    width : 40px;
-    
-  }
-
-  input:focus {
-    outline: 2px solid #073763;
-    border : 1px solid #073763;
-    border-radius: 1px;
-
-  }
-
-  .navBarButton{
-    height: 35px;
+  input[type=submit] {
     width : auto;
-
-    margin : auto 10px;
+    min-width: 40px;
+    margin: auto 10px;
+    margin-left: 0%;
     padding : 3px;
+    min-height: 100%;
+    position: relative;
+    color: white;
+    background-color: initial;
+    border-style: none;
+  }
 
-    background: white;
-    color: #076E8C;
+  .navBarButton {
+    width : auto;
+    min-width: 40px;
+    margin: auto 3px;
+    padding : 3px;
+    min-height: 100%;
+    position: relative;
+    color: white;
+    background-color: initial;
+    border-style: none;
+  }
 
-    border-radius: 5px;
-    box-shadow: 0 0 5px rgba(0,0,0,0.19), 0 0 5px rgba(0,0,0,0.19)
+  .navBarButton:hover:before {
+    color: white;
   }
 
 
@@ -178,11 +181,9 @@ export default {
   }
 
   .helpButton{
-    height: 40px;
-    width: 40px;
+
     font-size:20px;
     border-radius: 50%;
-    box-shadow: 0 0 5px rgba(0,0,0,0.19), 0 0 5px rgba(0,0,0,0.19)
   }
 
   .menuButton{
@@ -191,10 +192,81 @@ export default {
     padding : 3px;
     font-size: 18px;
 
-    border-radius: 5px;
-    box-shadow: 0 0 5px rgba(0,0,0,0.19), 0 0 5px rgba(0,0,0,0.19);
+    border-radius: 50%;
 
     vertical-align: middle;
   }
   
+
+@media (min-width: 768px) {
+  .navBarButton {
+    padding: 10px 20px;
+  }
+}
+
+.navBarButton:before,
+.navBarButton:after {
+  border-radius: 80px;
+}
+
+.navBarButton:before {
+  background-color: white;
+  content: "";
+  display: block;
+  height: 100%;
+  left: 0;
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: -2;
+}
+
+.navBarButton:after {
+  background-color: #076e8c;
+  bottom: 4px;
+  content: "";
+  display: block;
+  left: 4px;
+  overflow: hidden;
+  position: absolute;
+  right: 4px;
+  top: 4px;
+  transition: all 100ms ease-out;
+  z-index: -1;
+}
+
+.navBarButton:hover:not(:disabled):before {
+  background: white;
+}
+
+.navBarButton:hover:not(:disabled):after {
+  bottom: 0;
+  left: 0;
+  right: 0;
+  top: 0;
+  transition-timing-function: ease-in;
+  opacity: 0;
+}
+
+.navBarButton:active:not(:disabled) {
+  color: #ccc;
+}
+
+.navBarButton:active:not(:disabled):before {
+  background-image: linear-gradient(#073763 100%), linear-gradient(white);
+}
+
+.navBarButton:active:not(:disabled):after {
+  background-image: (#073763 100%);
+  bottom: 4px;
+  left: 4px;
+  right: 4px;
+  top: 4px;
+}
+
+.navBarButton:disabled {
+  cursor: default;
+  opacity: .24;
+}
 </style>
