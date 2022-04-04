@@ -2,13 +2,13 @@
     <button :class="{pdfManager: true, pdfManagerOpen: infSidePanel}" @click="actionSidePanel">
       <img src="../assets/texte.png" height ="30" width="30"/>
     </button>
-    <div v-if="infSidePanel" class="pdfSidepanelOpen">
-      <PDF class="pdfContainer" :pageOuvrage="pageOuvrage"/>
+    <div v-if="moveSidePanel" class="pdfSidepanelOpen">
+      <MenuPdf class="menuPdfContainer" :pageOuvrage="pageOuvrage"/>
     </div>
 </template>
 
 <script>
-import PDF from './pdfComponents/PDF.vue'
+import MenuPdf from './menuPdfComponents/MenuPdf.vue'
 
 export default {
   name: 'PDFManager',
@@ -19,7 +19,7 @@ export default {
     }
   },
   components: {
-    PDF,
+    MenuPdf,
   },
   data() {
     return {
@@ -71,7 +71,7 @@ export default {
   direction: rtl;
 }
 
-.pdfContainer {
+.menuPdfContainer {
   height: 100%;
   width: 100%;
 }

@@ -1,14 +1,14 @@
 <template>
-  <div><PDF/></div>
+  <div><MenuPdf/></div>
 </template>
 
 <script>
-import PDF from './pdfComponents/PDF.vue'
+import MenuPdf from './menuPdfComponents/MenuPdf.vue'
 
 export default {
   name: 'SwalManager',
   components: {
-    PDF
+    MenuPdf
   },
 }
 </script>
