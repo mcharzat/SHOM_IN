@@ -1,5 +1,5 @@
 <template>
-  <div class="map">
+  <div class="divMap">
     <div class="map" @mouseout.prevent="removeCoord" ref="Shom_IN"></div>
     <div class="mouseTracker">
         <p>{{ coordinate }}</p>
@@ -544,7 +544,7 @@ export default {
 </script>
 
 <style>
-.map {
+.map , .divMap{
   height: 100%;
   width: 100%;
   z-index: 0;

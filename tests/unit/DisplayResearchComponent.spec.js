@@ -9,21 +9,21 @@ describe("DisplayResearch.vue", () => {
 
         expect(button.attributes("class")).not.toContain("displayResearchOpen");
         expect(panel.exists()).toBeFalsy();
-        expect(wrapper.vm.infSidePanel).toBeFalsy();
+        expect(wrapper.vm.moveSidePanel).toBeFalsy();
 
         await button.trigger('click');
 
         panel = wrapper.find('.resultSidepanelOpen');
         expect(button.attributes("class")).toContain("displayResearchOpen");
         expect(panel.exists()).toBeTruthy();
-        expect(wrapper.vm.infSidePanel).toBeTruthy();
+        expect(wrapper.vm.moveSidePanel).toBeTruthy();
 
         await button.trigger('click');
 
         panel = wrapper.find('.resultSidepanelOpen');
         expect(button.attributes("class")).not.toContain("displayResearchOpen");
         expect(panel.exists()).toBeFalsy();
-        expect(wrapper.vm.infSidePanel).toBeFalsy();
+        expect(wrapper.vm.moveSidePanel).toBeFalsy();
     });
 
     it("emits a signal on click", async () => {
