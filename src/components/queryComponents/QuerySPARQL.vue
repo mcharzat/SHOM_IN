@@ -83,6 +83,7 @@ export default {
       onQueryUpdated: (queryString) =>  {
         queryString = this.semanticPostProcess(queryString);
         queryString = this.labelDescriptionSelectionPostProcess(queryString);
+        queryString = this.getChapterPostProcess(queryString);
         queryString = this.optionalQueriesPostProcess(queryString);
         $('#sparql code').html(queryString.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"));
         yasqe.setValue(queryString);
@@ -168,7 +169,7 @@ export default {
     labelDescriptionSelectionPostProcess(queryString) {
         queryString = queryString.replace(
           "SELECT DISTINCT ?this",
-          "SELECT DISTINCT ?this ?label ?description ?information ?wkt ?lat ?lng ?lumineux ?amer");
+          "SELECT DISTINCT ?this ?label ?description ?information ?wkt ?lat ?lng ?lumineux ?amer ?provenance ?page");
         return queryString;
     },
     optionalQueriesPostProcess(queryString) {
@@ -194,6 +195,10 @@ export default {
                 "OPTIONAL{?" + entity[0][1] + " rdfs:label ?" + property[0][1] + "}.\n"+
                 "OPTIONAL{?" + entity[0][1] + " skos:prefLabel ?" + property[0][1] + "}\n}");
       }
+      return queryString;
+    },
+    getChapterPostProcess(queryString){
+      queryString = queryString.replace(new RegExp('}$'),"<<?this nav:aPourProvenance ?provenance>> nav:aPourNumeroDePage ?page\n}");
       return queryString;
     },
     semanticPostProcess(queryString) {
