@@ -6,20 +6,21 @@
       @bboxSelectionArea="conveyBbox"
       @suppressBboxSelectionArea="conveyStateBbox"
     />
-    <DisplayResearch 
-      :queryResult="result"
-      @resultOpenState="updatedResultState"
-      @pageOuvrage="conveyPageOuvrage"
-    />
-    <PDFManager 
-      :pageOuvrage="pageOuvrage"
-    />
     <SPARQLResearch 
       :widthResult="widthResult"
       :bboxArea="bbox"
       :bboxState="bboxState"
       @sparnaResult="conveyResult"
     />
+    <DisplayResearch 
+      :queryResult="result"
+      @resultOpenState="updatedResultState"
+      @pageOuvrage="conveyPageOuvrage"
+    />
+    <PDFManager
+      :pageOuvrage="pageOuvrage"
+    />
+    <BackMenu />
   </div>
 </template>
 
@@ -29,6 +30,7 @@ import MapShom from './components/MapShom.vue'
 import SPARQLResearch from './components/SPARQLResearch.vue'
 import DisplayResearch from './components/DisplayResearch.vue'
 import PDFManager from './components/PDFManager.vue'
+import BackMenu from './components/BackMenu.vue'
 
 export default {
   name: 'App',
@@ -63,7 +65,8 @@ export default {
     MapShom,
     SPARQLResearch,
     DisplayResearch,
-    PDFManager
+    PDFManager,
+    BackMenu
   }
 }
 </script>

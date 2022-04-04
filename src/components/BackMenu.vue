@@ -1,9 +1,9 @@
 <template>
-    <button :class="{pdfManager: true, pdfManagerOpen: moveSidePanel}" @click="actionSidePanel">
-      <img src="../assets/pdf.png" height ="34" width="34"/>
+    <button :class="{backMenu: true, backMenuOpen: moveSidePanel}" @click="actionSidePanel">
+      <img src="../assets/backMenu.png" height ="34" width="34"/>
     </button>
     <div v-if="moveSidePanel" class="pdfSidepanelOpen">
-      <MenuPdf class="menuPdfContainer" :pageOuvrage="pageOuvrage"/>
+      <MenuPdf class="menuPdfContainer"/>
     </div>
 </template>
 
@@ -11,19 +11,18 @@
 import MenuPdf from './menuPdfComponents/MenuPdf.vue'
 
 export default {
-  name: 'PDFManager',
-  props: {
-    pageOuvrage:  {
-      type: Array,
-      default: () => []
-    }
-  },
+  name: 'BackMenu',
   components: {
     MenuPdf,
   },
   data() {
     return {
       infSidePanel: false,
+    }
+  },
+  computed : {
+    moveSidePanel() {
+      return this.infSidePanel;
     }
   },
   methods: {
@@ -36,11 +35,11 @@ export default {
 
 <style scoped>
 
-.pdfManager {
+.backMenu {
   position: absolute;
   height: 50px;
   width: 50px;
-  top: 100px;
+  top: 155px;
   right: 5px;
   z-index: 30;
   
@@ -52,7 +51,7 @@ export default {
   box-shadow: 0 0 5px rgba(0,0,0,0.19), 0 0 5px rgba(0,0,0,0.19)
 }
 
-.pdfManagerOpen {
+.backMenuOpen {
   right: calc(36% + 10px);
 }
 

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="openMenu && (pdfName == '')" class="menu">
-      Menu
+      Ouvrages d'instructions nautiques
       <ul class="pdfList">
         <button class="pdfEntity" @click="clickPdf">
         pdf1
@@ -66,7 +66,7 @@ export default {
   padding: 15px 32px;
   margin: 15px;
   text-align: center;
-  width: 70%;
+  width: 50%;
 
   -webkit-transition-duration: 0.4s;
   transition-duration: 0.4s;
