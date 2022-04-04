@@ -38,7 +38,7 @@ export default {
       querySelectBbox: "",
       bboxState: true,
       bboxArea: [],
-      tripleStoreLink: "http://172.31.58.17:7200/repositories/test_shom"
+      tripleStoreLink: "http://172.31.58.17:7200/repositories/test_shom_lambert"
     }
   },
   computed : {
@@ -169,7 +169,7 @@ export default {
     labelDescriptionSelectionPostProcess(queryString) {
         queryString = queryString.replace(
           "SELECT DISTINCT ?this",
-          "SELECT DISTINCT ?this ?label ?description ?information ?wkt ?lat ?lng ?lumineux ?amer ?provenance ?page");
+          "SELECT DISTINCT ?this ?label ?description ?information ?wkt ?lat ?lng ?lumineux ?amer ?page ?ouvrage");
         return queryString;
     },
     optionalQueriesPostProcess(queryString) {
@@ -198,7 +198,9 @@ export default {
       return queryString;
     },
     getChapterPostProcess(queryString){
-      queryString = queryString.replace(new RegExp('}$'),"<<?this nav:aPourProvenance ?provenance>> nav:aPourNumeroDePage ?page\n}");
+      queryString = queryString.replace(new RegExp('}$'),
+                "<<?this nav:aPourProvenance ?provenance>> nav:aPourNumeroDePage ?page.\n"+
+                "?provenance rdf:type ?ouvrage }");
       return queryString;
     },
     semanticPostProcess(queryString) {

@@ -4,7 +4,9 @@
     </button>
     <div v-if="moveSidePanel" class="resultSidepanelOpen">
       <h1>Results</h1>
-      <EntityResult v-for="(result, i) in queryResult" :values="result" :key="i"></EntityResult>
+      <EntityResult v-for="(result, i) in queryResult" :values="result" :key="i" 
+      @pageOuvrage="conveyPageOuvrage">
+      </EntityResult>
     </div>
 </template>
 
@@ -13,6 +15,7 @@ import EntityResult from "./queryComponents/EntityResult.vue";
 
 export default {
   name: 'DisplayResearch',
+  emits: ['pageOuvrage'],
   components : { 
     EntityResult,
   },
@@ -40,6 +43,9 @@ export default {
   methods: {
     actionSidePanel() {
       this.infSidePanel = !this.infSidePanel;
+    },
+    conveyPageOuvrage (pageOuvrage) {
+      this.$emit('pageOuvrage', pageOuvrage);
     }
   },
 }

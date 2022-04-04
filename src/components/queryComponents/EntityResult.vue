@@ -1,10 +1,10 @@
 <template>
-  <div class="myEntity">
+  <div class="myEntity" @click="sendPage">
     <ul class="fieldList" v-for="field in extractFields" :key="field">
       <div v-if="checkType(field)">
         <h5 class="field"> {{ field }} </h5>
         <ul>
-          <li v-for="datum in values[field].value" :key="datum"> {{ datum }} </li>
+          <li v-for="datum in values[field].value" :key="datum"> {{ datum }}  </li>
         </ul>
       </div>
     </ul>
@@ -14,6 +14,7 @@
 <script>
 export default {
   name: "EntityResult",
+  emits:["pageOuvrage"],
   props: {
     values:  {
       type: Object,
@@ -28,6 +29,9 @@ export default {
   methods: {
     checkType(field) {
       return !["uri", "bnode"].includes(this.values[field].type) && !["wkt"].includes(field);
+    },
+    sendPage() {
+      this.$emit("pageOuvrage",[this.values["ouvrage"].value[1].split("#").slice(-1)[0],this.values["page"].value[0]]);
     }
   },
 }
