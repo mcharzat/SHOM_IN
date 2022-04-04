@@ -229,7 +229,7 @@ export default {
     getChapterPostProcess(queryString){
       queryString = queryString.replace(new RegExp('}$'),
                 "<<?this nav:aPourProvenance ?provenance>> nav:aPourNumeroDePage ?page.\n"+
-                "?provenance rdf:type ?ouvrage }");
+                "?provenance rdf:type ?ouvrage FILTER(?ouvrage != nav:OuvrageIN) }");
       return queryString;
     },
     semanticPostProcess(queryString) {
@@ -239,11 +239,23 @@ export default {
     },
     emitResults (response) {
       let results = JSON.parse(response).results.bindings;
-
+      
+      results = this.concatOuvragePage(results);
       const state = this.getStateOfResults(results);
       results = this.synthesizeResults(state, results);
 
       this.$emit("myQueryResult", results);
+    },
+    concatOuvragePage(results){
+      results.forEach(element => {
+        element["reference"] = {
+          type: "literal",
+          value: element["ouvrage"].value.split('#').slice(-1)[0] + " page " + element["page"].value
+        }
+        delete element["page"];
+        delete element["ouvrage"];
+      });
+      return results;
     },
     getStateOfResults(results) {
       const state = {};

@@ -1,5 +1,5 @@
 <template>
-  <div class="myEntity" @click="sendPage">
+  <div class="myEntity" @click="sendPageOuvrage">
     <ul class="fieldList" v-for="field in extractFields" :key="field">
       <div v-if="checkType(field)">
         <h5 class="field"> {{ field }} </h5>
@@ -23,6 +23,7 @@ export default {
   },
   computed: {
     extractFields() {
+      
       return Object.keys(this.values);
     }
   },
@@ -30,8 +31,8 @@ export default {
     checkType(field) {
       return !["uri", "bnode"].includes(this.values[field].type) && !["wkt", "category"].includes(field);
     },
-    sendPage() {
-      this.$emit("pageOuvrage",[this.values["ouvrage"].value[1].split("#").slice(-1)[0],this.values["page"].value[0]]);
+    sendPageOuvrage() {
+      this.$emit("pageOuvrage",this.values["reference"].value[0].split(' page '));
     }
   },
 }

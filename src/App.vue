@@ -13,10 +13,9 @@
     />
     <PDFManager 
       :pageOuvrage="pageOuvrage"
-      @pdfOpenState="updatedPdfState"
     />
     <SPARQLResearch 
-      :widthPdf="widthPdf"
+      :widthResult="widthResult"
       :bboxArea="bbox"
       :bboxState="bboxState"
       @sparnaResult="conveyResult"
@@ -35,7 +34,7 @@ export default {
   name: 'App',
   data() {
     return {
-      widthPdf: false,
+      widthResult: false,
       result: [],
       bbox: [],
       bboxState: "",
@@ -43,8 +42,8 @@ export default {
     }
   },
   methods: {
-    updatedPdfState: function(width) {
-      this.widthPdf = width;
+    updatedResultState: function(width) {
+      this.widthResult = width;
     },
     conveyResult (result) {
       this.result = result;

@@ -14,19 +14,19 @@ describe("SPARQLResearch.vue", () => {
             }
         });
         const wrapperResearch = wrapper.getComponent(SPARQLResearch);
-        const wrapperPdf = wrapper.getComponent(DisplayResearch);
+        const wrapperDisplay = wrapper.getComponent(DisplayResearch);
         const buttonResearch = wrapperResearch.find('.researchManager');
-        const buttonPdf = wrapperPdf.find('.displayResearch');
+        const buttonDisplay = wrapperDisplay.find('.displayResearch');
         
         expect(wrapperResearch.vm.widthResult).toBeFalsy();
         expect(buttonResearch.attributes('class')).not.toContain("researchManagerOpen");
 
-        await buttonPdf.trigger('click');
+        await buttonDisplay.trigger('click');
         
         expect(wrapperResearch.vm.widthResult).toBeTruthy();
         expect(buttonResearch.attributes('class')).toContain("researchManagerOpen");
 
-        await buttonPdf.trigger('click');
+        await buttonDisplay.trigger('click');
 
         expect(wrapperResearch.vm.widthResult).toBeFalsy();
         expect(buttonResearch.attributes('class')).not.toContain("researchManagerOpen");
