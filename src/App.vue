@@ -9,8 +9,11 @@
     <DisplayResearch 
       :queryResult="result"
       @resultOpenState="updatedResultState"
+      @pageOuvrage="conveyPageOuvrage"
     />
-    <PDFManager />
+    <PDFManager 
+      :pageOuvrage="pageOuvrage"
+    />
     <SPARQLResearch 
       :widthResult="widthResult"
       :bboxArea="bbox"
@@ -35,6 +38,7 @@ export default {
       result: [],
       bbox: [],
       bboxState: "",
+      pageOuvrage: ""
     }
   },
   methods: {
@@ -49,6 +53,9 @@ export default {
     },
     conveyStateBbox (bboxState) {
       this.bboxState = bboxState;
+    },
+    conveyPageOuvrage (pageOuvrage) {
+      this.pageOuvrage = pageOuvrage;
     }
   },
   components: {

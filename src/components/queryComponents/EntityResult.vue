@@ -1,5 +1,5 @@
 <template>
-  <div class="myEntity">
+  <div class="myEntity" @click="sendPageOuvrage">
     <ul class="fieldList" v-for="field in extractFields" :key="field">
       <div v-if="checkType(field)">
         <h5 class="field"> {{ field }} </h5>
@@ -14,6 +14,7 @@
 <script>
 export default {
   name: "EntityResult",
+  emits:["pageOuvrage"],
   props: {
     values:  {
       type: Object,
@@ -22,12 +23,16 @@ export default {
   },
   computed: {
     extractFields() {
+      
       return Object.keys(this.values);
     }
   },
   methods: {
     checkType(field) {
       return !["uri", "bnode"].includes(this.values[field].type) && !["wkt", "category"].includes(field);
+    },
+    sendPageOuvrage() {
+      this.$emit("pageOuvrage",this.values["reference"].value[0].split(' page '));
     }
   },
 }

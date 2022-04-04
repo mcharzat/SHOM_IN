@@ -1,9 +1,9 @@
 <template>
-    <button :class="{pdfManager: true, pdfManagerOpen: moveSidePanel}" @click="actionSidePanel">
+    <button :class="{pdfManager: true, pdfManagerOpen: infSidePanel}" @click="actionSidePanel">
       <img src="../assets/texte.png" height ="30" width="30"/>
     </button>
-    <div v-if="moveSidePanel" class="pdfSidepanelOpen">
-      <PDF class="pdfContainer"/>
+    <div v-if="infSidePanel" class="pdfSidepanelOpen">
+      <PDF class="pdfContainer" :pageOuvrage="pageOuvrage"/>
     </div>
 </template>
 
@@ -12,17 +12,18 @@ import PDF from './pdfComponents/PDF.vue'
 
 export default {
   name: 'PDFManager',
+  props: {
+    pageOuvrage:  {
+      type: Array,
+      default: () => []
+    }
+  },
   components: {
     PDF,
   },
   data() {
     return {
       infSidePanel: false,
-    }
-  },
-  computed : {
-    moveSidePanel() {
-      return this.infSidePanel;
     }
   },
   methods: {

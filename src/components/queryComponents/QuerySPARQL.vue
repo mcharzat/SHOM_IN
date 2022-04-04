@@ -86,10 +86,9 @@ export default {
         queryString = this.optionalClassPostProcess(queryString);
         queryString = this.optionalLabelPostProcess(queryString);
         queryString = this.optionalDescriptionPostProcess(queryString);
+        queryString = this.getChapterPostProcess(queryString);
         queryString = this.optionalGeomPostProcess(queryString);
-
         queryString = this.anyEntitiesPostProcess(queryString);
-    
         $('#sparql code').html(queryString.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"));
         yasqe.setValue(queryString);
       },
@@ -174,7 +173,7 @@ export default {
     SelectorsPostProcess(queryString) {
         queryString = queryString.replace(
           "SELECT DISTINCT ?this",
-          "SELECT DISTINCT ?this ?type ?category ?label ?description ?information ?wkt ?lat ?lng");
+          "SELECT DISTINCT ?this ?type ?category ?label ?description ?information ?wkt ?lat ?lng ?lumineux ?ouvrage ?page ?amer");
         return queryString;
     },
     optionalLabelPostProcess(queryString) {
@@ -227,6 +226,12 @@ export default {
       }
       return queryString;
     },
+    getChapterPostProcess(queryString){
+      queryString = queryString.replace(new RegExp('}$'),
+                "<<?this nav:aPourProvenance ?provenance>> nav:aPourNumeroDePage ?page.\n"+
+                "?provenance rdf:type ?ouvrage FILTER(?ouvrage != nav:OuvrageIN) }");
+      return queryString;
+    },
     semanticPostProcess(queryString) {
       queryString = this.prefixesPostProcess(queryString);
       queryString = this.sparnatural.expandSparql(queryString);
@@ -234,11 +239,23 @@ export default {
     },
     emitResults (response) {
       let results = JSON.parse(response).results.bindings;
-
+      
+      results = this.concatOuvragePage(results);
       const state = this.getStateOfResults(results);
       results = this.synthesizeResults(state, results);
 
       this.$emit("myQueryResult", results);
+    },
+    concatOuvragePage(results){
+      results.forEach(element => {
+        element["reference"] = {
+          type: "literal",
+          value: element["ouvrage"].value.split('#').slice(-1)[0] + " page " + element["page"].value
+        }
+        delete element["page"];
+        delete element["ouvrage"];
+      });
+      return results;
     },
     getStateOfResults(results) {
       const state = {};

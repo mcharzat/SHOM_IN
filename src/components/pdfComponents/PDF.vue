@@ -8,15 +8,26 @@
 
 export default {
   name: "PDF",
+  props: {
+    pageOuvrage:  {
+      type: Array,
+      default: () => []
+    }
+  },
   data () {
     return {
-      name: 'C22.pdf', //change which pdf file loads
+      name: 'C22', //change which pdf file loads
       path: 'lib/pdfloader/web/viewer.html' 
     }
   },
-  computed:{ 
+  computed:{
     getFilePath() {
-      return this.path +'?file=' + this.name;
+      return this.path +'?file=' + this.changePage();
+    }
+  },
+  methods: {
+    changePage() {
+      return (this.pageOuvrage[0] ? this.pageOuvrage[0] : this.name) + ".pdf#page=" + this.pageOuvrage[1];
     }
   }
 }
