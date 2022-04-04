@@ -19,8 +19,11 @@
     />
     <PDFManager
       :pageOuvrage="pageOuvrage"
+      @pdfOpenState="updatedPdfState"
     />
-    <BackMenu />
+    <BackMenu 
+      :widthPdf="widthPdf"
+    />
   </div>
 </template>
 
@@ -37,6 +40,7 @@ export default {
   data() {
     return {
       widthResult: false,
+      widthPdf: false,
       result: [],
       bbox: [],
       bboxState: "",
@@ -46,6 +50,9 @@ export default {
   methods: {
     updatedResultState: function(width) {
       this.widthResult = width;
+    },
+    updatedPdfState: function(width) {
+      this.widthPdf = width;
     },
     conveyResult (result) {
       this.result = result;

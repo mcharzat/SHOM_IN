@@ -1,8 +1,8 @@
 <template>
-    <button :class="{backMenu: true, backMenuOpen: moveSidePanel}" @click="actionSidePanel">
+    <button :class="{backMenu: true, backMenuOpen: moveButton}" @click="backToMenu">
       <img src="../assets/backMenu.png" height ="34" width="34"/>
     </button>
-    <div v-if="moveSidePanel" class="pdfSidepanelOpen">
+    <div v-if="backToMenu" class="backToMenu">
       <MenuPdf class="menuPdfContainer"/>
     </div>
 </template>
@@ -15,19 +15,24 @@ export default {
   components: {
     MenuPdf,
   },
+  props: {
+    widthPdf:  {
+      type: Boolean,
+      default: false
+    }
+  },
   data() {
     return {
-      infSidePanel: false,
     }
   },
   computed : {
-    moveSidePanel() {
-      return this.infSidePanel;
+    moveButton() {
+      return this.widthPdf != 0;
     }
   },
   methods: {
-    actionSidePanel() {
-      this.infSidePanel = !this.infSidePanel;
+    backToMenu() {
+      console.log('bouton qui doit être supprimé');
     }
   },
 }
@@ -53,6 +58,10 @@ export default {
 
 .backMenuOpen {
   right: calc(36% + 10px);
+}
+
+.backToMenu {
+  padding: 20px;
 }
 
 .pdfSidepanelOpen {

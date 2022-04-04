@@ -12,6 +12,7 @@ import MenuPdf from './menuPdfComponents/MenuPdf.vue'
 
 export default {
   name: 'PDFManager',
+  emits: ['pdfOpenState'],
   props: {
     pageOuvrage:  {
       type: Array,
@@ -29,6 +30,7 @@ export default {
   methods: {
     actionSidePanel() {
       this.infSidePanel = !this.infSidePanel;
+      this.$emit('pdfOpenState', this.infSidePanel);
     }
   },
 }
