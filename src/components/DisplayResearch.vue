@@ -13,7 +13,7 @@ import EntityResult from "./queryComponents/EntityResult.vue";
 
 export default {
   name: 'DisplayResearch',
-  emits: ['resultOpenState'],
+  emits: ['resultOpenState','pageOuvrage'],
   components : { 
     EntityResult,
   },
@@ -44,6 +44,9 @@ export default {
   methods: {
     actionSidePanel() {
       this.infSidePanel = !this.infSidePanel;
+    },
+    conveyPageOuvrage (pageOuvrage) {
+      this.$emit('pageOuvrage', pageOuvrage);
     }
   },
 }

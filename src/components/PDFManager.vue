@@ -3,7 +3,7 @@
       <img src="../assets/texte.png" height ="30" width="30"/>
     </button>
     <div v-if="moveSidePanel" class="pdfSidepanelOpen">
-      <PDF class="pdfContainer"/>
+      <PDF class="pdfContainer" :pageOuvrage="pageOuvrage"/>
     </div>
 </template>
 
@@ -12,6 +12,13 @@ import PDF from './pdfComponents/PDF.vue'
 
 export default {
   name: 'PDFManager',
+  emits: ['pdfOpenState'],
+  props: {
+    pageOuvrage:  {
+      type: Array,
+      default: () => []
+    }
+  },
   components: {
     PDF,
   },
@@ -28,6 +35,7 @@ export default {
   methods: {
     actionSidePanel() {
       this.infSidePanel = !this.infSidePanel;
+      this.$emit('pdfOpenState', this.infSidePanel);
     }
   },
 }

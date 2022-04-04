@@ -87,7 +87,7 @@ export default {
         queryString = this.optionalLabelPostProcess(queryString);
         queryString = this.optionalDescriptionPostProcess(queryString);
         queryString = this.optionalGeomPostProcess(queryString);
-
+        queryString = this.getChapterPostProcess(queryString);
         queryString = this.anyEntitiesPostProcess(queryString);
     
         $('#sparql code').html(queryString.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"));
@@ -174,7 +174,7 @@ export default {
     SelectorsPostProcess(queryString) {
         queryString = queryString.replace(
           "SELECT DISTINCT ?this",
-          "SELECT DISTINCT ?this ?type ?category ?label ?description ?information ?wkt ?lat ?lng ?lumineux ?provenance ?page ?amer");
+          "SELECT DISTINCT ?this ?type ?category ?label ?description ?information ?wkt ?lat ?lng ?lumineux ?ouvrage ?page ?amer");
         return queryString;
     },
     optionalLabelPostProcess(queryString) {
@@ -228,7 +228,9 @@ export default {
       return queryString;
     },
     getChapterPostProcess(queryString){
-      queryString = queryString.replace(new RegExp('}$'),"<<?this nav:aPourProvenance ?provenance>> nav:aPourNumeroDePage ?page\n}");
+      queryString = queryString.replace(new RegExp('}$'),
+                "<<?this nav:aPourProvenance ?provenance>> nav:aPourNumeroDePage ?page.\n"+
+                "?provenance rdf:type ?ouvrage }");
       return queryString;
     },
     semanticPostProcess(queryString) {
