@@ -88,8 +88,7 @@ export default {
         queryString = this.optionalDescriptionPostProcess(queryString);
         queryString = this.optionalGeomPostProcess(queryString);
         queryString = this.getChapterPostProcess(queryString);
-        queryString = this.anyEntitiesPostProcess(queryString);
-    
+        queryString = this.optionalQueriesPostProcess(queryString);
         $('#sparql code').html(queryString.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"));
         yasqe.setValue(queryString);
       },

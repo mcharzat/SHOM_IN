@@ -4,7 +4,9 @@
     </button>
     <div v-if="moveSidePanel" class="resultSidepanelOpen">
       <h1>Results</h1>
-      <EntityResult v-for="(result, i) in queryResult" :values="result" :key="i"></EntityResult>
+      <EntityResult v-for="(result, i) in queryResult" :values="result" :key="i" 
+      @pageOuvrage="conveyPageOuvrage">
+      </EntityResult>
     </div>
 </template>
 
