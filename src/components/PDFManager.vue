@@ -1,6 +1,6 @@
 <template>
-    <button :class="{pdfManager: true, pdfManagerOpen: infSidePanel}" @click="actionSidePanel">
-      <img src="../assets/texte.png" height ="30" width="30"/>
+    <button :class="{pdfManager: true, pdfManagerOpen: moveSidePanel}" @click="actionSidePanel">
+      <img src="../assets/pdf.png" height ="35" width="35"/>
     </button>
     <div v-if="moveSidePanel" class="pdfSidepanelOpen">
       <MenuPdf class="menuPdfContainer" :pageOuvrage="pageOuvrage"/>
