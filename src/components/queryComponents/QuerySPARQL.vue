@@ -174,7 +174,7 @@ export default {
     SelectorsPostProcess(queryString) {
         queryString = queryString.replace(
           "SELECT DISTINCT ?this",
-          "SELECT DISTINCT ?this ?type ?category ?label ?description ?information ?wkt ?lat ?lng");
+          "SELECT DISTINCT ?this ?type ?category ?label ?description ?information ?wkt ?lat ?lng ?lumineux ?provenance ?page ?amer");
         return queryString;
     },
     optionalLabelPostProcess(queryString) {
@@ -225,6 +225,10 @@ export default {
                 "OPTIONAL{?" + entity[0][1] + " rdfs:label ?" + property[0][1] + "}.\n"+
                 "OPTIONAL{?" + entity[0][1] + " skos:prefLabel ?" + property[0][1] + "}\n}");
       }
+      return queryString;
+    },
+    getChapterPostProcess(queryString){
+      queryString = queryString.replace(new RegExp('}$'),"<<?this nav:aPourProvenance ?provenance>> nav:aPourNumeroDePage ?page\n}");
       return queryString;
     },
     semanticPostProcess(queryString) {
