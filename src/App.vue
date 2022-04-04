@@ -7,15 +7,22 @@
       @suppressBboxSelectionArea="conveyStateBbox"
     />
     <DisplayResearch 
-      :queryResult="result"
+      :stateHistory="stateHistory"
+      :queryResult="resultDisplay"
       @resultOpenState="updatedResultState"
       @pageOuvrage="conveyPageOuvrage"
     />
     <PDFManager 
       :pageOuvrage="pageOuvrage"
     />
+    <DisplayQueries
+      :stateResult="stateResult"
+      :queryResult="result"
+      @historyOpenState="updatedHistoryState"
+      @refreshDisplayResult="conveyOldResult"
+    />
     <SPARQLResearch 
-      :widthResult="widthResult"
+      :widthResult="stateResult || stateHistory"
       :bboxArea="bbox"
       :bboxState="bboxState"
       @sparnaResult="conveyResult"
@@ -28,25 +35,34 @@ import NavBar from './components/NavBar.vue'
 import MapShom from './components/MapShom.vue'
 import SPARQLResearch from './components/SPARQLResearch.vue'
 import DisplayResearch from './components/DisplayResearch.vue'
+import DisplayQueries from './components/DisplayQueries.vue'
 import PDFManager from './components/PDFManager.vue'
 
 export default {
   name: 'App',
   data() {
     return {
-      widthResult: false,
+      stateResult: false,
+      stateHistory: false,
       result: [],
+      resultDisplay: [],
       bbox: [],
       bboxState: "",
       pageOuvrage: ""
     }
   },
   methods: {
-    updatedResultState: function(width) {
-      this.widthResult = width;
+    updatedResultState: function(state) {
+      this.stateResult = state;
+    },
+    updatedHistoryState: function(state) {
+      this.stateHistory = state;
     },
     conveyResult (result) {
-      this.result = result;
+      this.result = this.resultDisplay = result;
+    },
+    conveyOldResult (result) {
+      this.resultDisplay = result;
     },
     conveyBbox (bbox) {
       this.bbox = bbox;
@@ -63,6 +79,7 @@ export default {
     MapShom,
     SPARQLResearch,
     DisplayResearch,
+    DisplayQueries,
     PDFManager
   }
 }
