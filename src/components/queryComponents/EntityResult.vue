@@ -27,7 +27,7 @@ export default {
   },
   methods: {
     checkType(field) {
-      return !["uri", "bnode"].includes(this.values[field].type) && !["wkt"].includes(field);
+      return !["uri", "bnode"].includes(this.values[field].type) && !["wkt", "category"].includes(field);
     }
   },
 }

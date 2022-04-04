@@ -24,6 +24,7 @@
     "leaflet": "^1.7.1",
     "leaflet-draw": "^1.0.4",
     "npm": "^8.5.5",
+    "proj4": "^2.8.0",
     "vue": "^3.2.13",
     "vue-sweetalert2": "^5.0.2"
   },

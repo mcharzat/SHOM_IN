@@ -11,6 +11,7 @@ import "leaflet/dist/leaflet.css";
 import "leaflet-draw/dist/leaflet.draw.css";
 import 'leaflet';
 import "leaflet-draw";
+import proj4 from 'proj4';
 
 import EntityResult from "./queryComponents/EntityResult.vue";
 
@@ -68,8 +69,9 @@ export default {
       layersManaged : L.layerGroup(),
       layerResearchedElements: L.featureGroup(),
       layerDefaultElements: L.featureGroup(),
-      layerGeoElements: L.featureGroup(),
-      layerAdviceElements: L.featureGroup(),
+      layerAmerElements: L.featureGroup(),
+      layerMaritimeElements: L.featureGroup(),
+      layerPhenomenonElements: L.featureGroup(),
     }
   },
   mounted() {
@@ -78,6 +80,7 @@ export default {
     this.setupControls(map);
     this.setupSelectArea(map);
     this.setupResults(map);
+    this.setupProj4();
 
     this.$watch('queryResultMap', () => {
       this.displayResult(map);
@@ -154,17 +157,31 @@ export default {
       map.on(L.Draw.Event.CREATED, (event) => {
         const layer = event.layer;
         this.selectionArea = layer.getBounds().toBBoxString();
-        this.$emit("bboxSelectionArea", this.selectionArea.split(','));
+        const coordWGS = this.selectionArea.split(',');
+        const coord1LAMB = this.convertWGSToLamb([parseFloat(coordWGS[0]), parseFloat(coordWGS[1])]);
+        const coord2LAMB = this.convertWGSToLamb([parseFloat(coordWGS[2]), parseFloat(coordWGS[3])]);
+        this.$emit("bboxSelectionArea", coord1LAMB.concat(coord2LAMB));
         drawnItems.addLayer(layer).addTo(map);
         this.layerManager.addOverlay(drawnItems, "Selection");
       });
     },
     setupResults (map) {
       this.layerResearchedElements.addLayer(this.layerDefaultElements);
-      this.layerResearchedElements.addLayer(this.layerGeoElements);
-      this.layerResearchedElements.addLayer(this.layerAdviceElements);
+      this.layerResearchedElements.addLayer(this.layerAmerElements);
+      this.layerResearchedElements.addLayer(this.layerMaritimeElements);
+      this.layerResearchedElements.addLayer(this.layerPhenomenonElements);
 
       this.layerResearchedElements.addTo(map);
+    },
+    setupProj4() {
+      proj4.defs([
+      [
+        'EPSG:4326',
+        '+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees +no_defs'],
+      [
+        'EPSG:2154',
+        '+title=LAMB 93 +proj=lcc +lat_1=49 +lat_2=44 +lat_0=46.5 +lon_0=3 +x_0=700000 +y_0=6600000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs']
+      ]);
     },
     displayResult(map) { 
       this.clearResearchLayer();
@@ -183,107 +200,109 @@ export default {
       this.checkFitBounds(map);
     },
     displayResultGeo(element, map) {
+      const category = this.determineCategory(element.category.value);
       if (element.lat.value[0].includes("°")) {
         const lat = this.convertDegreeToLatlng(element.lat.value[0]);
         const lng = this.convertDegreeToLatlng(element.lng.value[0]);
-        this.displayElement([lat, lng], element, map);
+        this.displayElement([lat, lng], element, category, map);
       } else {
         this.displayElement(
           [parseFloat(element.lat.value[0]), parseFloat(element.lng.value[0])],
-          element, map);
+          element, category, map);
       }
     },
     displayResultWkt(element, map) {
       const upperCoord = element.wkt.value[0].toUpperCase();
       let coord = this.checkEPSGWkt(element.wkt.value[0]);
       if (coord) {
+        const category = this.determineCategory(element.category.value);
         if (upperCoord.includes("POINT")) {
-          const coords = this.extractCoordPointWkt(coord);
-          this.displayElement(coords, element, map);
+          const coords = this.extractCoordPointWkt(coord.value, coord.epsg);
+          this.displayElement(coords, element, category, map);
         } else if (upperCoord.includes("LINESTRING")) {
           let coords = [];
           if (upperCoord.includes("MULTILINESTRING")) {
-            coords = this.extractCoordMultiLineWkt(coord);
+            coords = this.extractCoordMultiLineWkt(coord.value, coord.epsg);
           } else {
-            coords = this.extractCoordLineWkt(coord);
+            coords = this.extractCoordLineWkt(coord.value, coord.epsg);
           }
-          this.displayLineElement(coords, element, map);
+          this.displayLineElement(coords, element, category.layer, map);
         } else if (upperCoord.includes("POLYGON")) {
           let coords = [];
           if (upperCoord.includes("MULTIPOLYGON")) {
-            coords = this.extractCoordPolygonWkt(coord);
+            coords = this.extractCoordPolygonWkt(coord.value, coord.epsg);
           } else {
-            coords = this.extractCoordMultiLineWkt(coord);
+            coords = this.extractCoordMultiLineWkt(coord.value, coord.epsg);
           }
-          this.displayPolygonElement(coords, element, map);
+          this.displayPolygonElement(coords, element, category.layer, map);
         }
       }
     },
-    extractCoordPointWkt(coord) {
+    extractCoordPointWkt(coord, epsg) {
       coord = coord.replace(/^ /i, "").replace(' (', "(").split(" ");
 
-      const lng = parseFloat(coord[0].split("(")[coord[0].includes("(") ? 1 : 0]);
-      const lat = parseFloat(coord[1].split(")")[0]);
+      let lng = parseFloat(coord[0].split("(")[coord[0].includes("(") ? 1 : 0]);
+      let lat = parseFloat(coord[1].split(")")[0]);
+
+      if (epsg == 2154) {
+        const coords = this.convertLambToWGS([lng, lat]);
+        lat = coords[1];
+        lng = coords[0];
+      }
+
       return [lat, lng];
     },
-    extractCoordLineWkt(coord, poly=false) {
+    extractCoordLineWkt(coord, epsg, poly=false) {
       coord = coord.split("(")[coord.includes("(") ? 1 : 0].split(")")[0].split(",");
       const listPoints = [];
       
       for (let k = 0; k < coord.length - (poly ? 1 : 0); k++) {    
-        listPoints.push(this.extractCoordPointWkt(coord[k]));
+        listPoints.push(this.extractCoordPointWkt(coord[k], epsg));
       }
       return listPoints;
     },
-    extractCoordMultiLineWkt(coord, poly=false) {
+    extractCoordMultiLineWkt(coord, epsg, poly=false) {
       coord = coord.split("((")[coord.includes("((") ? 1 : 0].split("))")[0].split("),(");
       const listCoords = [];
 
       for (let k = 0; k < coord.length; k++) {
-        listCoords.push(this.extractCoordLineWkt(coord[k], poly));
+        listCoords.push(this.extractCoordLineWkt(coord[k], epsg, poly));
       }
       return listCoords;
     },
-    extractCoordPolygonWkt(coord) {
+    extractCoordPolygonWkt(coord, epsg) {
       coord = coord.split("(((")[1].split(")))")[0].split(")),((");
       const listPoints = [];
 
       for (let k = 0; k < coord.length; k++) {
-        listPoints.push(this.extractCoordMultiLineWkt(coord[k], true));
+        listPoints.push(this.extractCoordMultiLineWkt(coord[k], epsg, true));
       }
       return listPoints;
     },
-    checkEPSGWkt(coord) {
-      coord = coord.split("> ");
-
-      if (coord.length > 1 && !coord[0].includes("4326")) {
-        return;
-      } else if (coord.length > 1) {
-        coord = coord[1];
-      } else {
-        coord = coord[0];
-      }
-      return coord;
-    },
-    displayElement(coord, element, map) {
-      const category = "toDo";
-      switch (category) {
-        case "geo":
+    displayElement(coord, element, category, map) {
+      switch (category.title) {
+        case "amer":
           this.createMarker(
-            coord, "geo", [38, 50],
-            element, this.layerGeoElements, "Geographic Entities", map
+            coord, "amer", [38, 50],
+            element, category.layer, "Amers", map
           );
           break;
-        case "advice":
+        case "domaineMaritime":
           this.createMarker(
-            coord, "advice", [40, 30],
-            element, this.layerAdviceElements, "Advice Entities", map
+            coord, "maritime", [40, 40],
+            element, category.layer, "domaine Maritime", map
+          );
+          break;
+        case "phenomenon":
+          this.createMarker(
+            coord, "phenomenon", [60, 30],
+            element, category.layer, "Phénomènes naturels", map
           );
           break;
         default:
           this.createMarker(
             coord, "default", [50, 40],
-            element, this.layerDefaultElements, "Research Elements", map
+            element, this.layerDefaultElements, "Entités", map
           );
       }
     },
@@ -295,19 +314,19 @@ export default {
       layer.addLayer(marker);
       this.addResearchToLayerControl(layer, layerName, map);
     },
-    displayLineElement(coords, element, map) {
+    displayLineElement(coords, element, layer, map) {
       const line = L.polyline(coords);
 
       this.createPopup(line, element);
-      this.layerGeoElements.addLayer(line);
-      this.addResearchToLayerControl(this.layerGeoElements, "Geographic Entities", map);
+      layer.addLayer(line);
+      this.addResearchToLayerControl(layer, "Geographic Entities", map);
     },
-    displayPolygonElement(coords, element, map) {
+    displayPolygonElement(coords, element, layer, map) {
       const polygone = L.polygon(coords);
 
       this.createPopup(polygone, element);
-      this.layerGeoElements.addLayer(polygone);
-      this.addResearchToLayerControl(this.layerGeoElements, "Geographic Entities", map);
+      layer.addLayer(polygone);
+      this.addResearchToLayerControl(layer, "Geographic Entities", map);
     },
     createPopup(symbol, element) {
       symbol.on("click", async () => {
@@ -334,6 +353,33 @@ export default {
         }
       })
     },
+    determineCategory(categories) {
+      const category = {};
+
+      const amer = [
+        "http://data.shom.fr/def/navigation_cotiere#Amer", 
+        "http://data.shom.fr/def/navigation_cotiere#AideALaNavigation"
+      ];
+      const domaineMaritime = [
+        "http://data.shom.fr/def/navigation_cotiere#ZoneDuDomaineMaritime"];
+      const phenomenon = [
+        "http://data.shom.fr/def/navigation_cotiere#PhenomeneMeteorologiqueOuOceanographique"]
+      
+      if (categories.includes(amer[0]) || categories.includes(amer[1])) {
+        category["title"] = "amer";
+        category['layer'] = this.layerAmerElements;
+      } else if (categories.includes(domaineMaritime[0])) {
+        category["title"] = "domaineMaritime";
+        category['layer'] = this.layerMaritimeElements;
+      } else if (categories.includes(phenomenon[0])) {
+        category["title"] = "phenomenon";
+        category['layer'] = this.layerPhenomenonElements;
+      } else {
+        category["title"] = "default";
+        category['layer'] = this.layerDefaultElements;
+      }
+      return category;
+    },
     checkFitBounds(map) {
       this.layerResearchedElements.eachLayer((layer) => {
         if (layer.getLayers().length > 0) {
@@ -353,6 +399,24 @@ export default {
     removeCoord() {
       this.onMap=false;
     },
+    checkEPSGWkt(coord) {
+      const coordCrs = {};
+      coord = coord.split("> ");
+
+      if (coord[0].includes("4326") || coord[0].includes("WGS84")) {
+        coordCrs["epsg"] = 4326;
+        coordCrs["value"] = coord[1];
+      } else if (coord[0].includes("2154") || coord[0].includes("LAMB93")) {
+        coordCrs["epsg"] = 2154;
+        coordCrs["value"] = coord[1];
+      } else if (coord.length == 1) {
+        coordCrs["epsg"] = 2154;
+        coordCrs["value"] = coord[0];
+      } else {
+        return;
+      }
+      return coordCrs;
+    },
     convertDegreeToLatlng(coord) {
       const firstCut = coord.replace(" ", "").split("°");
       let latLng = parseFloat(firstCut[0]);
@@ -367,7 +431,19 @@ export default {
       
       latLng *= coord.includes('N') || coord.includes('E') ? 1 : -1;
       return latLng;
-    }
+    },
+    convertWGSToLamb(coord) {
+      
+      coord = proj4('EPSG:4326', 'EPSG:2154', coord);
+
+      return coord;
+    },
+    convertLambToWGS(coord) {
+      
+      coord = proj4('EPSG:2154', 'EPSG:4326', coord);
+
+      return coord;
+    },
   },
   computed: {
     getUrl () {
