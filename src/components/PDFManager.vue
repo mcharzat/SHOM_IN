@@ -3,7 +3,11 @@
       <img src="../assets/pdf.png" height ="34" width="34"/>
     </button>
     <div v-if="moveSidePanel" class="pdfSidepanelOpen">
-      <MenuPdf class="menuPdfContainer" :pageOuvrage="pageOuvrage"/>
+      <MenuPdf class="menuPdfContainer"
+        :menuOpen="menuOpen"
+        :pageOuvrage="pageOuvrage"
+        @openButtonMenu="conveyMenuButton"
+      />
     </div>
 </template>
 
@@ -12,15 +16,19 @@ import MenuPdf from './menuPdfComponents/MenuPdf.vue'
 
 export default {
   name: 'PDFManager',
-  emits: ['pdfOpenState'],
+  emits: ['pdfOpenState', 'openMenuButton'],
+  components: {
+    MenuPdf,
+  },
   props: {
+    menuOpen:  {
+      type: Boolean,
+      default: true
+    },
     pageOuvrage:  {
       type: Array,
       default: () => []
     }
-  },
-  components: {
-    MenuPdf,
   },
   data() {
     return {
@@ -28,6 +36,9 @@ export default {
     }
   },
   methods: {
+    conveyMenuButton (state) {
+      this.$emit('openMenuButton', state);
+    },
     actionSidePanel() {
       this.infSidePanel = !this.infSidePanel;
       this.$emit('pdfOpenState', this.infSidePanel);

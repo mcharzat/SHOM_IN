@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="openMenu && (pdfName == '')" class="menu">
+    <div v-if="openMenu && !pdfName" class="menu">
       Ouvrages d'instructions nautiques
       <ul class="pdfList">
         <button class="pdfEntity" @click="clickPdf">
@@ -12,7 +12,7 @@
       </ul>
     </div>
 
-    <PDF v-if="(pdfName != '') || openPdf" class="pdfContainer"/>
+    <PDF v-if="!openMenu && (pdfName || openPdf)" class="pdfContainer"/>
   </div>
 </template>
 
@@ -21,20 +21,34 @@ import PDF from './pdfComponents/PDF.vue'
 
 export default {
   name: 'MenuPdf',
+  emits: ['openButtonMenu'],
   components: {
     PDF,
   },
+  props: {
+    menuOpen:  {
+      type: Boolean,
+      default: true
+    },
+  },
   data () {
     return {
-      pdfName: '', // sera recu de quelque part => a écouter
+      pdfName: 'C22.pdf', // sera recu de quelque part => a écouter
       openMenu: true,
-      openPdf: false,
+      openPdf: false
+    }
+  },
+  watch: {
+    menuOpen: function () {
+      this.openMenu = true;
+      this.$emit('openButtonMenu', this.openMenu);
     }
   },
   methods: {
     clickPdf() {
       this.openPdf = true;
       this.openMenu = false;
+      this.$emit('openButtonMenu', this.openMenu);
     },
     namesPdfPresent() {
       if (this.pdfName != '') {
@@ -50,7 +64,7 @@ export default {
 <style scoped>
 
 .menu {
-  padding: 20px;
+  padding-top: 40px;
 }
 
 .pdfList {

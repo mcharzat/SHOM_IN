@@ -18,11 +18,21 @@
       @pageOuvrage="conveyPageOuvrage"
     />
     <PDFManager
+      :menuOpen="menuOpen"
       :pageOuvrage="pageOuvrage"
       @pdfOpenState="updatedPdfState"
+      @openMenuButton="conveyOpenMenuButton"
+    />
+    <PDFManager
+      :menuOpen="menuOpen"
+      @pdfOpenState="updatedPdfState"
+      @openMenuButton="conveyOpenMenuButton"
     />
     <BackMenu 
       :widthPdf="widthPdf"
+      :buttonMenu="buttonMenu"
+      :hidden="!buttonMenuState || !backToMenu"
+      @openMenu="backToMenu"
     />
   </div>
 </template>
@@ -44,14 +54,27 @@ export default {
       result: [],
       bbox: [],
       bboxState: "",
-      pageOuvrage: ""
+      pageOuvrage: "",
+      menuOpen: true,
+      buttonMenu: false
+    }
+  },
+  computed: {
+    buttonMenuState() {
+      return this.buttonMenu;  
     }
   },
   methods: {
-    updatedResultState: function(width) {
+    conveyOpenMenuButton() {
+      this.buttonMenu = !this.buttonMenu;
+    },
+    backToMenu() {
+      this.menuOpen = !this.menuOpen;
+    },
+    updatedResultState(width) {
       this.widthResult = width;
     },
-    updatedPdfState: function(width) {
+    updatedPdfState(width) {
       this.widthPdf = width;
     },
     conveyResult (result) {

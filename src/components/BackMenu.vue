@@ -1,28 +1,23 @@
 <template>
-    <button :class="{backMenu: true, backMenuOpen: moveButton}" @click="backToMenu">
+    <button :class="{backMenu:true, backMenuOpen: moveButton}" @click="backToMenu">
       <img src="../assets/backMenu.png" height ="34" width="34"/>
     </button>
-    <div v-if="backToMenu" class="backToMenu">
-      <MenuPdf class="menuPdfContainer"/>
-    </div>
 </template>
 
 <script>
-import MenuPdf from './menuPdfComponents/MenuPdf.vue'
 
 export default {
   name: 'BackMenu',
-  components: {
-    MenuPdf,
-  },
+  emits: ['openMenu'],
   props: {
     widthPdf:  {
       type: Boolean,
       default: false
-    }
+    },
   },
   data() {
     return {
+      isPush: false
     }
   },
   computed : {
@@ -32,7 +27,8 @@ export default {
   },
   methods: {
     backToMenu() {
-      console.log('bouton qui doit être supprimé');
+      this.isPush = !this.isPush;
+      this.$emit('openMenu', this.isPush);
     }
   },
 }
@@ -60,27 +56,4 @@ export default {
   right: calc(36% + 10px);
 }
 
-.backToMenu {
-  padding: 20px;
-}
-
-.pdfSidepanelOpen {
-  position: absolute;
-  background-color: beige;
-  right: 5px;
-  width: 36%;
-  height: 100%;
-  max-height: calc(100% - 125px);
-  top : 100px;
-  z-index: 1000;
-  scrollbar-width: none;
-  resize: horizontal;
-  overflow: auto;
-  direction: rtl;
-}
-
-.menuPdfContainer {
-  height: 100%;
-  width: 100%;
-}
 </style>
