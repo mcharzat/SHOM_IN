@@ -33,7 +33,7 @@ export default {
   },
   data () {
     return {
-      pdfName: 'C22.pdf', // sera recu de quelque part => a écouter
+      pdfName: '', // sera recu de quelque part => a écouter
       openMenu: true,
       openPdf: false
     }
