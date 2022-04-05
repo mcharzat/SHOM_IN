@@ -414,10 +414,10 @@ export default {
     },
     handleLayers(layers, symbol, map){
       layers.layer.addLayer(symbol);
-      this.addGlobalToQuery(layers.globalLayer, layers.layer);
+      this.addQueryToGlobal(layers.globalLayer, layers.layer);
       this.addResearchToLayerControl(layers.globalLayer, layers.label, map);
     },
-    addGlobalToQuery(globalLayer, queryLayer) {
+    addQueryToGlobal(globalLayer, queryLayer) {
       if (!globalLayer.hasLayer(queryLayer)) {
         globalLayer.addLayer(queryLayer);
       }
@@ -463,7 +463,7 @@ export default {
     determineCategory(categories) {
       const selectedCategory = {
         title: "default",
-        ladel: this.categories.default.label,
+        label: this.categories.default.label,
         globalLayer: this.categories.default.layer,
         layer: this.layerByQuery[this.lastQuery].default
       };

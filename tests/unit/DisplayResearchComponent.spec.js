@@ -2,9 +2,10 @@ import { shallowMount } from "@vue/test-utils";
 import displayResearch from "@/components/DisplayResearch.vue";
 
 describe("DisplayResearch.vue", () => {
+    const wrapper = shallowMount(displayResearch);
+    const button = wrapper.find('.displayResearch');
+
     it("click open the panel", async () => {
-        const wrapper = shallowMount(displayResearch);
-        const button = wrapper.find('.displayResearch');
         let panel = wrapper.find('.resultSidepanelOpen');
 
         expect(button.attributes("class")).not.toContain("displayResearchOpen");
@@ -27,8 +28,7 @@ describe("DisplayResearch.vue", () => {
     });
 
     it("emits a signal on click", async () => {
-        const wrapper = shallowMount(displayResearch);
-        await wrapper.find('button').trigger('click');
+        await button.trigger('click');
 
         expect(wrapper.emitted().resultOpenState).toBeTruthy();
     })
