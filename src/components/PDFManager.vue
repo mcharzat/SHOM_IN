@@ -32,7 +32,7 @@ export default {
   },
   data() {
     return {
-      infSidePanel: false,
+      moveSidePanel: false,
     }
   },
   methods: {
@@ -40,8 +40,8 @@ export default {
       this.$emit('openMenuButton', state);
     },
     actionSidePanel() {
-      this.infSidePanel = !this.infSidePanel;
-      this.$emit('pdfOpenState', this.infSidePanel);
+      this.moveSidePanel = !this.moveSidePanel;
+      this.$emit('pdfOpenState', this.moveSidePanel);
     }
   },
 }

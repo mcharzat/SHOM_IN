@@ -27,6 +27,7 @@ export default {
   },
   methods: {
     changePage() {
+      console.log(this.pageOuvrage);
       return (this.pageOuvrage[0] ? this.pageOuvrage[0] : this.name) + ".pdf#page=" + this.pageOuvrage[1];
     }
   }

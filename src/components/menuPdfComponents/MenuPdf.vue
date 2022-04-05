@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="openMenu && !pdfName" class="menu">
+    <div v-if="openMenu && !pageOuvrage.length" class="menu">
       Ouvrages d'instructions nautiques
       <ul class="pdfList">
         <button class="pdfEntity" @click="clickPdf">
@@ -12,7 +12,9 @@
       </ul>
     </div>
 
-    <PDF v-if="!openMenu && (pdfName || openPdf)" class="pdfContainer"/>
+    <PDF v-if="!openMenu && (pageOuvrage.length || openPdf)" class="pdfContainer"
+    :pageOuvrage="pageOuvrage"
+    />
   </div>
 </template>
 
@@ -30,10 +32,13 @@ export default {
       type: Boolean,
       default: true
     },
+    pageOuvrage:  {
+      type: Array,
+      default: () => []
+    }
   },
   data () {
     return {
-      pdfName: '', // sera recu de quelque part => a écouter
       openMenu: true,
       openPdf: false
     }
@@ -42,7 +47,11 @@ export default {
     menuOpen: function () {
       this.openMenu = true;
       this.$emit('openButtonMenu', this.openMenu);
-    }
+    },
+    pageOuvrage: function () {
+      this.openMenu = false;
+      this.$emit('openButtonMenu', this.openMenu);
+    },
   },
   methods: {
     clickPdf() {
@@ -50,12 +59,6 @@ export default {
       this.openMenu = false;
       this.$emit('openButtonMenu', this.openMenu);
     },
-    namesPdfPresent() {
-      if (this.pdfName != '') {
-        return true;
-      } else
-      {return false;}
-    }
   },
 }
 

@@ -23,11 +23,6 @@
       @pdfOpenState="updatedPdfState"
       @openMenuButton="conveyOpenMenuButton"
     />
-    <PDFManager
-      :menuOpen="menuOpen"
-      @pdfOpenState="updatedPdfState"
-      @openMenuButton="conveyOpenMenuButton"
-    />
     <BackMenu 
       :widthPdf="widthPdf"
       :buttonMenu="buttonMenu"
@@ -54,7 +49,7 @@ export default {
       result: [],
       bbox: [],
       bboxState: "",
-      pageOuvrage: "",
+      pageOuvrage: [],
       menuOpen: true,
       buttonMenu: false
     }
