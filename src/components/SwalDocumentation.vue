@@ -50,9 +50,16 @@
     </div>
 
     <div id=part2>
-      <h5>2- Gestion des couches</h5>
+      <h5>2- Gestion des couches <img src="../assets/doc/Couche.png"> </h5>
       <p>
-        Lorem ipsum dolor sit amet. Et assumenda ipsa quo vitae iure et saepe corrupti et voluptatem enim. Et doloribus odio nam illo facilis in galisum natus est magnam ratione vel incidunt perspiciatis et sequi error. Non dolorum pariatur aut blanditiis laudantium non doloremque accusantium aut aperiam placeat hic odit maiores. Ut exercitationem delectus in quia accusamus non ipsa nulla 33 deleniti vero a facilis ratione id voluptatibus dolor. Rem voluptates dolores est dolore omnis sit autem aspernatur qui aliquam illum in voluptatem voluptatum. Qui facilis fuga aut facilis quisquam hic excepturi eius voluptatum reprehenderit est quidem modi eum repellat cumque et dolor rerum. Est fugit explicabo qui dolor optio ut nobis nihil eum quia facere et nihil molestiae ut exercitationem tenetur! Qui quis nobis est maxime suscipit cum rerum quasi ut repellendus consequatur aut officia incidunt est blanditiis voluptatibus non ratione culpa!
+        Le bouton de gestion de couche, lorsqu'il est cliqué, permet de sélectionner les couches à afficher.<br>
+        &emsp;- Hydrography : <br>
+        &emsp;- Soundings : <br>
+        &emsp;- Dangers : <br>
+        &emsp;- Restrictions : <br>
+        &emsp;- Topography : <br>
+        &emsp;- Aids to navigation : <br>
+        &emsp;- Metadata : <br><br>
       </p>
     </div>
 
