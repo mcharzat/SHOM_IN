@@ -5,7 +5,7 @@
     </button>
     <div v-if="moveSidePanel" class="historySidepanelOpen">
       <div>
-        <h1>Requêtes</h1>
+        <h1 class="title">Requêtes</h1>
         <QueriesHistory v-for="(query, i) in queries" 
           :nameQuery="query.name"
           :key="i"
@@ -16,7 +16,10 @@
           ></QueriesHistory>
       </div>
       <div class="buttonsManage">
-        <button @click="reset">Supprimer tout</button>
+        <button class="reset" @click="reset">
+          <img src="../assets/x.png" height ="16" width="16"/>
+          <div class="resetText">Tout supprimer</div>
+        </button>
       </div>
     </div>
   </div>
@@ -162,6 +165,10 @@ export default {
   z-index: 1000;
 }
 
+.title {
+    margin-bottom: 10px;
+}
+
 .buttonsManage {
   display: flex;
   flex-direction: row;
@@ -170,5 +177,22 @@ export default {
 
   margin-top: 15px;
   max-width: 200px;
+
+}
+
+.buttonsManage .reset {
+  background-color: #f44336;
+  color: white;
+  font-size: 0.8em;
+  padding: 8px 22px 6px 22px;
+  border: 0px;
+  border-radius: 4px;
+
+  display: flex;
+  justify-content: space-between;
+}
+
+.resetText {
+  padding-left: 5px;
 }
 </style>

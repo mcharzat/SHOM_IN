@@ -98,7 +98,6 @@ export default {
       this.queryToRemove = name;
     },
     conveyReset() {
-      this.resultDisplay = [];
       this.resetSignal = Date.now();
     },
   },

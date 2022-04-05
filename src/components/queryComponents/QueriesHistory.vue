@@ -1,7 +1,6 @@
 <template>
   <div class="myQuery">
-    <input type="checkbox" v-model="displayedMap">
-    <div class="name">
+    <div :class="{name: true, selected: displayedMap}" @click="displayedMap = !displayedMap">
       <div v-if="stateNameEdition" @dblclick="editionMode">
         {{ nameQuery }}
       </div>
@@ -12,8 +11,12 @@
       </div>
     </div>
     <div class="buttons">
-      <button @click="displayResult">Afficher les résultats</button>
-      <button @click="removeQuery">x</button>
+      <button @click="displayResult">
+        <img src="../../assets/results.png" height ="25" width="25"/>
+      </button>
+      <button @click="removeQuery">
+        <img src="../../assets/trash.png" height ="25" width="25"/>
+      </button>
     </div>
   </div>
 </template>
@@ -87,6 +90,23 @@ export default {
 .name {
     display: flex;
     align-items: center;
+    justify-content: center;
+
+    width: 75%;
+    height: 35px;
+}
+
+.name:hover{
+    border: 2px #076e8c solid;
+    border-radius: 4px;
+}
+
+.selected {
+    border: 2px;
+    border-radius: 4px;
+    background-color: #076e8c;
+    box-shadow: 0 0 5px rgba(0,0,0,0.19), 0 0 5px rgba(0,0,0,0.19);
+    color: white;
 }
 
 .name input{
@@ -98,5 +118,10 @@ export default {
     min-width: 35px;
     min-height: 35px;
     border-radius: 4px;
+
+    border: 0px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.19), 0 0 5px rgba(0,0,0,0.19);
+
+    background-color: white;
 }
 </style>
