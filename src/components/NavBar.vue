@@ -57,7 +57,7 @@ export default {
         showCloseButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        width: 800,
+        width: 1200,
         html: '<div id="modal"></div>'
       })
       doc.mount("#modal");
