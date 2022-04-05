@@ -60,7 +60,7 @@ export default {
       resultDisplay: [],
       bbox: [],
       bboxState: "",
-      pageOuvrage: "",
+      pageOuvrage: [],
       queryToRemove: {},
       resetSignal: 0,
     }
