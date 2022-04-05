@@ -79,17 +79,31 @@ export default {
         aton: 0,
         meta: 0
       },
-      dataEntity: {},
+      categoriesNames: {
+        amer: "Amers",
+        domaineMaritime: "Domaine maritime",
+        phenomenon: "Phénomènes naturels",
+        default: "Entités"
+      },
+      categoriesUrls: {
+        amer: [
+        "http://data.shom.fr/def/navigation_cotiere#Amer", 
+        "http://data.shom.fr/def/navigation_cotiere#AideALaNavigation"
+      ],
+        domaineMaritime: [
+        "http://data.shom.fr/def/navigation_cotiere#ZoneDuDomaineMaritime"],
+        phenomenon: [
+        "http://data.shom.fr/def/navigation_cotiere#PhenomeneMeteorologiqueOuOceanographique"],
+        default: []
+      },
+      categories: {},
+      dataEntity: [],
       userLocation: {},
       onMap: false,
       selectionArea: "",
       layerManager : L.control.layers(),
       layersManaged : L.layerGroup(),
       layerResearchedElements: L.featureGroup(),
-      layerDefaultElements: L.featureGroup(),
-      layerAmerElements: L.featureGroup(),
-      layerMaritimeElements: L.featureGroup(),
-      layerPhenomenonElements: L.featureGroup(),
       layerByQuery: [],
     }
   },
@@ -97,6 +111,7 @@ export default {
     // Leaflet
     const map = this.setupMap();
     this.setupControls(map);
+    this.setupCategories();
 
     this.setupListeners(map);
     this.setupWatchers(map);
@@ -148,6 +163,16 @@ export default {
           this.tryDict[layerName] = this.layersManaged.getLayerId(layer);
         }
       });
+    },
+    setupCategories() {
+      Object.keys(this.categoriesNames).forEach(category => {
+        const buildCategory = {
+          label: this.categoriesNames[category],
+          urls: this.categoriesUrls[category],
+          layer: L.featureGroup()
+        }
+        this.categories[category] = buildCategory;
+      })
     },
     setupListeners(map) {
       //Connexion à la fonction au déplacement de la souris
@@ -213,21 +238,18 @@ export default {
       });
     },
     setupResults (map) {
-      this.layerResearchedElements.addLayer(this.layerDefaultElements);
-      this.layerResearchedElements.addLayer(this.layerAmerElements);
-      this.layerResearchedElements.addLayer(this.layerMaritimeElements);
-      this.layerResearchedElements.addLayer(this.layerPhenomenonElements);
-
+      Object.keys(this.categories).forEach(category => {
+        this.layerResearchedElements.addLayer(this.categories[category].layer);
+      });
+      
       this.layerResearchedElements.addTo(map);
     },
     setupQueryLayers() {
-      this.layerByQuery.push({
-        name: "newQuery",
-        amer: L.featureGroup(),
-        maritime: L.featureGroup(),
-        phenomenon: L.featureGroup(),
-        default: L.featureGroup(),
+      const newQuery = { name: "newQuery" };
+      Object.keys(this.categories).forEach(category => {
+        newQuery[category] = L.featureGroup();
       });
+      this.layerByQuery.push(newQuery);
     },
     setupProj4() {
       proj4.defs([
@@ -439,39 +461,26 @@ export default {
       })
     },
     determineCategory(categories) {
-      const category = {};
+      const selectedCategory = {
+        title: "default",
+        ladel: this.categories.default.label,
+        globalLayer: this.categories.default.layer,
+        layer: this.layerByQuery[this.lastQuery].default
+      };
 
-      const amer = [
-        "http://data.shom.fr/def/navigation_cotiere#Amer", 
-        "http://data.shom.fr/def/navigation_cotiere#AideALaNavigation"
-      ];
-      const domaineMaritime = [
-        "http://data.shom.fr/def/navigation_cotiere#ZoneDuDomaineMaritime"];
-      const phenomenon = [
-        "http://data.shom.fr/def/navigation_cotiere#PhenomeneMeteorologiqueOuOceanographique"]
-      
-      if (categories.includes(amer[0]) || categories.includes(amer[1])) {
-        category["title"] = "amer";
-        category["label"] = "Amers";
-        category['globalLayer'] = this.layerAmerElements;
-        category['layer'] = this.layerByQuery[this.lastQuery].amer;
-      } else if (categories.includes(domaineMaritime[0])) {
-        category["title"] = "domaineMaritime";
-        category["label"] = "Domaine Maritime";
-        category['globalLayer'] = this.layerMaritimeElements;
-        category['layer'] = this.layerByQuery[this.lastQuery].maritime;
-      } else if (categories.includes(phenomenon[0])) {
-        category["title"] = "phenomenon";
-        category["label"] = "Phénomènes naturels";
-        category['globalLayer'] = this.layerPhenomenonElements;
-        category['layer'] = this.layerByQuery[this.lastQuery].phenomenon;
-      } else {
-        category["title"] = "default";
-        category["label"] = "Entités";
-        category['globalLayer'] = this.layerDefaultElements;
-        category['layer'] = this.layerByQuery[this.lastQuery].default;
-      }
-      return category;
+      Object.keys(this.categories).forEach(category => {
+        const categoryData = this.categories[category];
+        for (const url of categoryData.urls) {
+          if (categories.includes(url)) {
+            selectedCategory["title"] = category;
+            selectedCategory["label"] = categoryData.label;
+            selectedCategory['globalLayer'] = categoryData.layer;
+            selectedCategory['layer'] = this.layerByQuery[this.lastQuery][category];
+            break;
+          }
+        }
+      });
+      return selectedCategory;
     },
     checkFitBounds(map) {
       this.layerResearchedElements.eachLayer((layer) => {
