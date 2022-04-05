@@ -1,16 +1,20 @@
 <template>
   <div class="myQuery">
-      <input type="checkbox" v-model="displayedMap">
-      <div v-if="stateNameEdition" class="name" @dblclick="editionMode">
-          <p> {{ nameQuery }} </p>
+    <input type="checkbox" v-model="displayedMap">
+    <div class="name">
+      <div v-if="stateNameEdition" @dblclick="editionMode">
+        {{ nameQuery }}
       </div>
       <div v-else>
-          <input type="text" v-model="newName" ref="rename"
+        <input type="text" v-model="newName" ref="rename"
           @keypress.enter="submitRename" @keydown.esc="cancelRename"
           @focusout="cancelRename">
       </div>
-      <button class="buttons" @click="displayResult">Afficher les résultats</button>
-      <button class="buttons" @click="removeQuery">x</button>
+    </div>
+    <div class="buttons">
+      <button @click="displayResult">Afficher les résultats</button>
+      <button @click="removeQuery">x</button>
+    </div>
   </div>
 </template>
 
@@ -82,18 +86,17 @@ export default {
 
 .name {
     display: flex;
-    align-content: center;
+    align-items: center;
 }
 
-.name p{
-    display: flex;
-    align-self: center;
+.name input{
+    max-width: 200px;
 }
 
-.buttons {
+.buttons button{
+    margin-left: 5px;
     min-width: 35px;
     min-height: 35px;
-
-    border-radius: 5px;
+    border-radius: 4px;
 }
 </style>

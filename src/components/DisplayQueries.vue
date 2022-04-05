@@ -4,15 +4,20 @@
       <img src="../assets/results.png" height ="35" width="35"/>
     </button>
     <div v-if="moveSidePanel" class="historySidepanelOpen">
-      <h1>Requêtes</h1>
-      <QueriesHistory v-for="(query, i) in queries" 
-        :nameQuery="query.name"
-        :key="i"
-        @renameQuery="remaneAQuery($event, i)"
-        @displayQueryMap="handleStateDisplay"
-        @displayQueryResult="refreshDisplayResult(i)"
-        @removeQuery="removeAQuery(i)"
-        ></QueriesHistory>
+      <div>
+        <h1>Requêtes</h1>
+        <QueriesHistory v-for="(query, i) in queries" 
+          :nameQuery="query.name"
+          :key="i"
+          @renameQuery="remaneAQuery($event, i)"
+          @displayQueryMap="handleStateDisplay"
+          @displayQueryResult="refreshDisplayResult(i)"
+          @removeQuery="removeAQuery(i)"
+          ></QueriesHistory>
+      </div>
+      <div class="buttonsManage">
+        <button @click="reset">Supprimer tout</button>
+      </div>
     </div>
   </div>
 </template>
@@ -27,7 +32,8 @@ export default {
         'nameUpdated',
         'stateDisplayQuery',
         'refreshDisplayResult',
-        'removeQuery'
+        'removeQuery',
+        'resetQueries'
     ],
     components : {
         QueriesHistory
@@ -109,6 +115,10 @@ export default {
             this.$emit('removeQuery', data);
             this.queries.splice(index, 1);
         },
+        reset() {
+            this.$emit('resetQueries');
+            this.queries = [];
+        },
     },
 }
 </script>
@@ -136,6 +146,11 @@ export default {
 
 .historySidepanelOpen {
   position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-content: center;
+
   background-color: rgba(255, 255, 255, 83%);
   padding-top: 15px;
   left: 5px;
@@ -145,5 +160,15 @@ export default {
   top : 100px;
   overflow: scroll;
   z-index: 1000;
+}
+
+.buttonsManage {
+  display: flex;
+  flex-direction: row;
+  justify-self: center;
+  align-self: center;
+
+  margin-top: 15px;
+  max-width: 200px;
 }
 </style>

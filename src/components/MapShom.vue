@@ -40,6 +40,10 @@ export default {
       type: Object,
       default: () => {}
     },
+    demandReset:  {
+      type: Number,
+      default: 0
+    },
   },
   data() {
     return {
@@ -169,7 +173,12 @@ export default {
 
         this.handleDisplayQuery(index, false, map);
         this.layerByQuery = this.RemoveElementFromArray(this.layerByQuery, index);
-      })
+      });
+
+      this.$watch('demandReset', () => {
+        this.clearResearchLayer();
+        this.layerByQuery = [];
+      });
     },
     setupSelectArea(map) {
       const drawnItems = L.featureGroup().addTo(map);
@@ -219,10 +228,6 @@ export default {
         phenomenon: L.featureGroup(),
         default: L.featureGroup(),
       });
-      this.layerAmerElements.addLayer(this.layerByQuery[this.lastQuery].amer)
-      this.layerMaritimeElements.addLayer(this.layerByQuery[this.lastQuery].maritime)
-      this.layerPhenomenonElements.addLayer(this.layerByQuery[this.lastQuery].phenomenon)
-      this.layerDefaultElements.addLayer(this.layerByQuery[this.lastQuery].default)
     },
     setupProj4() {
       proj4.defs([
@@ -362,22 +367,19 @@ export default {
       const marker = L.marker(coord, {icon: icon});
 
       this.createPopup(marker, element);
-      layers.layer.addLayer(marker);
-      this.addResearchToLayerControl(layers.globalLayer, layers.label, map);
+      this.handleLayers(layers, marker, map);
     },
     displayLineElement(coords, element, layers, map) {
       const line = L.polyline(coords);
 
       this.createPopup(line, element);
-      layers.layer.addLayer(line);
-      this.addResearchToLayerControl(layers.globalLayer, layers.label, map);
+      this.handleLayers(layers, line, map);
     },
     displayPolygonElement(coords, element, layers, map) {
       const polygone = L.polygon(coords);
 
       this.createPopup(polygone, element);
-      layers.layer.addLayer(polygone);
-      this.addResearchToLayerControl(layers.globalLayer, layers.label, map);
+      this.handleLayers(layers, polygone, map);
     },
     createPopup(symbol, element) {
       symbol.on("click", async () => {
@@ -387,6 +389,16 @@ export default {
         symbol.bindPopup(this.$refs["entity"].$el.innerHTML);
         symbol.openPopup();
       })
+    },
+    handleLayers(layers, symbol, map){
+      layers.layer.addLayer(symbol);
+      this.addGlobalToQuery(layers.globalLayer, layers.layer);
+      this.addResearchToLayerControl(layers.globalLayer, layers.label, map);
+    },
+    addGlobalToQuery(globalLayer, queryLayer) {
+      if (!globalLayer.hasLayer(queryLayer)) {
+        globalLayer.addLayer(queryLayer);
+      }
     },
     addResearchToLayerControl(layer, name, map) {
       if (!this.layersManaged.hasLayer(layer)) {

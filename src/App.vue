@@ -6,6 +6,7 @@
       :updateNameQuery="rename"
       :stateDisplayQuery="stateDisplay"
       :removeTheQuery="queryToRemove"
+      :demandReset="resetSignal"
       @bboxSelectionArea="conveyBbox"
       @suppressBboxSelectionArea="conveyStateBbox"
     />
@@ -27,6 +28,7 @@
       @stateDisplayQuery="conveyStateDisplay"
       @refreshDisplayResult="conveyRefreshResult"
       @removeQuery="conveyRemoveQuery"
+      @resetQueries="conveyReset"
     />
     <SPARQLResearch 
       :widthResult="stateResult || stateHistory"
@@ -60,6 +62,7 @@ export default {
       bboxState: "",
       pageOuvrage: "",
       queryToRemove: {},
+      resetSignal: 0,
     }
   },
   methods: {
@@ -93,6 +96,10 @@ export default {
     },
     conveyRemoveQuery(name) {
       this.queryToRemove = name;
+    },
+    conveyReset() {
+      this.resultDisplay = [];
+      this.resetSignal = Date.now();
     },
   },
   components: {
