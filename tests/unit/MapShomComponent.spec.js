@@ -148,11 +148,9 @@ describe("MapShom.vue", () => {
 
         const expectedDefault = {
             title: "default",
-            label: "Entité"
         };
         const expectedAmer = {
             title: "amer",
-            label: "Amers"
         };
 
         wrapper.vm.setupQueryLayers();
@@ -160,8 +158,6 @@ describe("MapShom.vue", () => {
         const resultAmer = wrapper.vm.determineCategory(categoriesAmer);
 
         expect(resultDefault.title).toMatch(expectedDefault.title);
-        expect(resultDefault.label).toMatch(expectedDefault.label);
         expect(resultAmer.title).toMatch(expectedAmer.title);
-        expect(resultAmer.label).toMatch(expectedAmer.label);
     });
 });
