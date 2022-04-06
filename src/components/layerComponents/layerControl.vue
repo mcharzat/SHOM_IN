@@ -48,7 +48,7 @@ export default {
     align-items: center;
     justify-content: center;
 
-    width: 97%;
+    width: 96%;
     height: 35px;
     margin: 2px 5px 2px 15px;
 }

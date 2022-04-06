@@ -5,33 +5,41 @@
     </button>
     <div v-if="moveSidePanel" class="historySidepanelOpen">
       <div class="manager">
-        <h2 class="title">Gestion des couches</h2>
-        <LayerControl v-for="type in Object.keys(configDisplayLayer)"
-          :key="type" 
-          :config="configDisplayLayer[type]"
-          :labels="layersLabel"
-          @updateDisplay="updateLayerConfig($event, type)"
-        ></LayerControl>
+        <h2 class="title" @dblclick="displayManager = !displayManager">
+          Gestion des couches
+        </h2>
+        <div v-if="displayManager">
+          <LayerControl v-for="type in Object.keys(configDisplayLayer)"
+            :key="type" 
+            :config="configDisplayLayer[type]"
+            :labels="layersLabel"
+            @updateDisplay="updateLayerConfig($event, type)"
+          ></LayerControl>
+        </div>
       </div>
       <div class="history">
-        <div>
-          <h2 class="title">Requêtes</h2>
-          <QueriesHistory v-for="(query, i) in queries" 
-            :nameQuery="query.name"
-            :displayed="configDisplayQueries[i].state"
-            :key="i"
-            @renameQuery="remaneAQuery($event, i)"
-            @displayQueryMap="updateQueryConfig(i)"
-            @displayQueryResult="refreshDisplayResult(i)"
-            @removeQuery="removeAQuery(i)"
-          ></QueriesHistory>
+        <h2 class="title" @dblclick="displayHistory = !displayHistory">
+          Requêtes
+        </h2>
+        <div class="historyContent" v-if="displayHistory">
+          <div>
+            <QueriesHistory v-for="(query, i) in queries" 
+              :nameQuery="query.name"
+              :displayed="configDisplayQueries[i].state"
+              :key="i"
+              @renameQuery="remaneAQuery($event, i)"
+              @displayQueryMap="updateQueryConfig(i)"
+              @displayQueryResult="refreshDisplayResult(i)"
+              @removeQuery="removeAQuery(i)"
+            ></QueriesHistory>
+          </div>
+          <div class="buttonsManage">
+            <button class="reset" @click="reset">
+            <img src="../assets/x.png" height ="16" width="16"/>
+            <div class="resetText">Tout supprimer</div>
+            </button>
+          </div> 
         </div>
-        <div class="buttonsManage">
-          <button class="reset" @click="reset">
-          <img src="../assets/x.png" height ="16" width="16"/>
-          <div class="resetText">Tout supprimer</div>
-          </button>
-        </div> 
       </div>
     </div>
   </div>
@@ -83,6 +91,8 @@ export default {
             },
             configDisplayQueries: [],
             moveSidePanel: false,
+            displayManager: true,
+            displayHistory: true,
         }
     },
     watch: {
@@ -252,25 +262,27 @@ export default {
   position: absolute;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   align-content: center;
+  user-select: none;
 
   background-color: rgba(255, 255, 255, 83%);
   padding-top: 15px;
   left: 5px;
   width: 33%;
   height: 100%;
-  max-height: calc(100% - 160px);
+  max-height: calc(100% - 125px);
   top : 100px;
   overflow: scroll;
   z-index: 1000;
 }
 
-.history {
+.history, .historyContent {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-content: center;
+
+  margin-top: 7px;
 }
 
 .title {
