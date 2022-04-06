@@ -282,6 +282,8 @@ export default {
   justify-content: space-between;
   align-content: center;
 
+  height: 100%;
+
   margin-top: 7px;
 }
 
