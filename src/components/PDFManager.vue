@@ -51,11 +51,11 @@ export default {
   watch: {
     pageOuvrage: function () {
       this.openMenu = false;
+      this.$emit('openMenuButton', this.openMenu);
       this.savePageOuvrage = this.pageOuvrage;
     },
     menuOpen: function () {
       this.openMenu = true;
-      //this.$emit('openMenuButton', this.openMenu);
     }
   },
   methods: {
@@ -68,11 +68,9 @@ export default {
 
       if (name.length == 2) this.savePageOuvrage = name;
       else this.savePageOuvrage = [name, "1"];
-/*
-      const data = {
-        time: Date.now()
-      }*/
+
       this.$emit('openMenuButton', this.openMenu);
+
     }
   },
 }

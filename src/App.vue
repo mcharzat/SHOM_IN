@@ -25,6 +25,7 @@
     />
     <BackMenu 
       :widthPdf="widthPdf"
+      :buttonMenuState="buttonMenu"
       @openMenu="backToMenu"
     />
   </div>

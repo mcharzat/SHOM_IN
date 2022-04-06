@@ -1,5 +1,5 @@
 <template>
-    <button :hidden="isPush" :class="{backMenu:true, backMenuOpen: moveButton}" @click="backToMenu">
+    <button v-if="buttonState" :class="{backMenu:true, backMenuOpen: moveButton}" @click="backToMenu">
       <img src="../assets/backMenu.png" height ="34" width="34"/>
     </button>
 </template>
@@ -14,10 +14,20 @@ export default {
       type: Boolean,
       default: false
     },
+    buttonMenuState:  {
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {
-      isPush: false
+      isPush: false,
+      buttonState: false
+    }
+  },
+  watch: {
+    buttonMenuState: function () {
+      this.buttonState = true;
     }
   },
   computed : {
@@ -28,6 +38,7 @@ export default {
   methods: {
     backToMenu() {
       this.isPush = !this.isPush;
+      this.buttonState = false;
       this.$emit('openMenu', this.isPush);
     }
   },
