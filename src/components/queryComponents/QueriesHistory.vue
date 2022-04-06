@@ -1,6 +1,6 @@
 <template>
   <div class="myQuery">
-    <div :class="{name: true, selected: displayedMap}" @click="displayedMap = !displayedMap">
+    <div :class="{name: true, selected: displayed}" @click="updateDisplay">
       <div v-if="stateNameEdition" @dblclick="editionMode">
         {{ nameQuery }}
       </div>
@@ -27,20 +27,18 @@ export default {
     emits: ['renameQuery', 'displayQueryMap', 'displayQueryResult', 'removeQuery'],
     props: {
         nameQuery:  {
-        type: String,
-        default: "Requête"
+            type: String,
+            default: "Requête"
+        },
+        displayed:  {
+            type: Boolean,
+            default: true
         },
     },
     data() {
         return {
-            displayedMap: true,
             stateNameEdition: true,
             newName: "",
-        }
-    },
-    watch: {
-        displayedMap: function () {
-            this.displayMap();
         }
     },
     methods: {
@@ -58,12 +56,8 @@ export default {
         cancelRename() {
             this.stateNameEdition = true;
         },
-        displayMap() {
-            const data = {
-                name: this.nameQuery,
-                state: this.displayedMap
-            }
-            this.$emit('displayQueryMap', data);
+        updateDisplay() {
+            this.$emit("displayQueryMap");
         },
         displayResult() {
             this.$emit('displayQueryResult');
@@ -91,6 +85,7 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
+    user-select: none;
 
     width: 75%;
     height: 35px;

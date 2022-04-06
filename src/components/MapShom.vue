@@ -19,7 +19,12 @@ import EntityResult from "./queryComponents/EntityResult.vue";
 
 export default {
   name: 'MapShom',
-  emits: ['bboxSelectionArea', 'suppressBboxSelectionArea'],
+  emits: [
+    'bboxSelectionArea',
+    'suppressBboxSelectionArea',
+    'layersToManage',
+    'layersLabel'
+  ],
   components: {
     EntityResult,
   },
@@ -32,7 +37,7 @@ export default {
       type: Object,
       default: () => {}
     },
-    stateDisplayQuery:  {
+    stateDisplay:  {
       type: Object,
       default: () => {}
     },
@@ -70,15 +75,13 @@ export default {
         "Aids To Navigation",
         "Metadata"
       ],
-      tryDict: {
-        hydrography: 0,
-        soundings: 0,
-        dangers: 0,
-        restrictions: 0,
-        topo: 0,
-        aton: 0,
-        meta: 0
+      layerIndexes: {},
+      layerToManaged: {
+        content: "categories",
+        data: [],
+        extra: [],
       },
+      layerLabels: {},
       categoriesNames: {
         amer: "Amers",
         domaineMaritime: "Domaine maritime",
@@ -119,6 +122,8 @@ export default {
     this.setupSelectArea(map);
     this.setupResults(map);
     this.setupProj4();
+
+    this.setupEmits();
   },
   methods: {
     setupMap() {
@@ -143,9 +148,6 @@ export default {
       this.setupLayerControls(map);
     },
     setupLayerControls(map) {
-      this.layerManager.setPosition("bottomleft");
-      this.layerManager.addTo(map);
-
       this.wmsLayers.forEach((layerName, i) => {
         const layer = L.tileLayer.wms(
           this.getUrl,
@@ -158,20 +160,20 @@ export default {
           layer.addTo(map);
         }
         if (i > 0) {
-          this.layerManager.addOverlay(layer, this.wmsNames[i]);
           this.layersManaged.addLayer(layer);
-          this.tryDict[layerName] = this.layersManaged.getLayerId(layer);
+          this.layerIndexes[layerName] = this.layersManaged.getLayerId(layer);
+          this.layerLabels[layerName] = this.wmsNames[i];
         }
       });
     },
     setupCategories() {
       Object.keys(this.categoriesNames).forEach(category => {
         const buildCategory = {
-          label: this.categoriesNames[category],
           urls: this.categoriesUrls[category],
           layer: L.featureGroup()
         }
         this.categories[category] = buildCategory;
+        this.layerLabels[category] = this.categoriesNames[category];
       })
     },
     setupListeners(map) {
@@ -183,21 +185,24 @@ export default {
         this.displayResult(map);
       });
 
+      this.$watch('layerToManaged', () => {
+        this.$emit("layersToManage", this.layerToManaged);
+      }, {deep: true});
+
       this.$watch('updateNameQuery', names => {
         const index = this.selectQueryByName(names.old);
         this.layerByQuery[index].name = names.new;
       });
 
-      this.$watch('stateDisplayQuery', config => {
-        const index = this.selectQueryByName(config.name);
-        this.handleDisplayQuery(index, config.state, map);
-      });
+      this.$watch('stateDisplay', config => {
+        this.handleDisplay(config, map);
+      }, {deep: true});
 
       this.$watch('removeTheQuery', name => {
         const index = this.selectQueryByName(name.name);
 
-        this.handleDisplayQuery(index, false, map);
-        this.layerByQuery = this.RemoveElementFromArray(this.layerByQuery, index);
+        this.layerByQuery = this.removeElementFromArray(this.layerByQuery, index);
+        this.cleanCategoriesLayers();
       });
 
       this.$watch('demandReset', () => {
@@ -207,6 +212,8 @@ export default {
     },
     setupSelectArea(map) {
       const drawnItems = L.featureGroup().addTo(map);
+      this.layersManaged.addLayer(drawnItems);
+      this.layerIndexes["selection"] = this.layersManaged.getLayerId(drawnItems);
 
       L.drawLocal.draw.toolbar.buttons.rectangle = 'Select an area';
       map.addControl(new L.Control.Draw({
@@ -222,7 +229,9 @@ export default {
 
       map.on(L.Draw.Event.DRAWSTART, () => {
         drawnItems.clearLayers();
-        this.layerManager.removeLayer(drawnItems);
+        const index = this.layerToManaged.extra.indexOf("selection");
+        this.layerToManaged.extra = this.removeElementFromArray(this.layerToManaged.extra, index);
+        console.log(this.layerToManaged);
         this.$emit("suppressBboxSelectionArea", this.selectionArea);
       });
 
@@ -234,8 +243,9 @@ export default {
         const coord2LAMB = this.convertWGSToLamb([parseFloat(coordWGS[2]), parseFloat(coordWGS[3])]);
         this.$emit("bboxSelectionArea", coord1LAMB.concat(coord2LAMB));
         drawnItems.addLayer(layer).addTo(map);
-        this.layerManager.addOverlay(drawnItems, "Selection");
+        this.layerToManaged.extra.push("selection");
       });
+      this.layerLabels["selection"] = "Sélection";
     },
     setupResults (map) {
       Object.keys(this.categories).forEach(category => {
@@ -261,6 +271,13 @@ export default {
         '+title=LAMB 93 +proj=lcc +lat_1=49 +lat_2=44 +lat_0=46.5 +lon_0=3 +x_0=700000 +y_0=6600000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs']
       ]);
     },
+    setupEmits() {
+      this.$emit("layersToManage", {
+        content: "base",
+        data: Object.keys(this.layerIndexes),
+      });
+      this.$emit("layersLabel", this.layerLabels);
+    },
     displayResult(map) { 
       this.setupQueryLayers();
       this.queryResultMap.forEach(element => {
@@ -276,6 +293,7 @@ export default {
         }
       })
       this.checkFitBounds(map);
+      //this.$emit("layersToManage", this.layerToManaged);
     },
     displayResultGeo(element, map) {
       const category = this.determineCategory(element.category.value);
@@ -415,7 +433,7 @@ export default {
     handleLayers(layers, symbol, map){
       layers.layer.addLayer(symbol);
       this.addQueryToGlobal(layers.globalLayer, layers.layer);
-      this.addResearchToLayerControl(layers.globalLayer, layers.label, map);
+      this.addResearchToLayerControl(layers.globalLayer, layers.title, map);
     },
     addQueryToGlobal(globalLayer, queryLayer) {
       if (!globalLayer.hasLayer(queryLayer)) {
@@ -426,7 +444,7 @@ export default {
       if (!this.layersManaged.hasLayer(layer)) {
         layer.addTo(map);
         this.layersManaged.addLayer(layer);
-        this.layerManager.addOverlay(layer, name);
+        this.layerToManaged.data.push(name);
       }
     },
     clearResearchLayer() {
@@ -434,10 +452,22 @@ export default {
         layer.clearLayers();
         if (this.layersManaged.hasLayer(layer)) {
           this.layersManaged.removeLayer(layer);
-          this.layerManager.removeLayer(layer);
+        }
+      });
+      Object.keys(this.categoriesNames).forEach(category => {
+        if (this.layerToManaged.data.includes(category)) {
+          const index = this.layerToManaged.data.indexOf(category);
+          this.layerToManaged.data = this.removeElementFromArray(this.layerToManaged.data, index);
+        }
+      });
+      this.queries = [];
+    },
+    cleanCategoriesLayers() {
+      this.layerToManaged.data.forEach( (category, index) => {
+        if (this.categories[category].layer.getLayers().length == 0) {
+          this.layerToManaged.data = this.removeElementFromArray(this.layerToManaged.data, index);
         }
       })
-      this.queries = [];
     },
     selectQueryByName(name) {
       let index = null;
@@ -448,22 +478,46 @@ export default {
       });
       return index;
     },
-    RemoveElementFromArray(array, index) {
+    removeElementFromArray(array, index) {
       array.splice(index, 1);
       return array;
     },
-    handleDisplayQuery(index, state, map) {
-      const query = this.layerByQuery[index];
-      Object.keys(query).forEach(layer => {
-        if (layer != "name") {
-          state ? query[layer].addTo(map) : query[layer].remove();
-        }
+    handleDisplay(config, map) {
+      Object.keys(config.layers.baseLayers).forEach( layer => {
+        this.handleDisplayBaseLayer(layer, config.layers.baseLayers[layer], map);
       })
+      Object.keys(config.layers.categoryLayers).forEach( category => {
+        this.handleDisplayCategoryLayer(
+          category,
+          config.layers.categoryLayers[category], 
+          config.queries,
+          map)
+      })
+    },
+    handleDisplayBaseLayer(layerAlias, state, map) {
+      const id = this.layerIndexes[layerAlias];
+      const layer = this.layersManaged.getLayer(id);
+      state ? layer.addTo(map) : layer.remove();
+    },
+    handleDisplayCategoryLayer(category, state, queries, map) {
+      if (state) {
+        this.categories[category].layer.addTo(map);
+        queries.forEach( query => {
+          this.handleDisplayQuery(query.name, category, query.state);
+        })
+      } else {
+        this.categories[category].layer.remove();
+      }
+    },
+    handleDisplayQuery(queryName, category, state) {
+      const index = this.selectQueryByName(queryName);
+      const query = this.layerByQuery[index];
+      state ? query[category].addTo(this.categories[category].layer) 
+            : this.categories[category].layer.removeLayer(query[category]);
     },
     determineCategory(categories) {
       const selectedCategory = {
         title: "default",
-        label: this.categories.default.label,
         globalLayer: this.categories.default.layer,
         layer: this.layerByQuery[this.lastQuery].default
       };
@@ -473,7 +527,6 @@ export default {
         for (const url of categoryData.urls) {
           if (categories.includes(url)) {
             selectedCategory["title"] = category;
-            selectedCategory["label"] = categoryData.label;
             selectedCategory['globalLayer'] = categoryData.layer;
             selectedCategory['layer'] = this.layerByQuery[this.lastQuery][category];
             break;
