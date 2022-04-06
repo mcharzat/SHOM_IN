@@ -9,20 +9,20 @@ describe("PDFManager.vue", () => {
 
         expect(button.attributes("class")).not.toContain("pdfManagerOpen");
         expect(panel.exists()).toBeFalsy();
-        expect(wrapper.vm.infSidePanel).toBeFalsy();
+        expect(wrapper.vm.moveSidePanel).toBeFalsy();
 
         await button.trigger('click');
 
         panel = wrapper.find('.pdfSidepanelOpen');
         expect(button.attributes("class")).toContain("pdfManagerOpen");
         expect(panel.exists()).toBeTruthy();
-        expect(wrapper.vm.infSidePanel).toBeTruthy();
+        expect(wrapper.vm.moveSidePanel).toBeTruthy();
 
         await button.trigger('click');
 
         panel = wrapper.find('.pdfSidepanelOpen');
         expect(button.attributes("class")).not.toContain("pdfManagerOpen");
         expect(panel.exists()).toBeFalsy();
-        expect(wrapper.vm.infSidePanel).toBeFalsy();
+        expect(wrapper.vm.moveSidePanel).toBeFalsy();
     });
 });

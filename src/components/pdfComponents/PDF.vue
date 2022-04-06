@@ -12,22 +12,21 @@ export default {
     pageOuvrage:  {
       type: Array,
       default: () => []
-    }
+    },
   },
   data () {
     return {
-      name: 'C22', //change which pdf file loads
-      path: 'lib/pdfloader/web/viewer.html' 
+      path: 'lib/pdfloader/web/viewer.html'
     }
   },
   computed:{
     getFilePath() {
-      return this.path +'?file=' + this.changePage();
+      return this.path +'?file=./pdfFiles/' + this.changePage();
     }
   },
   methods: {
     changePage() {
-      return (this.pageOuvrage[0] ? this.pageOuvrage[0] : this.name) + ".pdf#page=" + this.pageOuvrage[1];
+      return this.pageOuvrage[0] + ".pdf#page=" + this.pageOuvrage[1];
     }
   }
 }

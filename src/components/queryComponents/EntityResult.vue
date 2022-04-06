@@ -32,7 +32,7 @@ export default {
       return !["uri", "bnode"].includes(this.values[field].type) && !["wkt", "category"].includes(field);
     },
     sendPageOuvrage() {
-      this.$emit("pageOuvrage",this.values["reference"].value[0].split(' page '));
+      this.$emit("pageOuvrage", this.values["reference"].value[0].split(' page '));
     }
   },
 }

@@ -10,6 +10,12 @@
       @bboxSelectionArea="conveyBbox"
       @suppressBboxSelectionArea="conveyStateBbox"
     />
+    <SPARQLResearch 
+      :widthResult="stateResult || stateHistory"
+      :bboxArea="bbox"
+      :bboxState="bboxState"
+      @sparnaResult="conveyResult"
+    />
     <DisplayResearch 
       :stateHistory="stateHistory"
       :queryResult="resultDisplay"
@@ -17,8 +23,16 @@
       @resultOpenState="updatedResultState"
       @pageOuvrage="conveyPageOuvrage"
     />
-    <PDFManager 
+    <PDFManager
+      :menuOpen="menuOpen"
       :pageOuvrage="pageOuvrage"
+      @pdfOpenState="updatedPdfState"
+      @openMenuButton="conveyOpenMenuButton"
+    />
+    <BackMenu 
+      :widthPdf="widthPdf"
+      :buttonMenuState="buttonMenu"
+      @openMenu="backToMenu"
     />
     <DisplayQueries
       :stateResult="stateResult"
@@ -30,12 +44,6 @@
       @removeQuery="conveyRemoveQuery"
       @resetQueries="conveyReset"
     />
-    <SPARQLResearch 
-      :widthResult="stateResult || stateHistory"
-      :bboxArea="bbox"
-      :bboxState="bboxState"
-      @sparnaResult="conveyResult"
-    />
   </div>
 </template>
 
@@ -46,11 +54,13 @@ import SPARQLResearch from './components/SPARQLResearch.vue'
 import DisplayResearch from './components/DisplayResearch.vue'
 import DisplayQueries from './components/DisplayQueries.vue'
 import PDFManager from './components/PDFManager.vue'
+import BackMenu from './components/BackMenu.vue'
 
 export default {
   name: 'App',
   data() {
     return {
+      widthPdf: false,
       demandRefresh: null,
       stateResult: false,
       stateHistory: false,
@@ -61,11 +71,19 @@ export default {
       bbox: [],
       bboxState: "",
       pageOuvrage: [],
+      menuOpen: false,
+      buttonMenu: false,
       queryToRemove: {},
-      resetSignal: 0,
+      resetSignal: 0
     }
   },
   methods: {
+    conveyOpenMenuButton() {
+      this.buttonMenu = !this.buttonMenu;
+    },
+    backToMenu() {
+      this.menuOpen = !this.menuOpen;
+    },
     updatedResultState: function(state) {
       this.stateResult = state;
     },
@@ -77,6 +95,9 @@ export default {
     },
     conveyStateDisplay(stateDisplay) {
       this.stateDisplay = stateDisplay;
+    },
+    updatedPdfState(width) {
+      this.widthPdf = width;
     },
     conveyResult (result) {
       this.result = this.resultDisplay = result;
@@ -106,8 +127,9 @@ export default {
     MapShom,
     SPARQLResearch,
     DisplayResearch,
-    DisplayQueries,
-    PDFManager
+    PDFManager,
+    BackMenu,
+    DisplayQueries
   }
 }
 </script>
