@@ -41,3 +41,10 @@ In the graphDB settings (of the software not the web interface) set:<br>
 Set the port to 7200
 
 Reload graphDB
+
+
+### Add or update PDF
+
+All pdfs are located in the following folder: public/lib/pdfloader/web/pdfFiles.
+
+This folder also contains a file named 'pdfFilesNames' with all names of pdf located in this folder. Don't forget to update them when you will add or update a pdf file.
