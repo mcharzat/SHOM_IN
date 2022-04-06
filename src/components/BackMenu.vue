@@ -1,5 +1,5 @@
 <template>
-    <button :class="{backMenu:true, backMenuOpen: moveButton}" @click="backToMenu">
+    <button :hidden="isPush" :class="{backMenu:true, backMenuOpen: moveButton}" @click="backToMenu">
       <img src="../assets/backMenu.png" height ="34" width="34"/>
     </button>
 </template>

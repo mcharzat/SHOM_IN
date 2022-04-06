@@ -3,22 +3,32 @@
       <img src="../assets/pdf.png" height ="34" width="34"/>
     </button>
     <div v-if="moveSidePanel" class="pdfSidepanelOpen">
-      <MenuPdf class="menuPdfContainer"
-        :menuOpen="menuOpen"
-        :pageOuvrage="pageOuvrage"
-        @openButtonMenu="conveyMenuButton"
+
+      <div v-if="openMenu" class="menu">
+        Ouvrages d'instructions nautiques
+        <ul class="pdfList">
+          <button class="pdfEntity" v-for="namePdf in allFiles" :key="namePdf" @click="clickPdf(namePdf)">
+            {{ namePdf }}
+          </button>
+        </ul>
+      </div>
+
+      <PDF v-if="!openMenu" class="pdfContainer"
+        :pageOuvrage="savePageOuvrage"
       />
+
     </div>
 </template>
 
 <script>
-import MenuPdf from './menuPdfComponents/MenuPdf.vue'
+import PDF from './pdfComponents/PDF.vue'
+import filesNames from '../../public/lib/pdfloader/web/pdfFiles/pdfFilesNames.json'
 
 export default {
   name: 'PDFManager',
   emits: ['pdfOpenState', 'openMenuButton'],
   components: {
-    MenuPdf,
+    PDF,
   },
   props: {
     menuOpen:  {
@@ -33,15 +43,36 @@ export default {
   data() {
     return {
       moveSidePanel: false,
+      allFiles: filesNames['filesNames'],
+      savePageOuvrage: [],
+      openMenu: true
+    }
+  },
+  watch: {
+    pageOuvrage: function () {
+      this.openMenu = false;
+      this.savePageOuvrage = this.pageOuvrage;
+    },
+    menuOpen: function () {
+      this.openMenu = true;
+      //this.$emit('openMenuButton', this.openMenu);
     }
   },
   methods: {
-    conveyMenuButton (state) {
-      this.$emit('openMenuButton', state);
-    },
     actionSidePanel() {
       this.moveSidePanel = !this.moveSidePanel;
       this.$emit('pdfOpenState', this.moveSidePanel);
+    },
+    clickPdf(name) {
+      this.openMenu = false;
+
+      if (name.length == 2) this.savePageOuvrage = name;
+      else this.savePageOuvrage = [name, "1"];
+/*
+      const data = {
+        time: Date.now()
+      }*/
+      this.$emit('openMenuButton', this.openMenu);
     }
   },
 }
@@ -84,7 +115,34 @@ export default {
   direction: rtl;
 }
 
-.menuPdfContainer {
+.menu {
+  padding-top: 40px;
+}
+
+.pdfList {
+  padding: 0px;
+  display: block;
+  justify-content: center;
+}
+
+.pdfEntity {
+  background-color: rgba(44, 62, 80, 0.8);
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  margin: 15px;
+  text-align: center;
+  width: 50%;
+
+  -webkit-transition-duration: 0.4s;
+  transition-duration: 0.4s;
+}
+
+.pdfEntity:hover {
+  box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+}
+
+.pdfContainer {
   height: 100%;
   width: 100%;
 }

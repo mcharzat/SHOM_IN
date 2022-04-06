@@ -25,8 +25,6 @@
     />
     <BackMenu 
       :widthPdf="widthPdf"
-      :buttonMenu="buttonMenu"
-      :hidden="!buttonMenuState || !backToMenu"
       @openMenu="backToMenu"
     />
   </div>
@@ -50,13 +48,8 @@ export default {
       bbox: [],
       bboxState: "",
       pageOuvrage: [],
-      menuOpen: true,
+      menuOpen: false,
       buttonMenu: false
-    }
-  },
-  computed: {
-    buttonMenuState() {
-      return this.buttonMenu;  
     }
   },
   methods: {

@@ -13,14 +13,10 @@ export default {
       type: Array,
       default: () => []
     },
-    name: {
-      type: String,
-      default: ""
-    }
   },
   data () {
     return {
-      path: 'lib/pdfloader/web/viewer.html' 
+      path: 'lib/pdfloader/web/viewer.html'
     }
   },
   computed:{
@@ -30,8 +26,7 @@ export default {
   },
   methods: {
     changePage() {
-      console.log(this.pageOuvrage);
-      return (this.pageOuvrage[0] ? this.pageOuvrage[0] : this.name) + ".pdf#page=" + this.pageOuvrage[1];
+      return this.pageOuvrage[0] + ".pdf#page=" + this.pageOuvrage[1];
     }
   }
 }

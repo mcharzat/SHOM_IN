@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import PDF from './menuPdfComponents/pdfComponents/PDF.vue'
+import PDF from './pdfComponents/PDF.vue'
 
 export default {
   name: 'SwalManager',
