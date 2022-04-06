@@ -1,13 +1,16 @@
 <template>
-    <button :class="{displayResearch: true, displayResearchOpen: moveSidePanel}" @click="actionSidePanel">
+  <div>
+    <button :class="{displayResearch: true, displayResearchOpen: moveSidePanel || stateHistory}"
+    @click="actionSidePanel">
       <img src="../assets/results.png" height ="37" width="37"/>
     </button>
     <div v-if="moveSidePanel" class="resultSidepanelOpen">
-      <h1>Results</h1>
-      <EntityResult v-for="(result, i) in queryResult" :values="result" :key="i" 
-      @pageOuvrage="conveyPageOuvrage">
+      <h1>Resultats</h1>
+      <EntityResult v-for="(result, i) in queryResult" :values="result" :key="i"
+        @pageOuvrage="conveyPageOuvrage">
       </EntityResult>
     </div>
+  </div>
 </template>
 
 <script>
@@ -20,32 +23,41 @@ export default {
     EntityResult,
   },
   props: {
+    stateHistory: {
+      type: Boolean,
+      default: false
+    },
     queryResult:  {
       type: Array,
       default: () => []
     },
+    refresh:  {
+      type: Number,
+      default: 0
+    },
   },
   data() {
     return {
-      infSidePanel: false,
+      moveSidePanel: false,
     }
   },
   watch: {
-    queryResult: function () {
-      this.infSidePanel = true;
+    refresh: function () {
+      this.moveSidePanel = true;
     },
-    infSidePanel: function () {
-      this.$emit('resultOpenState', this.infSidePanel);
-    }
-  },
-  computed : {
-    moveSidePanel() {
-      return this.infSidePanel;
+    queryResult: function () {
+      this.moveSidePanel = true;
+    },
+    moveSidePanel: function () {
+      this.$emit('resultOpenState', this.moveSidePanel);
+    },
+    stateHistory : function () {
+      this.moveSidePanel = this.stateHistory ? false : this.moveSidePanel;
     }
   },
   methods: {
     actionSidePanel() {
-      this.infSidePanel = !this.infSidePanel;
+      this.moveSidePanel = !this.moveSidePanel;
     },
     conveyPageOuvrage (pageOuvrage) {
       this.$emit('pageOuvrage', pageOuvrage);

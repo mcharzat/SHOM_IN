@@ -1,9 +1,11 @@
 <template>
+  <div class="divMap">
     <div class="map" @mouseout.prevent="removeCoord" ref="Shom_IN"></div>
     <div class="mouseTracker">
         <p>{{ coordinate }}</p>
     </div>
     <EntityResult :values="dataEntity" v-show="false" ref="entity"></EntityResult>
+  </div>
 </template>
 
 <script>
@@ -25,6 +27,22 @@ export default {
     queryResultMap:  {
       type: Array,
       default: () => []
+    },
+    updateNameQuery:  {
+      type: Object,
+      default: () => {}
+    },
+    stateDisplayQuery:  {
+      type: Object,
+      default: () => {}
+    },
+    removeTheQuery:  {
+      type: Object,
+      default: () => {}
+    },
+    demandReset:  {
+      type: Number,
+      default: 0
     },
   },
   data() {
@@ -61,33 +79,46 @@ export default {
         aton: 0,
         meta: 0
       },
-      dataEntity: {},
+      categoriesNames: {
+        amer: "Amers",
+        domaineMaritime: "Domaine maritime",
+        phenomenon: "Phénomènes naturels",
+        default: "Entités"
+      },
+      categoriesUrls: {
+        amer: [
+        "http://data.shom.fr/def/navigation_cotiere#Amer", 
+        "http://data.shom.fr/def/navigation_cotiere#AideALaNavigation"
+      ],
+        domaineMaritime: [
+        "http://data.shom.fr/def/navigation_cotiere#ZoneDuDomaineMaritime"],
+        phenomenon: [
+        "http://data.shom.fr/def/navigation_cotiere#PhenomeneMeteorologiqueOuOceanographique"],
+        default: []
+      },
+      categories: {},
+      dataEntity: [],
       userLocation: {},
       onMap: false,
       selectionArea: "",
       layerManager : L.control.layers(),
       layersManaged : L.layerGroup(),
       layerResearchedElements: L.featureGroup(),
-      layerDefaultElements: L.featureGroup(),
-      layerAmerElements: L.featureGroup(),
-      layerMaritimeElements: L.featureGroup(),
-      layerPhenomenonElements: L.featureGroup(),
+      layerByQuery: [],
     }
   },
   mounted() {
     // Leaflet
     const map = this.setupMap();
     this.setupControls(map);
+    this.setupCategories();
+
+    this.setupListeners(map);
+    this.setupWatchers(map);
+
     this.setupSelectArea(map);
     this.setupResults(map);
     this.setupProj4();
-
-    this.$watch('queryResultMap', () => {
-      this.displayResult(map);
-    })
-
-    //Connexion à la fonction au déplacement de la souris
-    map.on('mousemove', this.getMousePosition, this);
   },
   methods: {
     setupMap() {
@@ -133,6 +164,47 @@ export default {
         }
       });
     },
+    setupCategories() {
+      Object.keys(this.categoriesNames).forEach(category => {
+        const buildCategory = {
+          label: this.categoriesNames[category],
+          urls: this.categoriesUrls[category],
+          layer: L.featureGroup()
+        }
+        this.categories[category] = buildCategory;
+      })
+    },
+    setupListeners(map) {
+      //Connexion à la fonction au déplacement de la souris
+      map.on('mousemove', this.getMousePosition, this);
+    },
+    setupWatchers(map) {
+      this.$watch('queryResultMap', () => {
+        this.displayResult(map);
+      });
+
+      this.$watch('updateNameQuery', names => {
+        const index = this.selectQueryByName(names.old);
+        this.layerByQuery[index].name = names.new;
+      });
+
+      this.$watch('stateDisplayQuery', config => {
+        const index = this.selectQueryByName(config.name);
+        this.handleDisplayQuery(index, config.state, map);
+      });
+
+      this.$watch('removeTheQuery', name => {
+        const index = this.selectQueryByName(name.name);
+
+        this.handleDisplayQuery(index, false, map);
+        this.layerByQuery = this.RemoveElementFromArray(this.layerByQuery, index);
+      });
+
+      this.$watch('demandReset', () => {
+        this.clearResearchLayer();
+        this.layerByQuery = [];
+      });
+    },
     setupSelectArea(map) {
       const drawnItems = L.featureGroup().addTo(map);
 
@@ -166,12 +238,18 @@ export default {
       });
     },
     setupResults (map) {
-      this.layerResearchedElements.addLayer(this.layerDefaultElements);
-      this.layerResearchedElements.addLayer(this.layerAmerElements);
-      this.layerResearchedElements.addLayer(this.layerMaritimeElements);
-      this.layerResearchedElements.addLayer(this.layerPhenomenonElements);
-
+      Object.keys(this.categories).forEach(category => {
+        this.layerResearchedElements.addLayer(this.categories[category].layer);
+      });
+      
       this.layerResearchedElements.addTo(map);
+    },
+    setupQueryLayers() {
+      const newQuery = { name: "newQuery" };
+      Object.keys(this.categories).forEach(category => {
+        newQuery[category] = L.featureGroup();
+      });
+      this.layerByQuery.push(newQuery);
     },
     setupProj4() {
       proj4.defs([
@@ -184,7 +262,7 @@ export default {
       ]);
     },
     displayResult(map) { 
-      this.clearResearchLayer();
+      this.setupQueryLayers();
       this.queryResultMap.forEach(element => {
         const keys = Object.keys(element);
         if (keys.includes("wkt")
@@ -226,7 +304,7 @@ export default {
           } else {
             coords = this.extractCoordLineWkt(coord.value, coord.epsg);
           }
-          this.displayLineElement(coords, element, category.layer, map);
+          this.displayLineElement(coords, element, category, map);
         } else if (upperCoord.includes("POLYGON")) {
           let coords = [];
           if (upperCoord.includes("MULTIPOLYGON")) {
@@ -234,7 +312,7 @@ export default {
           } else {
             coords = this.extractCoordMultiLineWkt(coord.value, coord.epsg);
           }
-          this.displayPolygonElement(coords, element, category.layer, map);
+          this.displayPolygonElement(coords, element, category, map);
         }
       }
     },
@@ -284,49 +362,46 @@ export default {
         case "amer":
           this.createMarker(
             coord, "amer", [38, 50],
-            element, category.layer, "Amers", map
+            element, category, map
           );
           break;
         case "domaineMaritime":
           this.createMarker(
             coord, "maritime", [40, 40],
-            element, category.layer, "domaine Maritime", map
+            element, category, map
           );
           break;
         case "phenomenon":
           this.createMarker(
             coord, "phenomenon", [60, 30],
-            element, category.layer, "Phénomènes naturels", map
+            element, category, map
           );
           break;
         default:
           this.createMarker(
             coord, "default", [50, 40],
-            element, this.layerDefaultElements, "Entités", map
+            element, category, map
           );
       }
     },
-    createMarker(coord, iconName, iconSize, element, layer, layerName, map) {
+    createMarker(coord, iconName, iconSize, element, layers, map) {
       const icon = L.icon({iconUrl: "markerIcons/" + iconName + ".png", iconSize: iconSize});
       const marker = L.marker(coord, {icon: icon});
 
       this.createPopup(marker, element);
-      layer.addLayer(marker);
-      this.addResearchToLayerControl(layer, layerName, map);
+      this.handleLayers(layers, marker, map);
     },
-    displayLineElement(coords, element, layer, map) {
+    displayLineElement(coords, element, layers, map) {
       const line = L.polyline(coords);
 
       this.createPopup(line, element);
-      layer.addLayer(line);
-      this.addResearchToLayerControl(layer, "Geographic Entities", map);
+      this.handleLayers(layers, line, map);
     },
-    displayPolygonElement(coords, element, layer, map) {
+    displayPolygonElement(coords, element, layers, map) {
       const polygone = L.polygon(coords);
 
       this.createPopup(polygone, element);
-      layer.addLayer(polygone);
-      this.addResearchToLayerControl(layer, "Geographic Entities", map);
+      this.handleLayers(layers, polygone, map);
     },
     createPopup(symbol, element) {
       symbol.on("click", async () => {
@@ -336,6 +411,16 @@ export default {
         symbol.bindPopup(this.$refs["entity"].$el.innerHTML);
         symbol.openPopup();
       })
+    },
+    handleLayers(layers, symbol, map){
+      layers.layer.addLayer(symbol);
+      this.addQueryToGlobal(layers.globalLayer, layers.layer);
+      this.addResearchToLayerControl(layers.globalLayer, layers.label, map);
+    },
+    addQueryToGlobal(globalLayer, queryLayer) {
+      if (!globalLayer.hasLayer(queryLayer)) {
+        globalLayer.addLayer(queryLayer);
+      }
     },
     addResearchToLayerControl(layer, name, map) {
       if (!this.layersManaged.hasLayer(layer)) {
@@ -352,33 +437,50 @@ export default {
           this.layerManager.removeLayer(layer);
         }
       })
+      this.queries = [];
+    },
+    selectQueryByName(name) {
+      let index = null;
+      this.layerByQuery.forEach((query, i) => {
+        if (query.name == name) {
+          index = i;
+        }
+      });
+      return index;
+    },
+    RemoveElementFromArray(array, index) {
+      array.splice(index, 1);
+      return array;
+    },
+    handleDisplayQuery(index, state, map) {
+      const query = this.layerByQuery[index];
+      Object.keys(query).forEach(layer => {
+        if (layer != "name") {
+          state ? query[layer].addTo(map) : query[layer].remove();
+        }
+      })
     },
     determineCategory(categories) {
-      const category = {};
+      const selectedCategory = {
+        title: "default",
+        label: this.categories.default.label,
+        globalLayer: this.categories.default.layer,
+        layer: this.layerByQuery[this.lastQuery].default
+      };
 
-      const amer = [
-        "http://data.shom.fr/def/navigation_cotiere#Amer", 
-        "http://data.shom.fr/def/navigation_cotiere#AideALaNavigation"
-      ];
-      const domaineMaritime = [
-        "http://data.shom.fr/def/navigation_cotiere#ZoneDuDomaineMaritime"];
-      const phenomenon = [
-        "http://data.shom.fr/def/navigation_cotiere#PhenomeneMeteorologiqueOuOceanographique"]
-      
-      if (categories.includes(amer[0]) || categories.includes(amer[1])) {
-        category["title"] = "amer";
-        category['layer'] = this.layerAmerElements;
-      } else if (categories.includes(domaineMaritime[0])) {
-        category["title"] = "domaineMaritime";
-        category['layer'] = this.layerMaritimeElements;
-      } else if (categories.includes(phenomenon[0])) {
-        category["title"] = "phenomenon";
-        category['layer'] = this.layerPhenomenonElements;
-      } else {
-        category["title"] = "default";
-        category['layer'] = this.layerDefaultElements;
-      }
-      return category;
+      Object.keys(this.categories).forEach(category => {
+        const categoryData = this.categories[category];
+        for (const url of categoryData.urls) {
+          if (categories.includes(url)) {
+            selectedCategory["title"] = category;
+            selectedCategory["label"] = categoryData.label;
+            selectedCategory['globalLayer'] = categoryData.layer;
+            selectedCategory['layer'] = this.layerByQuery[this.lastQuery][category];
+            break;
+          }
+        }
+      });
+      return selectedCategory;
     },
     checkFitBounds(map) {
       this.layerResearchedElements.eachLayer((layer) => {
@@ -449,6 +551,9 @@ export default {
     getUrl () {
       return "https://" + this.login + ":" + this.pwd.replace("@", "%40") + "@" + this.url;
     },
+    lastQuery () {
+      return this.layerByQuery.length - 1;
+    },
     coordinate () {
       if (this.onMap){
         return "Lat : "+this.userLocation.lat+"\xa0\xa0\xa0 Lng : "+this.userLocation.lng;
@@ -460,7 +565,7 @@ export default {
 </script>
 
 <style>
-.map {
+.map , .divMap{
   height: 100%;
   width: 100%;
   z-index: 0;

@@ -2,8 +2,9 @@ import { shallowMount } from "@vue/test-utils";
 import mapShom from "@/components/MapShom.vue";
 
 describe("MapShom.vue", () => {
+    const wrapper = shallowMount(mapShom);
+
     it("default coord display", () => {
-        const wrapper = shallowMount(mapShom);
         const coord = wrapper.find(".mouseTracker p");
 
         expect(coord.text()).toMatch("Mouse is not over map");
@@ -20,7 +21,6 @@ describe("MapShom.vue", () => {
     });
 
     it("mouse out coord display", async () => {
-        const wrapper = shallowMount(mapShom);
         const coord = wrapper.find(".mouseTracker p");
         const map = wrapper.find(".map");
 
@@ -31,7 +31,6 @@ describe("MapShom.vue", () => {
     });
 
     it("select an area", async () => {
-        const wrapper = shallowMount(mapShom);
         const map = wrapper.find(".map");
 
         expect(wrapper.vm.selectionArea).toBeFalsy();
@@ -50,7 +49,6 @@ describe("MapShom.vue", () => {
     });
 
     it("check EPSG", () => {
-        const wrapper = shallowMount(mapShom);
         const result1 = {
             epsg: 2154,
             value: "Point(186801.70 6870098.88)"
@@ -77,7 +75,6 @@ describe("MapShom.vue", () => {
     });
 
     it("convert degree to decimal", () => {
-        const wrapper = shallowMount(mapShom);
 
         const coord1 = wrapper.vm.convertDegreeToLatlng("4° 00,8' W");
         const coord2 = wrapper.vm.convertDegreeToLatlng("4° 00,8' E");
@@ -93,7 +90,6 @@ describe("MapShom.vue", () => {
     });
 
     it("convert lamb93 to wgs84", () => {
-        const wrapper = shallowMount(mapShom);
         const expectResult = [-3.960962, 48.748560];
 
         const coord = wrapper.vm.convertLambToWGS([188851.82, 6872372.18]);
@@ -103,7 +99,6 @@ describe("MapShom.vue", () => {
     });
 
     it("extract coord from wkt point", () => {
-        const wrapper = shallowMount(mapShom);
         const coord = [48.726567 ,-3.986004];
 
         const check1 = wrapper.vm.checkEPSGWkt("Point(186801.70 6870098.88)");
@@ -126,7 +121,6 @@ describe("MapShom.vue", () => {
     });
 
     it("extract coord from wkt line", () => {
-        const wrapper = shallowMount(mapShom);
         const wkt = "LINESTRING (48.7442339 -4.0096052, 48.73301 -3.970418)";
         const coord = [[-4.0096052 ,48.7442339],[-3.970418, 48.73301]];
 
@@ -136,12 +130,38 @@ describe("MapShom.vue", () => {
     });
 
     it("extract coord from wkt polygon", () => {
-        const wrapper = shallowMount(mapShom);
         const wkt = "POLYGON (((48.7442339 -4.0096052, 48.73301 -3.970418, 48.7442339 -4.0096052, 48.73301 -3.970418, 48.7442339 -4.0096052)))";
         const coord = [[[[-4.0096052 ,48.7442339],[-3.970418, 48.73301],[-4.0096052 ,48.7442339],[-3.970418, 48.73301]]]];
 
         const coord1 = wrapper.vm.extractCoordPolygonWkt(wkt, 4326);
 
         expect(coord1).toEqual(expect.arrayContaining(coord));
+    });
+
+    it("setup of categories", () => {
+        expect(Object.keys(wrapper.vm.categories)).not.toBeNull();
+    });
+
+    it("determination of category", () => {
+        const categoriesDefault = ["http://data.shom.fr/def/navigation_cotiere#Feature"];
+        const categoriesAmer = ["http://data.shom.fr/def/navigation_cotiere#Amer"];
+
+        const expectedDefault = {
+            title: "default",
+            label: "Entité"
+        };
+        const expectedAmer = {
+            title: "amer",
+            label: "Amers"
+        };
+
+        wrapper.vm.setupQueryLayers();
+        const resultDefault = wrapper.vm.determineCategory(categoriesDefault);
+        const resultAmer = wrapper.vm.determineCategory(categoriesAmer);
+
+        expect(resultDefault.title).toMatch(expectedDefault.title);
+        expect(resultDefault.label).toMatch(expectedDefault.label);
+        expect(resultAmer.title).toMatch(expectedAmer.title);
+        expect(resultAmer.label).toMatch(expectedAmer.label);
     });
 });
