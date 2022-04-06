@@ -12,17 +12,20 @@ export default {
     pageOuvrage:  {
       type: Array,
       default: () => []
+    },
+    name: {
+      type: String,
+      default: ""
     }
   },
   data () {
     return {
-      name: 'C22', //change which pdf file loads
       path: 'lib/pdfloader/web/viewer.html' 
     }
   },
   computed:{
     getFilePath() {
-      return this.path +'?file=' + this.changePage();
+      return this.path +'?file=./pdfFiles/' + this.changePage();
     }
   },
   methods: {

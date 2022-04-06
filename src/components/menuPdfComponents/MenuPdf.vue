@@ -3,23 +3,22 @@
     <div v-if="openMenu && !pageOuvrage.length" class="menu">
       Ouvrages d'instructions nautiques
       <ul class="pdfList">
-        <button class="pdfEntity" @click="clickPdf">
-        pdf1
-        </button>
-                <button class="pdfEntity" @click="clickPdf">
-        pdf2
+        <button class="pdfEntity" v-for="namePdf in allFiles" :key="namePdf" @click="clickPdf(namePdf)">
+          {{ namePdf }}
         </button>
       </ul>
     </div>
 
     <PDF v-if="!openMenu && (pageOuvrage.length || openPdf)" class="pdfContainer"
-    :pageOuvrage="pageOuvrage"
+      :pageOuvrage="pageOuvrage"
+      :name="pdfToOpen"
     />
   </div>
 </template>
 
 <script>
 import PDF from './pdfComponents/PDF.vue'
+import filesNames from '../../../public/lib/pdfloader/web/pdfFiles/pdfFilesNames.json'
 
 export default {
   name: 'MenuPdf',
@@ -40,7 +39,9 @@ export default {
   data () {
     return {
       openMenu: true,
-      openPdf: false
+      openPdf: false,
+      allFiles: filesNames['filesNames'],
+      pdfToOpen: ""
     }
   },
   watch: {
@@ -49,14 +50,20 @@ export default {
       this.$emit('openButtonMenu', this.openMenu);
     },
     pageOuvrage: function () {
-      this.openMenu = false;
+      this.openMenu = true;
       this.$emit('openButtonMenu', this.openMenu);
     },
   },
+  mounted () {
+    this.pdfToOpen = this.allFiles[this.allFiles.length -1];
+  },
   methods: {
-    clickPdf() {
+    clickPdf(name) {
+      console.log('coucou');
+      console.log(this.allFiles);
       this.openPdf = true;
       this.openMenu = false;
+      this.pdfToOpen = name;
       this.$emit('openButtonMenu', this.openMenu);
     },
   },
@@ -77,7 +84,7 @@ export default {
 }
 
 .pdfEntity {
-  background-color: #81a9c7; /* ou bleu:#076e8c*/
+  background-color: rgba(44, 62, 80, 0.8);
   border: none;
   color: white;
   padding: 15px 32px;

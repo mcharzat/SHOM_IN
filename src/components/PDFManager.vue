@@ -71,7 +71,7 @@ export default {
 
 .pdfSidepanelOpen {
   position: absolute;
-  background-color: beige;
+  background-color: rgba(255, 255, 255, 83%);
   right: 5px;
   width: 36%;
   height: 100%;
