@@ -53,20 +53,33 @@
       <h5>2- Gestion des couches <img src="../assets/doc/Couche.png"> </h5>
       <p>
         Le bouton de gestion de couche, lorsqu'il est cliqué, permet de sélectionner les couches à afficher.<br>
-        &emsp;- Hydrography : <br>
+        &emsp;- Hydrography : Carte de profondeur des fonds marins.<br>
         &emsp;- Soundings : <br>
-        &emsp;- Dangers : <br>
-        &emsp;- Restrictions : <br>
+        &emsp;- Dangers : Les différents dangers en mer.<br>
+        &emsp;- Restrictions : Différentes restrictions représentées sur la carte.<br>
         &emsp;- Topography : <br>
-        &emsp;- Aids to navigation : <br>
-        &emsp;- Metadata : <br><br>
+        &emsp;- Aids to navigation : Les bouées et les phares le long de la côte.<br>
+        &emsp;- Metadata : Les métadonnées liées aux zones.<br><br>
       </p>
     </div>
 
     <div id=part3>
       <h5>3- Gestion de la carte</h5>
+      <br>
+      <img src="../assets/doc/Gestion_carte.png" style="height: 100px;">
+      <br><br>
       <p>
-        Lorem ipsum dolor sit amet. Et assumenda ipsa quo vitae iure et saepe corrupti et voluptatem enim. Et doloribus odio nam illo facilis in galisum natus est magnam ratione vel incidunt perspiciatis et sequi error. Non dolorum pariatur aut blanditiis laudantium non doloremque accusantium aut aperiam placeat hic odit maiores. Ut exercitationem delectus in quia accusamus non ipsa nulla 33 deleniti vero a facilis ratione id voluptatibus dolor. Rem voluptates dolores est dolore omnis sit autem aspernatur qui aliquam illum in voluptatem voluptatum. Qui facilis fuga aut facilis quisquam hic excepturi eius voluptatum reprehenderit est quidem modi eum repellat cumque et dolor rerum. Est fugit explicabo qui dolor optio ut nobis nihil eum quia facere et nihil molestiae ut exercitationem tenetur! Qui quis nobis est maxime suscipit cum rerum quasi ut repellendus consequatur aut officia incidunt est blanditiis voluptatibus non ratione culpa!
+        On retrouve ici divers boutons permettant de gérer et de mieux comprendre la carte : <br>
+        1. Les coordonnées de la souris en temps réel (en Lambert93): <img src="../assets/doc/Gestion_carte_coord.png"> <br>
+        2. Une échelle : <img src="../assets/doc/Gestion_carte_echelle.png"> <br>
+        3. Des boutons pour gérer le niveau de zoom : <img src="../assets/doc/Gestion_carte_zoom.png"> <br>
+        &emsp;Le bouton + permet de zoomer (agrandir) et le bouton - permet de dézoomer (réduire).<br>
+        4. Un bouton de sélection : <img src="../assets/doc/Gestion_carte_select.png"> <br>
+        En cliquant sur ce bouton, votre curseur va changer. Une fois le curseur modifié, 
+        vous pourrez sélectionner une zone sur la carte, qui vous sera utile pour lancer une requête par la suite. 
+        Une fois que vous avez fini de vous servir de l'outil sélection, vous pouvez recliquer sur le bouton, 
+        puis sur le petit "Cancel" qui apparaît pour annuler votre sélection. <br>
+        <img src="../assets/doc/Gestion_carte_select_cancel.png">
       </p>
     </div>
 
