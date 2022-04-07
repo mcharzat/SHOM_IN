@@ -291,6 +291,10 @@ export default {
     margin-bottom: 10px;
 }
 
+.history .title {
+    margin-top: 15px;
+}
+
 .buttonsManage {
   display: flex;
   flex-direction: row;
