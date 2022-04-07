@@ -10,6 +10,12 @@
 </template>
 
 <script>
+/**
+ * @module layerControl
+ * @vue-event {String} updateDisplay - Property display of the layer changed
+ * @vue-prop {Object} config - All layers with their display property
+ * @vue-prop {Object} labels - All layers with their label
+ */
 export default {
   name: 'layerControl',
   emits: ['updateDisplay'],
@@ -24,6 +30,10 @@ export default {
     },
   },
   methods: {
+    /**
+     * Send the signal of the property changed.
+     * @param {String} layer - Name of the layer that have been modified
+     */
       updateDisplay(layer) {
           this.$emit("updateDisplay", layer);
       }
