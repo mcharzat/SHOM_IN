@@ -5,7 +5,7 @@
       <img src="../assets/results.png" height ="37" width="37"/>
     </button>
     <div v-if="moveSidePanel" class="resultSidepanelOpen">
-      <h1>Resultats</h1>
+      <h2>Resultats</h2>
       <EntityResult v-for="(result, i) in queryResult" :values="result" :key="i"
         @pageOuvrage="conveyPageOuvrage">
       </EntityResult>
@@ -95,7 +95,7 @@ export default {
   left: 5px;
   width: 33%;
   height: 100%;
-  max-height: calc(100% - 160px);
+  max-height: calc(100% - 125px);
   top : 100px;
   overflow: scroll;
   z-index: 1000;

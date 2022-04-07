@@ -4,11 +4,13 @@
     <MapShom
       :queryResultMap="result"
       :updateNameQuery="rename"
-      :stateDisplayQuery="stateDisplay"
+      :stateDisplay="stateDisplay"
       :removeTheQuery="queryToRemove"
       :demandReset="resetSignal"
       @bboxSelectionArea="conveyBbox"
       @suppressBboxSelectionArea="conveyStateBbox"
+      @layersToManage="conveyToManage"
+      @layersLabel="conveyLabels"
     />
     <SPARQLResearch 
       :widthResult="stateResult || stateHistory"
@@ -37,9 +39,11 @@
     <DisplayQueries
       :stateResult="stateResult"
       :queryResult="result"
+      :layersList="toManaged"
+      :layersLabel="labels"
       @historyOpenState="updatedHistoryState"
       @nameUpdated="updateQueryName"
-      @stateDisplayQuery="conveyStateDisplay"
+      @stateDisplay="conveyStateDisplay"
       @refreshDisplayResult="conveyRefreshResult"
       @removeQuery="conveyRemoveQuery"
       @resetQueries="conveyReset"
@@ -74,7 +78,9 @@ export default {
       menuOpen: false,
       buttonMenu: false,
       queryToRemove: {},
-      resetSignal: 0
+      resetSignal: 0,
+      toManaged: {},
+      labels: {},
     }
   },
   methods: {
@@ -121,6 +127,12 @@ export default {
     conveyReset() {
       this.resetSignal = Date.now();
     },
+    conveyToManage(layers) {
+      this.toManaged = layers;
+    },
+    conveyLabels(labels) {
+      this.labels = labels;
+    }
   },
   components: {
     NavBar,
