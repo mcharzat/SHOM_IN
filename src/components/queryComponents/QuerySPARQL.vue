@@ -22,11 +22,7 @@
 
 <script>
 import {Yasr,Yasqe} from '@triply/yasgui'
-
-for (elt in namesConfigs) {
-  import elt from '../../assets/sparnatural_config/atlantis-config.ttl'
-};
-
+import Config1 from '../../assets/sparnatural_config/atlantis-config.ttl'
 
 export default {
   name: 'QuerySPARQL',
@@ -345,11 +341,9 @@ export default {
     color: white;
     font-weight: bold;
   }
-  .buttonsConfigs {
-    margin-left: 42px;
+  .buttonConfig {
     padding: 2px;
     background: rgba(2,184,117);
-    width: 20%;
     font-size: 0.8em;
     border-radius: 3px;
     color: white;
