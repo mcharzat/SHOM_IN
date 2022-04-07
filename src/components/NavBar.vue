@@ -4,7 +4,7 @@
       <div class="logo"><img src="../assets/logo_shom_white.png"></div>
       <div class="name">Nereus</div>
     </div>
-    <div v-if="!isLog" class="navBarMiddle notLogged"> 
+    <div v-if="!clientLog" class="navBarMiddle notLogged"> 
         <label for="login">Login:</label>
         <input type=text name=login v-model="login">
         <label for="pwd">Mdp:</label>
@@ -23,6 +23,15 @@
 </template>
 
 <script>
+/**
+ * @module navBar
+ * @vue-data {String} login - Login of the user
+ * @vue-data {String} pwd - Password of the user
+ * @vue-data {Boolean} [clientLog=false] - Wether the user is logged
+ * @vue-data {String} [title=Documentation titre] - Title of the documentation
+ * @vue-data {String} doc - Documentation content
+ * @vue-computed {String} messageLogger - Message for a logged user
+ */
 import { createApp } from 'vue';
 import SwalDocumentationVue from './SwalDocumentation.vue';
 import OtherShomWebsiteVue from './OtherShomWebsites.vue';
@@ -41,14 +50,23 @@ export default {
   mounted() {
   },
   methods: {
+    /**
+     * Set clientLog to true.
+     */
     getAuth: function () {
       this.clientLog = true;
     },
+    /**
+     * Reset login.
+     */
     deconnect: function () {
       this.login = "login";
       this.pwd = "pwd";
       this.clientLog = false;
     },
+    /**
+     * Display the documentation over the page.
+     */
     displayHelp: function () {
       const doc = createApp(SwalDocumentationVue);
 
@@ -62,6 +80,9 @@ export default {
       })
       doc.mount("#modal");
     },
+    /**
+     * Display links of SHOM sites.
+     */
     displayShom: function () {
       const doc = createApp(OtherShomWebsiteVue);
 
@@ -80,9 +101,6 @@ export default {
     messageLogger () {
       return "Connecté en tant que : " + this.login;
     },
-    isLog () {
-      return this.clientLog;
-    }
   }
 }
 </script>
