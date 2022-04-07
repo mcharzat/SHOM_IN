@@ -12,6 +12,12 @@
 </template>
 
 <script>
+/**
+ * @module entityResult
+ * @vue-event {Array} pageOuvrage - File and page of where the entity is describe
+ * @vue-prop {Object} values - Data of the entity
+ * @vue-computed {Array} extractFields - All fields of values
+ */
 export default {
   name: "EntityResult",
   emits:["pageOuvrage"],
@@ -28,9 +34,17 @@ export default {
     }
   },
   methods: {
+    /**
+     * Check wethrer the data should be display
+     * @param {String} field - field to check
+     */
     checkType(field) {
-      return !["uri", "bnode"].includes(this.values[field].type) && !["wkt", "category"].includes(field);
+      return !["uri", "bnode"].includes(this.values[field].type) 
+              && !["wkt", "category"].includes(field);
     },
+    /**
+     * Send pageOuvrage
+     */
     sendPageOuvrage() {
       this.$emit("pageOuvrage", this.values["reference"].value[0].split(' page '));
     }
