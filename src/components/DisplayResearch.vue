@@ -19,7 +19,7 @@
  * @vue-event {Boolean} resultOpenState - State of the display of the composent
  * @vue-event {Array} pageOuvrage - File and page of where the entity is describe
  * @vue-prop {Boolean} [stateHistory=false] - State of the display of history component
- * @vue-prop {Array} queryResult - New query results to display
+ * @vue-prop {Array} [queryResult=[]] - New query results to display
  * @vue-prop {Number} [refresh=0] - Force open component for refresh
  * @vue-data {Boolean} [moveSidePanel=false] - Wether the content of the component is displayed
  */
