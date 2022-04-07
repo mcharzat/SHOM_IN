@@ -14,6 +14,15 @@
 </template>
 
 <script>
+/**
+ * @module displayResearch
+ * @vue-event {Boolean} resultOpenState - State of the display of the composent
+ * @vue-event {Array} pageOuvrage - File and page of where the entity is describe
+ * @vue-prop {Boolean} [stateHistory=false] - State of the display of history component
+ * @vue-prop {Array} queryResult - New query results to display
+ * @vue-prop {Number} [refresh=0] - Force open component for refresh
+ * @vue-data {Boolean} [moveSidePanel=false] - Wether the content of the component is displayed
+ */
 import EntityResult from "./queryComponents/EntityResult.vue";
 
 export default {
@@ -56,9 +65,17 @@ export default {
     }
   },
   methods: {
+    /**
+     * Update moveSidePanel
+     */
     actionSidePanel() {
       this.moveSidePanel = !this.moveSidePanel;
     },
+    /**
+     * Convey a signal
+     * @param {Array} pageOuvrage - File and page of where the entity is describe
+     * @emits pageOuvrage
+     */
     conveyPageOuvrage (pageOuvrage) {
       this.$emit('pageOuvrage', pageOuvrage);
     }
