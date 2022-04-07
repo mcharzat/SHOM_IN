@@ -16,8 +16,9 @@
             @updateDisplay="updateLayerConfig($event, type)"
           ></LayerControl>
         </div>
+        <div v-else>...</div>
       </div>
-      <div class="history">
+      <div :class="{history: true, resize: displayHistory}">
         <h2 class="title" @dblclick="displayHistory = !displayHistory">
           Requêtes
         </h2>
@@ -40,6 +41,7 @@
             </button>
           </div> 
         </div>
+        <div v-else>...</div>
       </div>
     </div>
   </div>
@@ -282,17 +284,19 @@ export default {
   justify-content: space-between;
   align-content: center;
 
-  height: 100%;
-
   margin-top: 7px;
 }
 
+.resize {
+  height: 100%;
+}
+
 .title {
-    margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 .history .title {
-    margin-top: 15px;
+  margin-top: 15px;
 }
 
 .buttonsManage {
