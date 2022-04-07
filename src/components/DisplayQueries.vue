@@ -48,6 +48,26 @@
 </template>
 
 <script>
+/**
+ * @module displayQueries
+ * @vue-event {Boolean} historyOpenState - State of the display of the composent
+ * @vue-event {Object} nameUpdated - Name to be updated
+ * @vue-event {Object} stateDisplay - Configuration for display
+ * @vue-event {Object} refreshDisplayResult - Refresh oh the display of result is demanded
+ * @vue-event {Object} removeQuery - Query to be remove
+ * @vue-event resetQueries - Clear the queries
+ * @vue-prop {Boolean} [stateResult=false] - State of the display of result component
+ * @vue-prop {Array} queryResult - New query
+ * @vue-prop {Object} layersList - Layers to handle the display on the map
+ * @vue-prop {Object} layersLabel - Labels of the layers
+ * @vue-data {Array} queries - List of the queries
+ * @vue-data {Array} lastExtra - List of the extra layers
+ * @vue-data {Object} configDisplayLayer - Configuration of the display property of the layers
+ * @vue-data {Array} configDisplayQueries - Configuration of the display property of the queries
+ * @vue-data {Boolean} [moveSidePanel=false] - Wether the content of the component is displayed
+ * @vue-data {Boolean} [displayManager=true] - Wether the content of the manager is displayed
+ * @vue-data {Boolean} [displayHistory=true] - Wether the content of the history is displayed
+ */
 import QueriesHistory from "./queryComponents/QueriesHistory.vue";
 import LayerControl from "./layerComponents/layerControl.vue";
 
@@ -120,6 +140,9 @@ export default {
         }
     },
     methods: {
+        /**
+         * Setup the configuration for the base layers
+         */
         setupBaseLayers() {
             this.layersList.data.forEach(layer => {
                 if (layer != "selection") {
@@ -127,6 +150,9 @@ export default {
                 }
             })
         },
+        /**
+         * Setup the configuration for the categoreis layers
+         */
         setupCategoriesLayers() {
             const configCategoriesLayers = Object.keys(this.configDisplayLayer.categoryLayers);
             if (this.layersList.data.length > configCategoriesLayers.length) {
@@ -143,6 +169,9 @@ export default {
                 });
             }
         },
+        /**
+         * Setup the configuration for the extra layers
+         */
         setupExtraLayers() {
             if (this.layersList.extra.length > this.lastExtra.length) {
                 this.layersList.extra.forEach(layer => {
@@ -161,6 +190,9 @@ export default {
                 });
             }
         },
+        /**
+         * instantiate the new query
+         */
         createNewQuery() {
             let number =  this.queries.length + 1;
             while (!this.checkName("Requête " + number)) {
@@ -177,9 +209,17 @@ export default {
             });
             this.conveyUpdatedName("newQuery", query.name);
         },
+        /**
+         * Update moveSidePanel
+         */
         actionSidePanel() {
             this.moveSidePanel = !this.moveSidePanel;
         },
+        /**
+         * Check the unicity of the name
+         * @param {String} newName - Name to be tested
+         * @return {Boolean} Wether the name is available
+         */
         checkName(newName) {
             let response = true;
             this.queries.forEach(query => {
@@ -189,6 +229,11 @@ export default {
             })
             return response;
         },
+        /**
+         * @param {String} oldName - Name to be change
+         * @param {String} newName - Name to be use
+         * @emits nameUpdated
+         */
         conveyUpdatedName(oldName, newName) {
             const data = {
                 time: Date.now(),
@@ -197,6 +242,11 @@ export default {
             }
             this.$emit('nameUpdated', data);
         },
+        /**
+         * Handle the rename request
+         * @param {String} name - New name
+         * @param {Number} index - Index of the query to update
+         */
         remaneAQuery (name, index) {
             if (this.checkName(name)) {
                 this.conveyUpdatedName(this.queries[index].name, name);
@@ -204,23 +254,44 @@ export default {
                 this.configDisplayQueries[index].name = name;
             }
         },
+        /**
+         * Update the display property of the layer
+         * @param {String} layer - Layer to update
+         * @param {String} type - Type of the layer
+         */
         updateLayerConfig(layer, type) {
             this.configDisplayLayer[type][layer] = !this.configDisplayLayer[type][layer];
             this.conveyDisplayConfig();
         },
+        /**
+         * Update the display property of the query
+         * @param {Number} index - Index of the query to update
+         */
         updateQueryConfig(index) {
             this.configDisplayQueries[index].state = !this.configDisplayQueries[index].state;
             this.conveyDisplayConfig();
         },
+        /**
+         * @emits stateDisplay
+         */
         conveyDisplayConfig() {
             this.$emit("stateDisplay", {
                 layers: this.configDisplayLayer,
                 queries: this.configDisplayQueries
             })
         },
+        /**
+         * @param {Number} index - Index of the query to refresh
+         * @emits refreshDisplayResult
+         */
         refreshDisplayResult(index) {
             this.$emit('refreshDisplayResult', this.queries[index].value);
         },
+        /**
+         * Remove a query
+         * @param {Number} index - Index of the query to remove
+         * @emits removeQuery
+         */
         removeAQuery(index) {
             const data = {
                 time: Date.now(),
@@ -230,6 +301,10 @@ export default {
             this.queries.splice(index, 1);
             this.configDisplayQueries.splice(index, 1);
         },
+        /**
+         * Delete all queries
+         * @emits resetQueries
+         */
         reset() {
             this.$emit('resetQueries');
             this.queries = [];
