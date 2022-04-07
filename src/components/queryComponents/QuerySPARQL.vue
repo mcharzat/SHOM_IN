@@ -1,11 +1,17 @@
 <template>
     <div class="container-fluid">
       <div id="ui-search">
-          <div v-if="!displaySelect" id="displaySelect" class="displaySelect">
+          <div v-if="!displaySelect" id="displaySelect" class="sparnatBackground">
             <div class="selection">
               <img src="../../assets/valide_selection.png" height ="20" width="20"/>
               Sélection activée
             </div>
+          </div>
+
+          <div class="sparnatBackground">
+            <button class="buttonConfig" v-for="nameConfig in namesConfigs" :key="nameConfig" @click="clickConfig(nameConfig)">
+              {{ nameConfig }}
+            </button>
           </div>
       </div>
       
@@ -34,6 +40,7 @@ export default {
   data () {
     return {
       config: data,
+      namesConfigs: ["Config1", "Config2", "Config3"],
       sparnatural: {},
       querySelectBbox: "",
       bboxState: true,
@@ -119,6 +126,9 @@ export default {
     });
   },
   methods: {
+    clickConfig(name) {
+      console.log(name);
+    },
     filterQueryBySelection(yasqe) {
       let queryString = yasqe.getValue();
 
@@ -313,11 +323,21 @@ export default {
   .bg-wrapper {
     padding: 0;
   }
-  .displaySelect {
+  .sparnatBackground {
     padding-top: 12px;
     background: rgba(0, 0, 0, 0) linear-gradient(rgba(2, 184, 117, 0.1) 0px, rgba(2, 184, 117, 0.1) 116px)
   }
   .selection {
+    margin-left: 42px;
+    padding: 2px;
+    background: rgba(2,184,117);
+    width: 20%;
+    font-size: 0.8em;
+    border-radius: 3px;
+    color: white;
+    font-weight: bold;
+  }
+  .buttonsConfigs {
     margin-left: 42px;
     padding: 2px;
     background: rgba(2,184,117);
