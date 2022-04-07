@@ -9,7 +9,7 @@
           </div>
 
           <div class="sparnatBackground">
-            <button class="buttonConfig" v-for="nameConfig in namesConfigs" :key="nameConfig" @click="clickConfig(nameConfig)">
+            <button class="buttonConfig" v-for="nameConfig in namesConfigs['buttonName']" :key="nameConfig" @click="clickConfig(nameConfig)">
               {{ nameConfig }}
             </button>
           </div>
@@ -21,8 +21,12 @@
 </template>
 
 <script>
-import data from '../../assets/sparnatural_config/atlantis-config.ttl'
 import {Yasr,Yasqe} from '@triply/yasgui'
+
+for (elt in namesConfigs) {
+  import elt from '../../assets/sparnatural_config/atlantis-config.ttl'
+};
+
 
 export default {
   name: 'QuerySPARQL',
@@ -39,8 +43,11 @@ export default {
   },
   data () {
     return {
-      config: data,
-      namesConfigs: ["Config1", "Config2", "Config3"],
+      config: Config1,
+      namesConfigs: {
+        "fileName" : ["atlantis_config", "atlantis-sparnaconfig"],
+        "buttonName" : ["Config1", "Config2"]
+        },
       sparnatural: {},
       querySelectBbox: "",
       bboxState: true,
@@ -89,7 +96,7 @@ export default {
       filterConfigOnEndpoint : false,
       onQueryUpdated: (queryString) =>  {
         queryString = this.semanticPostProcess(queryString);
-        queryString = this.SelectorsPostProcess(queryString);
+        queryString = this.selectorsPostProcess(queryString);
         queryString = this.optionalClassPostProcess(queryString);
         queryString = this.optionalLabelPostProcess(queryString);
         queryString = this.optionalDescriptionPostProcess(queryString);
@@ -128,6 +135,7 @@ export default {
   methods: {
     clickConfig(name) {
       console.log(name);
+      this.sparnatural.config = name;
     },
     filterQueryBySelection(yasqe) {
       let queryString = yasqe.getValue();
@@ -180,7 +188,7 @@ export default {
       }       
       return queryString;
     },
-    SelectorsPostProcess(queryString) {
+    selectorsPostProcess(queryString) {
         queryString = queryString.replace(
           "SELECT DISTINCT ?this",
           "SELECT DISTINCT ?this ?type ?category ?label ?description ?information ?wkt ?lat ?lng ?lumineux ?ouvrage ?page ?amer");
