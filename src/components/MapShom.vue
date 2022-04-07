@@ -201,6 +201,9 @@ export default {
       this.$watch('removeTheQuery', name => {
         const index = this.selectQueryByName(name.name);
 
+        Object.keys(this.categories).forEach(( category => {
+          this.handleDisplayQuery(name.name, category, false);
+        }))
         this.layerByQuery = this.removeElementFromArray(this.layerByQuery, index);
         this.cleanCategoriesLayers();
       });
