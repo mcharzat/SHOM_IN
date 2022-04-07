@@ -68,8 +68,22 @@
 
     <div id=part3>
       <h5>3- Requêtes et affichage des résultats</h5>
+      <br>
+      <img src="../assets/doc/Sparnatural.png" style="height: 200px;">
+      <br><br>
+      <h6>&emsp;• Boutons et fonctionnalités</h6>
       <p>
-        Le bouton de gestion de couche, lorsqu'il est cliqué, permet de sélectionner les couches à afficher.<br>
+        Le bouton <img src="../assets/doc/Sparnatural_sparql_btn.png" style="height: 50px;"> permet d'afficher ou de masquer la zone de requête, et ainsi
+        avoir une meilleure vue sur la carte.
+      </p>
+      <p>
+        Le bouton <img src="../assets/doc/Sparnatural_result_btn.png" style="height: 50px;"> permet d'afficher le résultat des requêtes
+        effectuées au préalable.
+      </p>
+      <p>
+        Le bouton de gestion de couche, <img src="../assets/doc/Sparnatural_layers_btn.png" style="height: 50px;">
+        lorsqu'il est cliqué, permet de sélectionner les couches à afficher.<br>
+        On retrouve dans un premier temps des couches tirées du SHOM :<br>
         &emsp;- Hydrography : Carte de profondeur des fonds marins.<br>
         &emsp;- Soundings : <br>
         &emsp;- Dangers : Les différents dangers en mer.<br>
@@ -78,13 +92,21 @@
         &emsp;- Aids to navigation : Les bouées et les phares le long de la côte.<br>
         &emsp;- Metadata : Les métadonnées liées aux zones.<br><br>
       </p>
+      <h6>&emsp;• Exemple de requêtes</h6>
+      <p>
+        Explication sur la div Sparnatural et exemples de requêtes.
+      </p>
     </div>
 
     <div id=part4>
       <h5>4- Affichage des IN en pdf</h5>
       <p>
-        Lorem ipsum dolor sit amet. Et assumenda ipsa quo vitae iure et saepe corrupti et voluptatem enim. Et doloribus odio nam illo facilis in galisum natus est magnam ratione vel incidunt perspiciatis et sequi error. Non dolorum pariatur aut blanditiis laudantium non doloremque accusantium aut aperiam placeat hic odit maiores. Ut exercitationem delectus in quia accusamus non ipsa nulla 33 deleniti vero a facilis ratione id voluptatibus dolor. Rem voluptates dolores est dolore omnis sit autem aspernatur qui aliquam illum in voluptatem voluptatum. Qui facilis fuga aut facilis quisquam hic excepturi eius voluptatum reprehenderit est quidem modi eum repellat cumque et dolor rerum. Est fugit explicabo qui dolor optio ut nobis nihil eum quia facere et nihil molestiae ut exercitationem tenetur! Qui quis nobis est maxime suscipit cum rerum quasi ut repellendus consequatur aut officia incidunt est blanditiis voluptatibus non ratione culpa!
+        Enfin, on retrouve à droite de l'écran le bouton <img src="../assets/doc/Pdf.png" style="height: 50px;"> qui permet
+        d'accéder aux pdf des Instructions Nautiques du SHOM.<br>
+        Vous pouvez soit l'ouvrir pour lire l'intégralité des ouvrages, soit cliquer sur le résultat d'une requête 
+        pour accéder directement à la bonne page comme on peut le voir sur l'exemple ci-dessous:
       </p>
+      <img src="../assets/doc/Pdf_exemple.png" style="height: 450px;">
     </div>
 
   </div>
@@ -100,6 +122,10 @@
   h5{
     text-align: left;
     padding: 0px 20px;
+  }
+  h6{
+    text-align: left;
+    padding: 0px 10px;
   }
   p{
     text-align: left;
