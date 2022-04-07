@@ -5,7 +5,10 @@ module.exports = {
     "source": {
         "include": [
           "src/",
-          "src/components/"
+          "src/components/",
+          "src/components/layerComponents/",
+          "src/components/pdfComponents/",
+          "src/components/queryComponents/"
         ],
         "includePattern": ".vue$"
     },
