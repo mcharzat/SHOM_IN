@@ -1,28 +1,34 @@
 <template>
     <div class="container-fluid">
-      <div id="ui-search">
+                <div class="sparnatBackground">
+            <button class="buttonConfig" v-for="nameConfig in namesConfigs['buttonName']" :key="nameConfig" @click="clickConfig(nameConfig)">
+              {{ nameConfig }}
+            </button>
+          </div>
+
+      <div v-if="isActive">
+              <div id="ui-search">
+
+
           <div v-if="!displaySelect" id="displaySelect" class="sparnatBackground">
             <div class="selection">
               <img src="../../assets/valide_selection.png" height ="20" width="20"/>
               Sélection activée
             </div>
           </div>
-
-          <div class="sparnatBackground">
-            <button class="buttonConfig" v-for="nameConfig in namesConfigs['buttonName']" :key="nameConfig" @click="clickConfig(nameConfig)">
-              {{ nameConfig }}
-            </button>
-          </div>
       </div>
       
       <div id="yasqe" class="yasr_header"></div>
       <div id="yasr" class="yasr_header"></div>
+        </div>                             
+
     </div>  
 </template>
 
 <script>
 import {Yasr,Yasqe} from '@triply/yasgui'
 import Config1 from '../../assets/sparnatural_config/atlantis-config.ttl'
+import Config3 from '../../assets/sparnatural_config/test.ttl'
 
 export default {
   name: 'QuerySPARQL',
@@ -35,16 +41,18 @@ export default {
     suppressBbox: {
       type: String,
       default: ""
-    }
+    },
   },
   data () {
     return {
-      config: Config1,
+      config: [Config1, Config3],
       namesConfigs: {
-        "fileName" : ["atlantis_config", "atlantis-sparnaconfig"],
-        "buttonName" : ["Config1", "Config2"]
+        "fileName" : ["atlantis_config.ttl", "atlantis-sparnaconfig.ttl", "test.ttl"],
+        "buttonName" : ["Config1", "Config2", "Config3"]
         },
       sparnatural: {},
+      isActive: false,
+      lang: null,
       querySelectBbox: "",
       bboxState: true,
       bboxArea: [],
@@ -65,61 +73,94 @@ export default {
       this.bboxState = true;
     }
   },
-  mounted() {         
-    $.urlParam = function(name){
-        const results = new RegExp('[\\?&amp;]' + name + '=([^&amp;#]*)').exec(window.location.href);
-        if(results == null) { return null; }
-        return results[1] || 0;
-      }
+  mounted() {
 
-    const lang = ($.urlParam('lang') != null)?$.urlParam('lang'):'fr';
+  },
+  methods: {
+    divToFalse() {
+      
+      return new Promise(() => {
+        this.isActive = true;
+        console.log("C'est fait");
+      })
+    },
+    clickConfig(name) {
 
-    this.sparnatural = document.getElementById('ui-search').Sparnatural({
-      config: this.config ,
-      maxDepth: 4,
-      addDistinct: true,
-      language: lang,
-      noTypeCriteriaForObjects: ["http://dbpedia.org/ontology/Artwork"],
-      sendQueryOnFirstClassSelected: true,
-      backgroundBaseColor: '2,184,117',
-      autocomplete : null,
-      list : null,
-      defaultEndpoint: this.tripleStoreLink,
-      sparqlPrefixes : {
-        "dbpedia" : "http://dbpedia.org/ontology/"
-      },
-      localCacheDataTtl: 1000 * 60 * 60 * 24, // 24 hours in miiseconds
-      filterConfigOnEndpoint : false,
-      onQueryUpdated: (queryString) =>  {
-        queryString = this.semanticPostProcess(queryString);
-        queryString = this.selectorsPostProcess(queryString);
-        queryString = this.optionalClassPostProcess(queryString);
-        queryString = this.optionalLabelPostProcess(queryString);
-        queryString = this.optionalDescriptionPostProcess(queryString);
-        queryString = this.getChapterPostProcess(queryString);
-        queryString = this.optionalGeomPostProcess(queryString);
-        queryString = this.anyEntitiesPostProcess(queryString);
-        $('#sparql code').html(queryString.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"));
-        yasqe.setValue(queryString);
-      },
-      tooltipConfig : {
-        delay: [800, 100],
-        duration: [100, 100],
-      },
-      // triggered when "play" button is clicked
-      onSubmit: (form) => {
+      console.log(name);
 
-        this.filterQueryBySelection(yasqe);
+    if (name == 'Config1') {
 
-        // enable loader on button
-        form.sparnatural.enableLoading() ; 
-        // trigger the query from YasQE
-        yasqe.query();
-      }
-    });
+      this.isActive = true;
+        this.sparnaturalConfiguration(this.config[0]);
+      
+    }
+    if (name == 'Config2') {
+      this.isActive = false;
+    }
+    if (name == 'Config3') {
+      this.isActive = true;
+      this.sparnaturalConfiguration(this.config[1]);
+    }
+    
 
+
+    },
+    sparnaturalConfiguration(configSparnatural) {
+
+                      $.urlParam = function(name){
+      const results = new RegExp('[\\?&amp;]' + name + '=([^&amp;#]*)').exec(window.location.href);
+      if(results == null) { return null; }
+      return results[1] || 0;
+    }
+
+    this.lang = ($.urlParam('lang') != null)?$.urlParam('lang'):'fr';
     const yasqe = this.constructYasqe();
-    const yasr = this.constructYasr(yasqe);
+
+      this.sparnatural = document.getElementById('ui-search').Sparnatural({
+        config: configSparnatural,
+        maxDepth: 4,
+        addDistinct: true,
+        language: this.lang,
+        noTypeCriteriaForObjects: ["http://dbpedia.org/ontology/Artwork"],
+        sendQueryOnFirstClassSelected: true,
+        backgroundBaseColor: '2,184,117',
+        autocomplete : null,
+        list : null,
+        defaultEndpoint: this.tripleStoreLink,
+        sparqlPrefixes : {
+          "dbpedia" : "http://dbpedia.org/ontology/"
+        },
+        localCacheDataTtl: 1000 * 60 * 60 * 24, // 24 hours in miiseconds
+        filterConfigOnEndpoint : false,
+        onQueryUpdated: (queryString) =>  {
+          queryString = this.semanticPostProcess(queryString);
+          queryString = this.selectorsPostProcess(queryString);
+          queryString = this.optionalClassPostProcess(queryString);
+          queryString = this.optionalLabelPostProcess(queryString);
+          queryString = this.optionalDescriptionPostProcess(queryString);
+          queryString = this.getChapterPostProcess(queryString);
+          queryString = this.optionalGeomPostProcess(queryString);
+          queryString = this.anyEntitiesPostProcess(queryString);
+          $('#sparql code').html(queryString.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"));
+          yasqe.setValue(queryString);
+        },
+        tooltipConfig : {
+          delay: [800, 100],
+          duration: [100, 100],
+        },
+        // triggered when "play" button is clicked
+        onSubmit: (form) => {
+
+          this.filterQueryBySelection(yasqe);
+
+          // enable loader on button
+          form.sparnatural.enableLoading() ; 
+          // trigger the query from YasQE
+          yasqe.query();
+        }
+      });
+
+          const yasr = this.constructYasr(yasqe);
 
     // link yasqe and yasr
     yasqe.on("queryResponse", (_yasqe, response, duration) => {
@@ -127,11 +168,6 @@ export default {
       yasr.setResponse(response, duration);
       this.sparnatural.disableLoading() ;
     });
-  },
-  methods: {
-    clickConfig(name) {
-      console.log(name);
-      this.sparnatural.config = name;
     },
     filterQueryBySelection(yasqe) {
       let queryString = yasqe.getValue();
@@ -328,13 +364,16 @@ export default {
     padding: 0;
   }
   .sparnatBackground {
-    padding-top: 12px;
-    background: rgba(0, 0, 0, 0) linear-gradient(rgba(2, 184, 117, 0.1) 0px, rgba(2, 184, 117, 0.1) 116px)
+    display: flex;
+    justify-content: stretch;
+    width: 100%;
+    background: rgba(0, 0, 0, 0) linear-gradient(rgba(2, 184, 117, 0.1) 0px, rgba(2, 184, 117, 0.1) 96px) repeat scroll 0% 0%;
   }
   .selection {
     margin-left: 42px;
     padding: 2px;
-    background: rgba(2,184,117);
+    margin-top: 8px;
+    background: #81a9c7;
     width: 20%;
     font-size: 0.8em;
     border-radius: 3px;
@@ -342,11 +381,22 @@ export default {
     font-weight: bold;
   }
   .buttonConfig {
-    padding: 2px;
+    flex-grow: 1;
+    padding: 5px;
     background: rgba(2,184,117);
     font-size: 0.8em;
-    border-radius: 3px;
+    border-radius: 3px 3px 0px 0px;
+    border: 0px;
     color: white;
     font-weight: bold;
+    box-shadow: 0 0 5px rgba(0,0,0,0.19), 0 0 5px rgba(0,0,0,0.19)
+  }
+  .buttonConfig:hover {
+    background: rgba(0, 0, 0, 0) linear-gradient(rgba(2, 184, 117, 0.1) 0px, rgba(2, 184, 117, 0.1) 96px) repeat scroll 0% 0%;
+    color: black;
+  }
+  .buttonClick {
+    background: rgba(0, 0, 0, 0) linear-gradient(rgba(2, 184, 117, 0.1) 0px, rgba(2, 184, 117, 0.1) 96px) repeat scroll 0% 0%;
+    color: black;
   }
 </style>

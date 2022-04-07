@@ -21,7 +21,6 @@ export default {
   },
   data() {
     return {
-      isPush: false,
       buttonState: false
     }
   },
@@ -37,9 +36,8 @@ export default {
   },
   methods: {
     backToMenu() {
-      this.isPush = !this.isPush;
       this.buttonState = false;
-      this.$emit('openMenu', this.isPush);
+      this.$emit('openMenu');
     }
   },
 }
