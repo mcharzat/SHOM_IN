@@ -9,15 +9,15 @@
         <input type=text name=login v-model="login">
         <label for="pwd">Mdp:</label>
         <input type=password name=pwd v-model="pwd">
-        <input class="navBarButton" type="submit" @click.prevent="getAuth" value="OK">
+        <input class="navBarButton menuButton" type="submit" @click.prevent="getAuth" value="Connexion">
       </div>
       <div v-else class="navBarMiddle logged">
         <p> {{ messageLogger }}</p>
-        <input class="navBarButton" type="submit" @click.prevent="deconnect" value="Déconnexion">
+        <input class="navBarButton menuButton" type="submit" @click.prevent="deconnect" value="Déconnexion">
     </div>
     <div class=navBarRight>
-        <button class="navBarButton menuButton" title='Sites du SHOM' @click.prevent="displayShom">SHOM</button>
-        <button class="navBarButton helpButton" title='Aide' @click.prevent="displayHelp">?</button>
+        <button class="navBarButton menuButton" title='Sites du SHOM' @click.prevent="displayShom">Le SHOM</button>
+        <button class="helpButton navBarButton" title='Aide' @click.prevent="displayHelp">?</button>
     </div>
 </nav>
 </template>
@@ -121,9 +121,10 @@ export default {
 
   .navBarMiddle{
     position: fixed;
-    right: 175px;
+    right: 200px;
     height: 50px;
     display: flex;
+
   }
   .notLogged label{
     margin : auto 0;
@@ -132,18 +133,15 @@ export default {
   }
   .notLogged input{
     margin : auto 10px;
-    height: 30px;
+    height: 35px;
+    
   }
-  .navBarButton{
-    margin : auto 10px;
-    height: 30px;
-    background: white;
-    color: #076E8C;
-  }
+
   .logged p{
     margin : auto 10px;
     color: white;
     font-size: 20px;
+    font-family: inherit;
   }
 
 
@@ -153,17 +151,53 @@ export default {
     height: 50px;
     display: flex;
   }
+
   .helpButton{
-    height: 40px;
-    width: 40px;
     font-size:20px;
+    
+    aspect-ratio: 1 / 1;
+    height: 100%;
+
+    border-width: 5px;
     border-radius: 50%;
   }
+
   .menuButton{
-    height: 40px;
-    width: 80px;
-    font-size:20px;
-    border-radius: 10%;
+    height: 35px;
+    width: auto;
+    padding : 5px;
+
+    font-size: 18px;
+    
+    vertical-align: middle;
+    
+    border-width: 1px;
+    border-radius: 5%;
   }
   
+  .navBarButton {
+    width : auto;
+    min-width: 40px;
+    margin: auto 0.5em;
+    padding: 0px 7px;
+    min-height: 35px;
+    position: relative;
+    color: white;
+    background-color: initial;
+
+    border:solid;
+    border-color:white;
+
+    font-size: 1.15em;
+
+    box-shadow: 1px;
+  }
+
+  .navBarButton:hover {
+    background-color: white;
+    color : #076e8c;
+    border-color:rgb(11, 73, 94);
+  }
+
+
 </style>
