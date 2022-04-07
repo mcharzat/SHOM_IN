@@ -279,19 +279,21 @@ export default {
     anyEntitiesPostProcess(queryString) {
       const entity = [...queryString.matchAll(new RegExp("([a-zA-Z]*_[0-9]).* WHERE", "gm"))];
       if(entity.length > 0) {
-        const exp = "this <?.*#([a-zA-Z]+)>? ." + entity[0][1];
+        const exp = "this (<.*#|nav:)([a-zA-Z]+)>? ." + entity[0][1];
         const property = [...queryString.matchAll(new RegExp(exp, "gm"))];
         if (property.length > 0) {
-          queryString = queryString.replace(entity[0][1], property[0][1]);
+          queryString = queryString.replace(entity[0][1], property[0][2]);
 
           queryString = queryString.replace(new RegExp('}$'), 
-            "OPTIONAL{?" + entity[0][1] + " rdfs:label ?" + property[0][1] + "}.\n"+
-            "OPTIONAL{?" + entity[0][1] + " skos:prefLabel ?" + property[0][1] + "}\n}");
+            "OPTIONAL{?" + entity[0][1] + " rdfs:label ?" + property[0][2] + "}.\n"+
+            "OPTIONAL{?" + entity[0][1] + " skos:prefLabel ?" + property[0][2] + "}\n}");
         } else {
           const regEx1 = [...queryString.matchAll(new RegExp(".this .* ." + entity[0][1] +".", "gm"))];
-          queryString = queryString.replace(regEx1[1][0], "");
-          const regEx2 = new RegExp("." + entity[0][1] + " .* .any.");
-          queryString = queryString.replace(regEx2, "");
+          if (regEx1.length > 1) {
+            queryString = queryString.replace(regEx1[1][0], "");
+            const regEx2 = new RegExp("." + entity[0][1] + " .* .any.");
+            queryString = queryString.replace(regEx2, "");
+          }
         }
       }
       return queryString;
