@@ -5,7 +5,12 @@
 </template>
 
 <script>
-
+/**
+ * @module pdf
+ * @vue-prop {Array} pageOuvrage - Default file and page to display
+ * @vue-data {String} [path=lib/pdfloader/web/viewer.html] - Path to the library that display the pdf
+ * @vue-computed {String} getFilePath - Path to the pdf to display
+ */
 export default {
   name: "PDF",
   props: {
@@ -25,6 +30,10 @@ export default {
     }
   },
   methods: {
+    /**
+     * Transform the property pageOuvrage
+     * @return {String} Parameters of the path
+     */
     changePage() {
       return this.pageOuvrage[0] + ".pdf#page=" + this.pageOuvrage[1];
     }
