@@ -57,13 +57,13 @@
  * @vue-event {Object} removeQuery - Query to be remove
  * @vue-event resetQueries - Clear the queries
  * @vue-prop {Boolean} [stateResult=false] - State of the display of result component
- * @vue-prop {Array} queryResult - New query
- * @vue-prop {Object} layersList - Layers to handle the display on the map
- * @vue-prop {Object} layersLabel - Labels of the layers
- * @vue-data {Array} queries - List of the queries
- * @vue-data {Array} lastExtra - List of the extra layers
- * @vue-data {Object} configDisplayLayer - Configuration of the display property of the layers
- * @vue-data {Array} configDisplayQueries - Configuration of the display property of the queries
+ * @vue-prop {Array} [queryResult=[]] - New query
+ * @vue-prop {Object} [layersList={}] - Layers to handle the display on the map
+ * @vue-prop {Object} [layersLabel={}] - Labels of the layers
+ * @vue-data {Array} [queries=()] - List of the queries
+ * @vue-data {Array} [lastExtra=[]] - List of the extra layers
+ * @vue-data {Object} [configDisplayLayer={}] - Configuration of the display property of the layers
+ * @vue-data {Array} [configDisplayQueries={}] - Configuration of the display property of the queries
  * @vue-data {Boolean} [moveSidePanel=false] - Wether the content of the component is displayed
  * @vue-data {Boolean} [displayManager=true] - Wether the content of the manager is displayed
  * @vue-data {Boolean} [displayHistory=true] - Wether the content of the history is displayed

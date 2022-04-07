@@ -25,11 +25,11 @@
 <script>
 /**
  * @module navBar
- * @vue-data {String} login - Login of the user
- * @vue-data {String} pwd - Password of the user
+ * @vue-data {String} [login=""] - Login of the user
+ * @vue-data {String} [pwd=""] - Password of the user
  * @vue-data {Boolean} [clientLog=false] - Wether the user is logged
  * @vue-data {String} [title=Documentation titre] - Title of the documentation
- * @vue-data {String} doc - Documentation content
+ * @vue-data {String} [doc="Documentation"] - Documentation content
  * @vue-computed {String} messageLogger - Message for a logged user
  */
 import { createApp } from 'vue';

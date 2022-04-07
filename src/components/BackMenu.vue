@@ -39,6 +39,7 @@ export default {
   methods: {
     /**
      * Send a signal ot return to the menu pdf
+     * @emits openMenu
      */
     backToMenu() {
       this.buttonState = false;

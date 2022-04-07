@@ -7,7 +7,7 @@
 <script>
 /**
  * @module pdf
- * @vue-prop {Array} pageOuvrage - Default file and page to display
+ * @vue-prop {Array} [pageOuvrage=[]] - Default file and page to display
  * @vue-data {String} [path=lib/pdfloader/web/viewer.html] - Path to the library that display the pdf
  * @vue-computed {String} getFilePath - Path to the pdf to display
  */

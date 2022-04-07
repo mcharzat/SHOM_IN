@@ -31,7 +31,7 @@
  * @vue-prop {String} [nameQuery=Requête] - Name of the query
  * @vue-prop {Boolean} [displayed=true] - State of the display on the map of the querey
  * @vue-data {Boolean} [stateNameEdition=true] - Wether the display of the name is in edition mode
- * @vue-data {String} newName - New name of the query
+ * @vue-data {String} [newName=""] - New name of the query
  */
 export default {
     name: "queryHistory",

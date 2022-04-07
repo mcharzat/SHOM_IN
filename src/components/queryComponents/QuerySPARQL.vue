@@ -18,14 +18,14 @@
 /**
  * @module querySPARQL
  * @vue-event {Array} myQueryResult - The result of the research
- * @vue-prop {Array} coordsBboxArea - Bbox selected by the user
- * @vue-prop {String} suppressBbox - Selection is remove
- * @vue-data {String} config - File of configuration of sparnatural
+ * @vue-prop {Array} [coordsBboxArea=[]] - Bbox selected by the user
+ * @vue-prop {String} [suppressBbox=""] - Selection is remove
+ * @vue-data {String} [config=""] - File of configuration of sparnatural
  * @vue-data sparnatural - Sparnatural element
- * @vue-data {String} querySelectBbox - Part of the query about the selection
+ * @vue-data {String} [querySelectBbox=""] - Part of the query about the selection
  * @vue-data {Boolean} [bboxState=true] - Wether the selection is used
- * @vue-data {Array} bboxArea - Bbox to filter
- * @vue-data {String} tripleStoreLink - Url of the database
+ * @vue-data {Array} [bboxArea=[]] - Bbox to filter
+ * @vue-data {String} [tripleStoreLink=""] - Url of the database
  */
 import data from '../../assets/sparnatural_config/atlantis-config.ttl'
 import {Yasr,Yasqe} from '@triply/yasgui'

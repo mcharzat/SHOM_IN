@@ -15,7 +15,7 @@
 /**
  * @module entityResult
  * @vue-event {Array} pageOuvrage - File and page of where the entity is describe
- * @vue-prop {Object} values - Data of the entity
+ * @vue-prop {Object} [values={}] - Data of the entity
  * @vue-computed {Array} extractFields - All fields of values
  */
 export default {
@@ -43,7 +43,7 @@ export default {
               && !["wkt", "category"].includes(field);
     },
     /**
-     * Send pageOuvrage
+     * @emits pageOuvrage
      */
     sendPageOuvrage() {
       this.$emit("pageOuvrage", this.values["reference"].value[0].split(' page '));
