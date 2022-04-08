@@ -207,8 +207,6 @@ export default {
     border-color:white;
 
     font-size: 1.15em;
-
-    box-shadow: 1px;
   }
 
   .navBarButton:hover {
