@@ -1,34 +1,33 @@
 <template>
     <div class="container-fluid">
-                <div class="sparnatBackground">
-            <button class="buttonConfig" v-for="nameConfig in namesConfigs['buttonName']" :key="nameConfig" @click="clickConfig(nameConfig)">
-              {{ nameConfig }}
-            </button>
-          </div>
+      <div class="sparnatBackground">
+        <button class="buttonConfig" v-for="nameConfig in namesConfigs['buttonName']" :key="nameConfig" @click="clickConfig(nameConfig)">
+          {{ nameConfig }}
+        </button>
+      </div>
 
       <div v-if="isActive">
-              <div id="ui-search">
-
-
+        <div id="ui-search">
           <div v-if="!displaySelect" id="displaySelect" class="sparnatBackground">
             <div class="selection">
               <img src="../../assets/valide_selection.png" height ="20" width="20"/>
               Sélection activée
             </div>
           </div>
-      </div>
-      
-      <div id="yasqe" class="yasr_header"></div>
-      <div id="yasr" class="yasr_header"></div>
-        </div>                             
+        </div>
+        
+        <div id="yasqe" class="yasr_header"></div>
+        <div id="yasr" class="yasr_header"></div>
+      </div>                             
 
     </div>  
 </template>
 
 <script>
 import {Yasr,Yasqe} from '@triply/yasgui'
-import Config1 from '../../assets/sparnatural_config/atlantis-config.ttl'
+import Config1 from '../../assets/sparnatural_config/atlantis-config.ttl';
 import Config3 from '../../assets/sparnatural_config/test.ttl'
+
 
 export default {
   name: 'QuerySPARQL',
@@ -45,7 +44,7 @@ export default {
   },
   data () {
     return {
-      config: [Config1, Config3],
+      config: [Config1, Config1, Config3],
       namesConfigs: {
         "fileName" : ["atlantis_config.ttl", "atlantis-sparnaconfig.ttl", "test.ttl"],
         "buttonName" : ["Config1", "Config2", "Config3"]
@@ -77,59 +76,43 @@ export default {
 
   },
   methods: {
-    divToFalse() {
-      
-      return new Promise(() => {
-        this.isActive = true;
-        console.log("C'est fait");
-      })
-    },
-    clickConfig(name) {
+    async clickConfig(name) {
 
       console.log(name);
-
-    if (name == 'Config1') {
-
-      this.isActive = true;
-        this.sparnaturalConfiguration(this.config[0]);
-      
-    }
-    if (name == 'Config2') {
       this.isActive = false;
-    }
-    if (name == 'Config3') {
+      await this.$forceUpdate();
       this.isActive = true;
-      this.sparnaturalConfiguration(this.config[1]);
-    }
-    
+      await this.$forceUpdate();
 
+      for (let i=0; i < this.namesConfigs['buttonName'].length; i++) {
+
+        if (name == this.namesConfigs['buttonName'][i]) {
+          this.sparnaturalConfiguration(this.config[i]); 
+        } 
+      } 
 
     },
     sparnaturalConfiguration(configSparnatural) {
 
-                      $.urlParam = function(name){
-      const results = new RegExp('[\\?&amp;]' + name + '=([^&amp;#]*)').exec(window.location.href);
-      if(results == null) { return null; }
-      return results[1] || 0;
-    }
+      $.urlParam = function(name){
+        const results = new RegExp('[\\?&amp;]' + name + '=([^&amp;#]*)').exec(window.location.href);
+        if(results == null) { return null; }
+        return results[1] || 0;
+      }
 
-    this.lang = ($.urlParam('lang') != null)?$.urlParam('lang'):'fr';
-    const yasqe = this.constructYasqe();
+      this.lang = ($.urlParam('lang') != null)?$.urlParam('lang'):'fr';
+      const yasqe = this.constructYasqe();
 
       this.sparnatural = document.getElementById('ui-search').Sparnatural({
         config: configSparnatural,
         maxDepth: 4,
         addDistinct: true,
         language: this.lang,
-        noTypeCriteriaForObjects: ["http://dbpedia.org/ontology/Artwork"],
         sendQueryOnFirstClassSelected: true,
         backgroundBaseColor: '2,184,117',
         autocomplete : null,
         list : null,
         defaultEndpoint: this.tripleStoreLink,
-        sparqlPrefixes : {
-          "dbpedia" : "http://dbpedia.org/ontology/"
-        },
         localCacheDataTtl: 1000 * 60 * 60 * 24, // 24 hours in miiseconds
         filterConfigOnEndpoint : false,
         onQueryUpdated: (queryString) =>  {
