@@ -53,7 +53,7 @@
       <br><br>
       <p>
         On retrouve ici divers boutons permettant de gérer et de mieux comprendre la carte : <br>
-        1. Les coordonnées de la souris en temps réel (en Lambert93): <img src="../assets/doc/Gestion_carte_coord.png"> <br>
+        1. Les coordonnées de la souris en temps réel (en WGS84): <img src="../assets/doc/Gestion_carte_coord.png"> <br>
         2. Une échelle : <img src="../assets/doc/Gestion_carte_echelle.png"> <br>
         3. Des boutons pour gérer le niveau de zoom : <img src="../assets/doc/Gestion_carte_zoom.png"> <br>
         &emsp;Le bouton + permet de zoomer (agrandir) et le bouton - permet de dézoomer (réduire).<br>
