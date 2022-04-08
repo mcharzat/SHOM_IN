@@ -1,10 +1,17 @@
 <template>
-    <button v-if="buttonState" :class="{backMenu:true, backMenuOpen: moveButton}" @click="backToMenu">
+    <button v-if="buttonState" :class="{backMenu:true, backMenuOpen: widthPdf}" @click="backToMenu">
       <img src="../assets/backMenu.png" height ="34" width="34"/>
     </button>
 </template>
 
 <script>
+/**
+ * @module backMenu
+ * @vue-event openMenu - Back to menu signal
+ * @vue-prop {Boolean} [widthPdf=false] - Wether the pdf is open
+ * @vue-prop {Boolean} [buttonMenuState=false] - Wether the button is display
+ * @vue-data {Boolean} [buttonState=false] - Recieve the state of the button
+ */
 
 export default {
   name: 'BackMenu',
@@ -21,7 +28,6 @@ export default {
   },
   data() {
     return {
-      isPush: false,
       buttonState: false
     }
   },
@@ -30,16 +36,14 @@ export default {
       this.buttonState = true;
     }
   },
-  computed : {
-    moveButton() {
-      return this.widthPdf != 0;
-    }
-  },
   methods: {
+    /**
+     * Send a signal ot return to the menu pdf
+     * @emits openMenu
+     */
     backToMenu() {
-      this.isPush = !this.isPush;
       this.buttonState = false;
-      this.$emit('openMenu', this.isPush);
+      this.$emit('openMenu');
     }
   },
 }

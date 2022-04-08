@@ -9,6 +9,39 @@
 </template>
 
 <script>
+/**
+ * @module mapShom
+ * @vue-event {String} bboxSelectionArea - Bbox of the selection
+ * @vue-event {String} suppressBboxSelectionArea - Suppression of the selection is demanded
+ * @vue-event {Object} layersToManage - Layers to handle the display on the map
+ * @vue-event {Object} layersLabel - Labels of the layers
+ * @vue-prop {Array} [queryResultMap=[]] - results of the research
+ * @vue-prop {Object} [updateNameQuery={}] - Name of a query to be updated
+ * @vue-prop {Object} [stateDisplay={}] - Configuration of the display of layers on map
+ * @vue-prop {Object} [removeTheQuery={}] - Remove a query
+ * @vue-prop {number} [demandReset=0] - Clear of all queries is demanded
+ * @vue-data {String} [url=""] - Url of the wms
+ * @vue-data {String} [login=""] - Login for the wms
+ * @vue-data {String} [pwd=""] - Password for the wms
+ * @vue-data {Array} [wmsLayers=[]] - Alias of the layers in the wms
+ * @vue-data {Array} [wmsNames=[]] - Labels of the layers in the wms
+ * @vue-data {Object} [layerIndexes={}] - Indexes of the layers in layersManaged
+ * @vue-data {Object} [layerToManaged={}] - Layers to handle the display on the map
+ * @vue-data {Object} [layerLabels={}] - Labels of the layers
+ * @vue-data {Object} [categoriesNames={}] - Names of the categories
+ * @vue-data {Object} [categoriesUrls={}] - Uris of the elements in each category
+ * @vue-data {Object} [categories={}] - Categories with their layer
+ * @vue-data {Array} [dataEntity=[]] - Data of the popup
+ * @vue-data {Object} [userLocation={}] - Coordinates of the mouse
+ * @vue-data {Boolean} [onMap=false] - Wether the mouse is over the map
+ * @vue-data {String} [selectionArea=""] - Bbox of the selection
+ * @vue-data {layerGroup} [layersManaged=L.layerGroup] - Base layers
+ * @vue-data {featureGroup} [layerResearchedElements=L.featureGroup] - Layers from the researches
+ * @vue-data {Array} [layerByQuery=[]] - List of the queries with name and layers
+ * @vue-computed {String} getUrl - Retrieve the complete url
+ * @vue-computed {Number} lastQuery - Index of the last query
+ * @vue-computed {String} coordinate - Coordinates of the mouse
+ */
 import "leaflet/dist/leaflet.css";
 import "leaflet-draw/dist/leaflet.draw.css";
 import 'leaflet';
@@ -104,7 +137,6 @@ export default {
       userLocation: {},
       onMap: false,
       selectionArea: "",
-      layerManager : L.control.layers(),
       layersManaged : L.layerGroup(),
       layerResearchedElements: L.featureGroup(),
       layerByQuery: [],
@@ -126,6 +158,9 @@ export default {
     this.setupEmits();
   },
   methods: {
+    /**
+     * Setup the map
+     */
     setupMap() {
       return L.map(this.$refs['Shom_IN'], {
         zoomControl: false,
@@ -135,6 +170,10 @@ export default {
         attributionControl: false
       }).setView([46.50370875, -10.5], 6.5);
     },
+    /**
+     * Setup the controls of the map.
+     * @param {L.map} map - The map
+     */
     setupControls(map) {
       L.control.scale({
         position: 'bottomright',
@@ -147,6 +186,10 @@ export default {
 
       this.setupLayerControls(map);
     },
+    /**
+     * Setup the base layers controls.
+     * @param {L.map} map - The map
+     */
     setupLayerControls(map) {
       this.wmsLayers.forEach((layerName, i) => {
         const layer = L.tileLayer.wms(
@@ -166,6 +209,9 @@ export default {
         }
       });
     },
+    /**
+     * Setup the categories.
+     */
     setupCategories() {
       Object.keys(this.categoriesNames).forEach(category => {
         const buildCategory = {
@@ -176,10 +222,18 @@ export default {
         this.layerLabels[category] = this.categoriesNames[category];
       })
     },
+    /**
+     * Setup the listeners on the map.
+     * @param {L.map} map - The map
+     */
     setupListeners(map) {
       //Connexion à la fonction au déplacement de la souris
       map.on('mousemove', this.getMousePosition, this);
     },
+    /**
+     * Setup the watchers over the props.
+     * @param {L.map} map - The map
+     */
     setupWatchers(map) {
       this.$watch('queryResultMap', () => {
         this.displayResult(map);
@@ -213,6 +267,10 @@ export default {
         this.layerByQuery = [];
       });
     },
+    /**
+     * Setup the selection over the map.
+     * @param {L.map} map - The map
+     */
     setupSelectArea(map) {
       const drawnItems = L.featureGroup().addTo(map);
       this.layersManaged.addLayer(drawnItems);
@@ -250,6 +308,10 @@ export default {
       });
       this.layerLabels["selection"] = "Sélection";
     },
+    /**
+     * Setup the results layers.
+     * @param {L.map} map - The map
+     */
     setupResults (map) {
       Object.keys(this.categories).forEach(category => {
         this.layerResearchedElements.addLayer(this.categories[category].layer);
@@ -257,6 +319,10 @@ export default {
       
       this.layerResearchedElements.addTo(map);
     },
+
+    /**
+     * Setup the new query.
+     */
     setupQueryLayers() {
       const newQuery = { name: "newQuery" };
       Object.keys(this.categories).forEach(category => {
@@ -264,6 +330,9 @@ export default {
       });
       this.layerByQuery.push(newQuery);
     },
+    /**
+     * Setup the projection library.
+     */
     setupProj4() {
       proj4.defs([
       [
@@ -274,6 +343,11 @@ export default {
         '+title=LAMB 93 +proj=lcc +lat_1=49 +lat_2=44 +lat_0=46.5 +lon_0=3 +x_0=700000 +y_0=6600000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs']
       ]);
     },
+    /**
+     * Emits of the setup of layers.
+     * @emits layersToManage
+     * @emits layersLabel
+     */
     setupEmits() {
       this.$emit("layersToManage", {
         content: "base",
@@ -281,6 +355,10 @@ export default {
       });
       this.$emit("layersLabel", this.layerLabels);
     },
+    /**
+     * Check the presence of coordinates field.
+     * @param {L.map} map - The map
+     */
     displayResult(map) { 
       this.setupQueryLayers();
       this.queryResultMap.forEach(element => {
@@ -296,8 +374,12 @@ export default {
         }
       })
       this.checkFitBounds(map);
-      //this.$emit("layersToManage", this.layerToManaged);
     },
+    /**
+     * Check the type of coordinates of geographic coordinates.
+     * @param {Object} element - Data of an entity of the result
+     * @param {L.map} map - The map
+     */
     displayResultGeo(element, map) {
       const category = this.determineCategory(element.category.value);
       if (element.lat.value[0].includes("°")) {
@@ -310,6 +392,11 @@ export default {
           element, category, map);
       }
     },
+    /**
+     * Check the type of geometry of the wkt.
+     * @param {Object} element - Data of an entity of the result
+     * @param {L.map} map - The map
+     */
     displayResultWkt(element, map) {
       const upperCoord = element.wkt.value[0].toUpperCase();
       let coord = this.checkEPSGWkt(element.wkt.value[0]);
@@ -337,6 +424,12 @@ export default {
         }
       }
     },
+    /**
+     * Extract the coordinates of a point from a wkt.
+     * @param {Array} coord - Coordinates of the entity
+     * @param {Number} epsg - System of coordinates
+     * @return {Array} Coordinates of the point
+     */
     extractCoordPointWkt(coord, epsg) {
       coord = coord.replace(/^ /i, "").replace(' (', "(").split(" ");
 
@@ -351,6 +444,13 @@ export default {
 
       return [lat, lng];
     },
+    /**
+     * Extract the coordinates of a line from a wkt.
+     * @param {Array} coord - Coordinates of the entity
+     * @param {Number} epsg - System of coordinates
+     * @param {Boolean} [poly=false] - Wether the original geometry is a polygon
+     * @return {Array} Coordinates of the line
+     */
     extractCoordLineWkt(coord, epsg, poly=false) {
       coord = coord.split("(")[coord.includes("(") ? 1 : 0].split(")")[0].split(",");
       const listPoints = [];
@@ -360,6 +460,13 @@ export default {
       }
       return listPoints;
     },
+    /**
+     * Extract the coordinates of a multiline from a wkt.
+     * @param {Array} coord - Coordinates of the entity
+     * @param {Number} epsg - System of coordinates
+     * @param {Boolean} [poly=false] - Wether the original geometry is a polygon
+     * @return {Array} Coordinates of the multiline
+     */
     extractCoordMultiLineWkt(coord, epsg, poly=false) {
       coord = coord.split("((")[coord.includes("((") ? 1 : 0].split("))")[0].split("),(");
       const listCoords = [];
@@ -369,6 +476,12 @@ export default {
       }
       return listCoords;
     },
+    /**
+     * Extract the coordinates of a polygon from a wkt.
+     * @param {Array} coord - Coordinates of the entity
+     * @param {Number} epsg - System of coordinates
+     * @return {Array} Coordinates of the polygon
+     */
     extractCoordPolygonWkt(coord, epsg) {
       coord = coord.split("(((")[1].split(")))")[0].split(")),((");
       const listPoints = [];
@@ -378,6 +491,13 @@ export default {
       }
       return listPoints;
     },
+    /**
+     * Define the details of the marker to be displayed.
+     * @param {Array} coord - Coordinates of the entity
+     * @param {Object} element - Data of the entity
+     * @param {Object} category - Category of the entity with layers
+     * @param {L.map} map  - The map
+     */
     displayElement(coord, element, category, map) {
       switch (category.title) {
         case "amer":
@@ -405,6 +525,15 @@ export default {
           );
       }
     },
+    /**
+     * Create the marker for the entity.
+     * @param {Array} coord - Coordinates of the entity
+     * @param {String} iconName - Name of the icon of the marker
+     * @param {Array} iconSize - Size of the icon of the marker
+     * @param {Object} element - Data of the entity
+     * @param {Object} layers - Layers of the category of the entity 
+     * @param {L.map} map - the map
+     */
     createMarker(coord, iconName, iconSize, element, layers, map) {
       const icon = L.icon({iconUrl: "markerIcons/" + iconName + ".png", iconSize: iconSize});
       const marker = L.marker(coord, {icon: icon});
@@ -412,18 +541,37 @@ export default {
       this.createPopup(marker, element);
       this.handleLayers(layers, marker, map);
     },
+    /**
+     * Create the line for the entity.
+     * @param {Array} coords - Coordinates of the entity
+     * @param {Object} element - Data of the entity
+     * @param {Object} layers - Layers of the category of the entity
+     * @param {L.map} map - the map
+     */
     displayLineElement(coords, element, layers, map) {
       const line = L.polyline(coords);
 
       this.createPopup(line, element);
       this.handleLayers(layers, line, map);
     },
+    /**
+     * Create the polygone for the entity.
+     * @param {Array} coords - Coordinates of the entity
+     * @param {Object} element - Data of the entity
+     * @param {Object} layers - Layers of the category of the entity
+     * @param {L.map} map - the map
+     */
     displayPolygonElement(coords, element, layers, map) {
       const polygone = L.polygon(coords);
 
       this.createPopup(polygone, element);
       this.handleLayers(layers, polygone, map);
     },
+    /**
+     * Create a popup for the entity.
+     * @param {L.feature} symbol - Feature for which the popup is meant
+     * @param {Array} element - Data of the entity
+     */
     createPopup(symbol, element) {
       symbol.on("click", async () => {
         symbol.unbindPopup();
@@ -433,16 +581,33 @@ export default {
         symbol.openPopup();
       })
     },
+    /**
+     * Handle the display of the new entities.
+     * @param {Object} layers - Layers of the category of the entity
+     * @param {L.Feature} symbol - Feature to be displayed
+     * @param {L.map} map - The map
+     */
     handleLayers(layers, symbol, map){
       layers.layer.addLayer(symbol);
       this.addQueryToGlobal(layers.globalLayer, layers.layer);
       this.addResearchToLayerControl(layers.globalLayer, layers.title, map);
     },
+    /**
+     * Handle the layers of a new query.
+     * @param {L.layer} globalLayer - Layer of the category
+     * @param {L.layer} queryLayer - Layer of the category for the query
+     */
     addQueryToGlobal(globalLayer, queryLayer) {
       if (!globalLayer.hasLayer(queryLayer)) {
         globalLayer.addLayer(queryLayer);
       }
     },
+    /**
+     * Handle the display on the map for a new query.
+     * @param {L.layer} layer - Layer that have been filled
+     * @param {String} name - Alias of the category
+     * @param {*} map - The map
+     */
     addResearchToLayerControl(layer, name, map) {
       if (!this.layersManaged.hasLayer(layer)) {
         layer.addTo(map);
@@ -450,6 +615,9 @@ export default {
         this.layerToManaged.data.push(name);
       }
     },
+    /**
+     * Empty all layers.
+     */
     clearResearchLayer() {
       this.layerResearchedElements.eachLayer((layer) => {
         layer.clearLayers();
@@ -463,8 +631,10 @@ export default {
           this.layerToManaged.data = this.removeElementFromArray(this.layerToManaged.data, index);
         }
       });
-      this.queries = [];
     },
+    /**
+     * Clean the categories layer of layerToManaged.
+     */
     cleanCategoriesLayers() {
       this.layerToManaged.data.forEach( (category, index) => {
         if (this.categories[category].layer.getLayers().length == 0) {
@@ -472,6 +642,11 @@ export default {
         }
       })
     },
+    /**
+     * retrieve the index of a query with the name.
+     * @param {String} name - Name of the query
+     * @return {Number} Index of the query in layerByQuery
+     */
     selectQueryByName(name) {
       let index = null;
       this.layerByQuery.forEach((query, i) => {
@@ -481,10 +656,21 @@ export default {
       });
       return index;
     },
+    /**
+     * Remove an element of an array.
+     * @param {Array} array - An array
+     * @param {Number} index - Index of the element to remove
+     * @return {Array} Array without the unwanted element
+     */
     removeElementFromArray(array, index) {
       array.splice(index, 1);
       return array;
     },
+    /**
+     * Handle the display of layers and queries on the map.
+     * @param {Object} config - Configuration of the display property of the layers and the queries
+     * @param {L.map} map - The map
+     */
     handleDisplay(config, map) {
       Object.keys(config.layers.baseLayers).forEach( layer => {
         this.handleDisplayBaseLayer(layer, config.layers.baseLayers[layer], map);
@@ -497,11 +683,24 @@ export default {
           map)
       })
     },
+    /**
+     * Handle the display of a base layer.
+     * @param {String} layerAlias - Alias of the layer
+     * @param {Boolean} state - Wether the layer should be displayed
+     * @param {L.map} map - The map
+     */
     handleDisplayBaseLayer(layerAlias, state, map) {
       const id = this.layerIndexes[layerAlias];
       const layer = this.layersManaged.getLayer(id);
       state ? layer.addTo(map) : layer.remove();
     },
+    /**
+     * Handle the display of a category layer.
+     * @param {String} category - Alias of the layer
+     * @param {Boolean} state - Wether the layer should be displayed
+     * @param {Array} queries - Queries and their state
+     * @param {L.map} map - The map
+     */
     handleDisplayCategoryLayer(category, state, queries, map) {
       if (state) {
         this.categories[category].layer.addTo(map);
@@ -512,12 +711,23 @@ export default {
         this.categories[category].layer.remove();
       }
     },
+    /**
+     * Handle the display of a query.
+     * @param {String} queryName - Name of the query
+     * @param {Boolean} category - Alias of the category
+     * @param {Boolean} state - Wether the query should be displayed
+     */
     handleDisplayQuery(queryName, category, state) {
       const index = this.selectQueryByName(queryName);
       const query = this.layerByQuery[index];
       state ? query[category].addTo(this.categories[category].layer) 
             : this.categories[category].layer.removeLayer(query[category]);
     },
+    /**
+     * Determine and setup the category of an entity.
+     * @param {Object} categories - Url(s) of the category from the query
+     * @return {Object} Category with layers
+     */
     determineCategory(categories) {
       const selectedCategory = {
         title: "default",
@@ -538,6 +748,10 @@ export default {
       });
       return selectedCategory;
     },
+    /**
+     * Zoom on the result.
+     * @param {L.map} map - The map
+     */
     checkFitBounds(map) {
       this.layerResearchedElements.eachLayer((layer) => {
         if (layer.getLayers().length > 0) {
@@ -547,6 +761,10 @@ export default {
         }
       })
     },
+    /**
+     * Retrieve the position of the mouse.
+     * @param {Object} pos - Data from the event
+     */
     getMousePosition(pos) {
       this.onMap=true;
       this.userLocation = {
@@ -554,9 +772,17 @@ export default {
         lng: pos.latlng.lng.toFixed(10),
       };
     },
+    /**
+     * Hide the coordinates of the mouse.
+     */
     removeCoord() {
       this.onMap=false;
     },
+    /**
+     * Check the system of coordinates.
+     * @param {String} coord - Coordinates of an entity in wkt
+     * @return {Number} System of coordinates
+     */
     checkEPSGWkt(coord) {
       const coordCrs = {};
       coord = coord.split("> ");
@@ -575,6 +801,11 @@ export default {
       }
       return coordCrs;
     },
+    /**
+     * Convert coordinates from Degree Minutes to degree latLng.
+     * @param {String} coord - Coordinates of an entity
+     * @return {String} The converted coordinates
+     */
     convertDegreeToLatlng(coord) {
       const firstCut = coord.replace(" ", "").split("°");
       let latLng = parseFloat(firstCut[0]);
@@ -590,12 +821,22 @@ export default {
       latLng *= coord.includes('N') || coord.includes('E') ? 1 : -1;
       return latLng;
     },
+    /**
+     * Covert coordinates from WGS to Lambert.
+     * @param {Array} coord - Coordinatesof an entity
+     * @return {Array} The converted coordinates
+     */
     convertWGSToLamb(coord) {
       
       coord = proj4('EPSG:4326', 'EPSG:2154', coord);
 
       return coord;
     },
+    /**
+     * Covert coordinates from Lambert to WGS.
+     * @param {Array} coord - Coordinatesof an entity
+     * @return {Array} The converted coordinates
+     */
     convertLambToWGS(coord) {
       
       coord = proj4('EPSG:2154', 'EPSG:4326', coord);
