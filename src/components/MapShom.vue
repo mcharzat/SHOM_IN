@@ -15,7 +15,8 @@
  * @vue-event {String} suppressBboxSelectionArea - Suppression of the selection is demanded
  * @vue-event {Object} layersToManage - Layers to handle the display on the map
  * @vue-event {Object} layersLabel - Labels of the layers
- * @vue-prop {Array} [queryResultMap=[]] - results of the research
+ * @vue-prop {Array} [queryResultMap=[]] - Results of the research
+ * @vue-prop {Object} [uploadedQueries={}] - Queries uploaded
  * @vue-prop {Object} [updateNameQuery={}] - Name of a query to be updated
  * @vue-prop {Object} [stateDisplay={}] - Configuration of the display of layers on map
  * @vue-prop {Object} [removeTheQuery={}] - Remove a query
@@ -65,6 +66,10 @@ export default {
     queryResultMap:  {
       type: Array,
       default: () => []
+    },
+    uploadedQueries:  {
+      type: Object,
+      default: () => {}
     },
     updateNameQuery:  {
       type: Object,
@@ -236,7 +241,16 @@ export default {
      */
     setupWatchers(map) {
       this.$watch('queryResultMap', () => {
-        this.displayResult(map);
+        this.setupQueryLayers();
+        this.displayResult(this.queryResultMap, map);
+      });
+
+      this.$watch('uploadedQueries', () => {
+        this.uploadedQueries.queries.forEach(query => {
+          this.setupQueryLayers(query.name);
+          this.displayResult(query.value, map);
+        })
+          
       });
 
       this.$watch('layerToManaged', () => {
@@ -322,9 +336,10 @@ export default {
 
     /**
      * Setup the new query.
+     * @param {String} [queryName=newQuery] - The name of the query
      */
-    setupQueryLayers() {
-      const newQuery = { name: "newQuery" };
+    setupQueryLayers(queryName = "newQuery") {
+      const newQuery = { name: queryName };
       Object.keys(this.categories).forEach(category => {
         newQuery[category] = L.featureGroup();
       });
@@ -357,11 +372,11 @@ export default {
     },
     /**
      * Check the presence of coordinates field.
+     * @param {Array} query - Result of a query
      * @param {L.map} map - The map
      */
-    displayResult(map) { 
-      this.setupQueryLayers();
-      this.queryResultMap.forEach(element => {
+    displayResult(query, map) { 
+      query.forEach(element => {
         const keys = Object.keys(element);
         if (keys.includes("wkt")
             && element.wkt.type == "literal") {
