@@ -1,12 +1,12 @@
 <template>
     <div>
-        <a class=link href="https://www.shom.fr/" target="_blank">Site institutionnel</a>
+        <a class=link href="https://www.shom.fr/" title='Site officiel du SHOM' target="_blank">Site institutionnel</a>
         <br>
-        <a class=link href="https://data.shom.fr/" target="_blank">Portail data.shom.fr</a>
+        <a class=link href="https://data.shom.fr/" title='Portail vers les données du SHOM' target="_blank">Portail data.shom.fr</a>
         <br>
-        <a class=link href="https://diffusion.shom.fr/" target="_blank">Espace de diffusion</a>
+        <a class=link href="https://diffusion.shom.fr/" title="L'espace de diffusion du SHOM" target="_blank">Espace de diffusion</a>
         <br>
-        <a class=link href="https://maree.shom.fr/" target="_blank">Portail horaire des marées</a>
+        <a class=link href="https://maree.shom.fr/" title='Informations sur les marées' target="_blank">Portail horaire des marées</a>
         <br>
     </div>
 </template>

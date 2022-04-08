@@ -13,7 +13,7 @@
       </div>
       <div v-else class="navBarMiddle logged">
         <p> {{ messageLogger }}</p>
-        <input class="navBarButton menuButton" type="submit" @click.prevent="deconnect" value="Déconnexion">
+        <input class="navBarButton menuButton" type="submit"  @click.prevent="deconnect" value="Déconnexion">
     </div>
     <div class=navBarRight>
         <button class="navBarButton menuButton" title='Sites du SHOM' @click.prevent="displayShom">Le SHOM</button>

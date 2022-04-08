@@ -2,7 +2,7 @@
   <div>
     <button :class="{displayResearch: true, displayResearchOpen: moveSidePanel || stateHistory}"
     @click="actionSidePanel">
-      <img src="../assets/results.png" height ="37" width="37"/>
+      <img src="../assets/results.png" title='Résultats' height ="37" width="37"/>
     </button>
     <div v-if="moveSidePanel" class="resultSidepanelOpen">
       <h2>Resultats</h2>

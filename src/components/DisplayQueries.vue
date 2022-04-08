@@ -1,7 +1,7 @@
 <template>
   <div>
     <button :class="{displayHistory: true, displayHistoryOpen: moveSidePanel || stateResult}" @click="actionSidePanel">
-      <img src="../assets/layers.png" height ="35" width="35"/>
+      <img src="../assets/layers.png" title='Gestion de couches et de requêtes' height ="35" width="35"/>
     </button>
     <div v-if="moveSidePanel" class="historySidepanelOpen">
       <div class="manager">

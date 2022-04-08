@@ -129,6 +129,7 @@
   }
   p{
     text-align: left;
+    font-family:inherit;
     padding: 0px 20px;
   }
   button{
