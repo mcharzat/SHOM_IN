@@ -1,12 +1,16 @@
 <template>
     <div class="container-fluid">
       <div class="sparnatBackground">
-        <button class="buttonConfig" v-for="nameConfig in namesConfigs['buttonName']" :key="nameConfig" @click="clickConfig(nameConfig)">
+        <button 
+          v-for="(nameConfig,idx) in namesConfigs['buttonName']" 
+          :key="(nameConfig,idx)" 
+          :class="{buttonConfig:true, buttonClick:getColorButton(idx)}" 
+          @click="clickConfig(nameConfig)">
           {{ nameConfig }}
         </button>
       </div>
 
-      <div v-if="isActive">
+      <div v-if="isSparnatActive">
         <div id="ui-search">
           <div v-if="!displaySelect" id="displaySelect" class="sparnatBackground">
             <div class="selection">
@@ -25,6 +29,8 @@
 
 <script>
 import {Yasr,Yasqe} from '@triply/yasgui'
+
+// ----- Import config sparnatural data ----- //
 import Config1 from '../../assets/sparnatural_config/atlantis-config.ttl';
 import Config3 from '../../assets/sparnatural_config/test.ttl'
 
@@ -44,13 +50,14 @@ export default {
   },
   data () {
     return {
-      config: [Config1, Config1, Config3],
       namesConfigs: {
         "fileName" : ["atlantis_config.ttl", "atlantis-sparnaconfig.ttl", "test.ttl"],
-        "buttonName" : ["Config1", "Config2", "Config3"]
-        },
+        "buttonName" : ["Config1", "Config2", "Config3"],
+        "config" : [Config1, Config1, Config3]
+      },
       sparnatural: {},
-      isActive: false,
+      isSparnatActive: false,
+      colorButton: [],
       lang: null,
       querySelectBbox: "",
       bboxState: true,
@@ -74,21 +81,31 @@ export default {
   },
   mounted() {
 
+    this.colorButton = new Array(this.namesConfigs['config'].length);
+
+    this.clickConfig(this.namesConfigs['buttonName'][0]);
   },
   methods: {
+    getColorButton(index) {
+      return this.colorButton[index];
+    },
     async clickConfig(name) {
 
       console.log(name);
-      this.isActive = false;
+      this.isSparnatActive = false;
       await this.$forceUpdate();
-      this.isActive = true;
+      this.isSparnatActive = true;
       await this.$forceUpdate();
 
       for (let i=0; i < this.namesConfigs['buttonName'].length; i++) {
 
         if (name == this.namesConfigs['buttonName'][i]) {
-          this.sparnaturalConfiguration(this.config[i]); 
-        } 
+          this.colorButton[i] = true;
+          this.getColorButton(i);
+          this.sparnaturalConfiguration(this.namesConfigs['config'][i]); 
+        } else {
+          this.colorButton[i] = false;
+        }
       } 
 
     },
