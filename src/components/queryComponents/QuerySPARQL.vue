@@ -45,13 +45,11 @@
  * @vue-data {Array} [bboxArea=[]] - Bbox to filter
  * @vue-data {String} [tripleStoreLink=""] - Url of the database
  */
-
 import {Yasr,Yasqe} from '@triply/yasgui'
 
 // ----- Import config sparnatural data ----- //
 import Config1 from '../../assets/sparnatural_config/atlantis-config.ttl';
 import Config3 from '../../assets/sparnatural_config/test.ttl'
-
 
 export default {
   name: 'QuerySPARQL',
@@ -489,7 +487,6 @@ export default {
   .yasqe .CodeMirror { font-size: 0.8em; height: 380px; }
 
   .yasr_header {
-    display: none;
   }
   .bg-wrapper {
     padding: 0;
