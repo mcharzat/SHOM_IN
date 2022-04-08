@@ -306,7 +306,6 @@ export default {
         drawnItems.clearLayers();
         const index = this.layerToManaged.extra.indexOf("selection");
         this.layerToManaged.extra = this.removeElementFromArray(this.layerToManaged.extra, index);
-        console.log(this.layerToManaged);
         this.$emit("suppressBboxSelectionArea", this.selectionArea);
       });
 

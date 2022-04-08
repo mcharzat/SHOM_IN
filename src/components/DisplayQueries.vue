@@ -80,7 +80,7 @@
  */
 import QueriesHistory from "./queryComponents/QueriesHistory.vue";
 import LayerControl from "./layerComponents/layerControl.vue";
-import Download from "json-data-convert-file/src/components/Download.vue"
+import Download from "../../public/lib/downloadHandler/Download.vue"
 
 export default {
     name: 'displayQueries',
@@ -405,16 +405,16 @@ export default {
                     || !Array.isArray(query.value)) {
                     return false;
                 }
-                query.value.every( entity => {
-                    Object.keys(entity).every(field => {
+                return query.value.every( entity => {
+                    return Object.keys(entity).every(field => {
                         if (!Object.keys(entity[field]).includes("type")
                             || !Object.keys(entity[field]).includes("value")
                             || !Array.isArray(entity[field].value)) {
                             return false;
-                        }
+                        } 
+                        return true;
                     })
                 })
-                return true;
             })
             if (datafilter.length != data.length) {
                 return true;
@@ -427,14 +427,14 @@ export default {
          * @return {String} Name not available or empty
          */
         checkIsQueriesNameTaken(data) {
+            const newQueriesName = [];
             let nameTaken = "";
-            data.every( query => {
-                if (this.checkName(query.name)) {
-                    return true;
-                } else {
+            data.forEach( query => {
+                if (!this.checkName(query.name)
+                    || newQueriesName.includes(query.name)) {
                     nameTaken = query.name;
-                    return false;
                 }
+                newQueriesName.push(query.name);
             })
             return nameTaken;
         }
