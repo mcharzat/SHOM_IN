@@ -13,7 +13,7 @@
 
       <div v-if="isSparnatActive">
         <div id="ui-search">
-          <div v-if="!displaySelect" id="displaySelect" class="sparnatBackground">
+          <div v-if="!bboxState" id="displaySelect" class="sparnatBackground">
             <div class="selection">
               <img src="../../assets/valide_selection.png" height ="20" width="20"/>
               Sélection activée
@@ -509,11 +509,7 @@ export default {
     font-weight: bold;
     box-shadow: 0 0 5px rgba(0,0,0,0.19), 0 0 5px rgba(0,0,0,0.19)
   }
-  .buttonConfig:hover {
-    background: rgba(0, 0, 0, 0) linear-gradient(rgba(2, 184, 117, 0.1) 0px, rgba(2, 184, 117, 0.1) 96px) repeat scroll 0% 0%;
-    color: black;
-  }
-  .buttonClick {
+  .buttonConfig:hover, .buttonClick {
     background: rgba(0, 0, 0, 0) linear-gradient(rgba(2, 184, 117, 0.1) 0px, rgba(2, 184, 117, 0.1) 96px) repeat scroll 0% 0%;
     color: black;
   }
