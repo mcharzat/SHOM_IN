@@ -1,8 +1,8 @@
 <template>
-  <button :class="{researchManager: true, researchManagerOpen: moveButton}" @click="actionResearchPanel">
+  <button :class="{researchManager: true, researchManagerOpen: widthResult}" @click="actionResearchPanel">
     <img src="../assets/research.png" height ="35" width="35"/>
   </button>
-  <div class="research" :hidden="!displayPanel">
+  <div class="research" :hidden="!isDisplayed">
     <QuerySPARQL 
       :coordsBboxArea="bboxArea"
       :suppressBbox="bboxState"
@@ -12,6 +12,14 @@
 </template>
 
 <script>
+/**
+ * @module sparqlResearch
+ * @vue-event {Array} sparnaResult - Results of the research
+ * @vue-prop {Boolean} [widthResult=false] - State of the display of result/history component
+ * @vue-prop {Array} [bboxArea=[]] - Bbox of the selection
+ * @vue-prop {String} [bboxState=""] - Wether to use the selection
+ * @vue-data {Boolean} [isDisplayed=true] - Wether the content of the component is displayed
+ */
 import QuerySPARQL from './queryComponents/QuerySPARQL.vue'
 
 export default {
@@ -39,18 +47,18 @@ export default {
       isDisplayed: true
     }
   },
-  computed : {
-    displayPanel() {
-      return this.isDisplayed;
-    },
-    moveButton() {
-      return this.widthResult != 0;
-    }
-  },
   methods: {
+    /**
+     * Update isDisplayed
+     */
     actionResearchPanel() {
       this.isDisplayed = !this.isDisplayed;
     },
+    /**
+     * Convey the signal
+     * @param {Array} result - Results of the research
+     * @emits sparnaResult
+     */
     conveyResult (result) {
       this.$emit('sparnaResult', result);
     }
@@ -70,6 +78,8 @@ export default {
   background-color:white;
   border:solid;
   border-color: white;
+  border-radius: 10%;
+
   box-shadow: 0 0 5px rgba(0,0,0,0.19), 0 0 5px rgba(0,0,0,0.19)
 }
 

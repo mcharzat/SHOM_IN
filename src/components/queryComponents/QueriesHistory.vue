@@ -1,7 +1,7 @@
 <template>
   <div class="myQuery">
-    <div :class="{name: true, selected: displayedMap}" @click="displayedMap = !displayedMap">
-      <div v-if="stateNameEdition" @dblclick="editionMode">
+    <div :class="{name: true, selected: displayed}" @click="updateDisplay">
+      <div v-if="!stateNameEdition" @dblclick="editionMode">
         {{ nameQuery }}
       </div>
       <div v-else>
@@ -22,28 +22,40 @@
 </template>
 
 <script>
+/**
+ * @module queryHistory
+ * @vue-event {String} renameQuery - New name of the query
+ * @vue-event displayQueryMap - Updated the state of the display on the map of the query
+ * @vue-event displayQueryResult - Refresh the display of entity result of the query
+ * @vue-event removeQuery - Remove the query
+ * @vue-prop {String} [nameQuery=Requête] - Name of the query
+ * @vue-prop {Boolean} [displayed=true] - State of the display on the map of the querey
+ * @vue-data {Boolean} [stateNameEdition=true] - Wether the display of the name is in edition mode
+ * @vue-data {String} [newName=""] - New name of the query
+ */
 export default {
     name: "queryHistory",
     emits: ['renameQuery', 'displayQueryMap', 'displayQueryResult', 'removeQuery'],
     props: {
         nameQuery:  {
-        type: String,
-        default: "Requête"
+            type: String,
+            default: "Requête"
+        },
+        displayed:  {
+            type: Boolean,
+            default: true
         },
     },
     data() {
         return {
-            displayedMap: true,
-            stateNameEdition: true,
+            stateNameEdition: false,
             newName: "",
         }
     },
-    watch: {
-        displayedMap: function () {
-            this.displayMap();
-        }
-    },
     methods: {
+        /**
+         * Set up the edition mode
+         */
         async editionMode() {
             this.newName = this.nameQuery;
             this.stateNameEdition = !this.stateNameEdition;
@@ -51,23 +63,35 @@ export default {
             await this.$forceUpdate();
             this.$refs['rename'].focus();
         },
+        /**
+         * End the edition mode.
+         * @emits renameQuery
+         */
         submitRename() {
             this.stateNameEdition = !this.stateNameEdition;
             this.$emit('renameQuery', this.newName);
         },
+        /**
+         * Reset the edition mode and cancel the rename.
+         */
         cancelRename() {
             this.stateNameEdition = true;
         },
-        displayMap() {
-            const data = {
-                name: this.nameQuery,
-                state: this.displayedMap
-            }
-            this.$emit('displayQueryMap', data);
+        /**
+         * @emits displayQueryMap
+         */
+        updateDisplay() {
+            this.$emit("displayQueryMap");
         },
+        /**
+         * @emits displayQueryResult
+         */
         displayResult() {
             this.$emit('displayQueryResult');
         },
+        /**
+         * @emits removeQuery
+         */
         removeQuery() {
             this.$emit('removeQuery');
         }
@@ -91,6 +115,7 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
+    user-select: none;
 
     width: 75%;
     height: 35px;

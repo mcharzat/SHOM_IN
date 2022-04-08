@@ -5,7 +5,7 @@
       <img src="../assets/results.png" height ="37" width="37"/>
     </button>
     <div v-if="moveSidePanel" class="resultSidepanelOpen">
-      <h1>Resultats</h1>
+      <h2>Resultats</h2>
       <EntityResult v-for="(result, i) in queryResult" :values="result" :key="i"
         @pageOuvrage="conveyPageOuvrage">
       </EntityResult>
@@ -14,6 +14,15 @@
 </template>
 
 <script>
+/**
+ * @module displayResearch
+ * @vue-event {Boolean} resultOpenState - State of the display of the composent
+ * @vue-event {Array} pageOuvrage - File and page of where the entity is describe
+ * @vue-prop {Boolean} [stateHistory=false] - State of the display of history component
+ * @vue-prop {Array} [queryResult=[]] - New query results to display
+ * @vue-prop {Number} [refresh=0] - Force open component for refresh
+ * @vue-data {Boolean} [moveSidePanel=false] - Wether the content of the component is displayed
+ */
 import EntityResult from "./queryComponents/EntityResult.vue";
 
 export default {
@@ -56,9 +65,17 @@ export default {
     }
   },
   methods: {
+    /**
+     * Update moveSidePanel
+     */
     actionSidePanel() {
       this.moveSidePanel = !this.moveSidePanel;
     },
+    /**
+     * Convey a signal
+     * @param {Array} pageOuvrage - File and page of where the entity is describe
+     * @emits pageOuvrage
+     */
     conveyPageOuvrage (pageOuvrage) {
       this.$emit('pageOuvrage', pageOuvrage);
     }
@@ -80,6 +97,7 @@ export default {
 
     border:solid;
     border-color: white;
+    border-radius: 10%;
 
     box-shadow: 0 0 5px rgba(0,0,0,0.19), 0 0 5px rgba(0,0,0,0.19)
 }
@@ -95,7 +113,7 @@ export default {
   left: 5px;
   width: 33%;
   height: 100%;
-  max-height: calc(100% - 160px);
+  max-height: calc(100% - 125px);
   top : 100px;
   overflow: scroll;
   z-index: 1000;

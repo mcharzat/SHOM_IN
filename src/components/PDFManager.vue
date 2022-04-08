@@ -21,6 +21,17 @@
 </template>
 
 <script>
+/**
+ * @module pdfManager
+ * @vue-event {Boolean} pdfOpenState - State of the display of the composent
+ * @vue-event {Boolean} openMenuButton - Wether the back button should be displayed
+ * @vue-prop {Boolean} [menuOpen=true] - Wether the menu is displayed
+ * @vue-prop {Array} [pageOuvrage=[]] - File and page to display
+ * @vue-data {Boolean} [moveSidePanel=false] - Wether the content of the component is displayed
+ * @vue-data {Array} [allFiles=[]] - List of all the pdf
+ * @vue-data {Array} [savePageOuvrage=[]] - Save the pdf (and page) displayed
+ * @vue-data {Boolean} [openMenu=true] - Wether the content of the menu is displayed
+ */
 import PDF from './pdfComponents/PDF.vue'
 import filesNames from '../../public/lib/pdfloader/web/pdfFiles/pdfFilesNames.json'
 
@@ -59,10 +70,19 @@ export default {
     }
   },
   methods: {
+    /**
+     * Update moveSidePanel
+     * @emits pdfOpenState
+     */
     actionSidePanel() {
       this.moveSidePanel = !this.moveSidePanel;
       this.$emit('pdfOpenState', this.moveSidePanel);
     },
+    /**
+     * Display thepdf asked
+     * @param {String} name - Name of the pdf
+     * @emits openMenuButton
+     */
     clickPdf(name) {
       this.openMenu = false;
 
@@ -90,6 +110,7 @@ export default {
 
   border:solid;
   border-color: white;
+  border-radius: 10%;
 
   box-shadow: 0 0 5px rgba(0,0,0,0.19), 0 0 5px rgba(0,0,0,0.19)
 }

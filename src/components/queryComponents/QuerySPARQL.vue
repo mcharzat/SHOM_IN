@@ -1,6 +1,6 @@
 <template>
     <div class="container-fluid">
-      
+
       <div class="sparnatBackground">
         <button 
           v-for="(nameConfig,idx) in namesConfigs['buttonName']" 
@@ -29,6 +29,19 @@
 </template>
 
 <script>
+/**
+ * @module querySPARQL
+ * @vue-event {Array} myQueryResult - The result of the research
+ * @vue-prop {Array} [coordsBboxArea=[]] - Bbox selected by the user
+ * @vue-prop {String} [suppressBbox=""] - Selection is remove
+ * @vue-data {String} [config=""] - File of configuration of sparnatural
+ * @vue-data sparnatural - Sparnatural element
+ * @vue-data {String} [querySelectBbox=""] - Part of the query about the selection
+ * @vue-data {Boolean} [bboxState=true] - Wether the selection is used
+ * @vue-data {Array} [bboxArea=[]] - Bbox to filter
+ * @vue-data {String} [tripleStoreLink=""] - Url of the database
+ */
+
 import {Yasr,Yasqe} from '@triply/yasgui'
 
 // ----- Import config sparnatural data ----- //
@@ -63,11 +76,6 @@ export default {
       bboxState: true,
       bboxArea: [],
       tripleStoreLink: "http://172.31.58.17:7200/repositories/test_shom_lambert"
-    }
-  },
-  computed : {
-    displaySelect() {
-      return this.bboxState;
     }
   },
   watch: {
@@ -105,7 +113,7 @@ export default {
       await this.$forceUpdate();
 
       for (let i=0; i < this.namesConfigs['buttonName'].length; i++) {
-
+      
         if (name == this.namesConfigs['buttonName'][i]) {
           this.colorButton[i] = true;
           this.getColorButton(i);
@@ -113,8 +121,7 @@ export default {
         } else {
           this.colorButton[i] = false;
         }
-      } 
-
+      }
     },
     sparnaturalConfiguration(configSparnatural) {
 
@@ -168,6 +175,10 @@ export default {
         this.sparnatural.disableLoading() ;
       });
     },
+    /**
+     * Setup the selection
+     * @param {*} yasqe 
+     */
     filterQueryBySelection(yasqe) {
       let queryString = yasqe.getValue();
 
@@ -180,11 +191,18 @@ export default {
       }
       yasqe.setValue(queryString);
     },
+    /**
+     * Setup Yasqe
+     */
     constructYasqe() {
       return new Yasqe(document.getElementById("yasqe"), {
       requestConfig: { endpoint: this.tripleStoreLink },
       copyEndpointOnNewTab: false});
     },
+    /**
+     * Setup Yasr
+     * @param {*} yasqe - Yasqe
+     */
     constructYasr(yasqe) {
       return new Yasr(document.getElementById("yasr"), {
       //this way, the URLs in the results are prettified using the defined prefixes in the query
@@ -194,10 +212,20 @@ export default {
       // avoid persistency side-effects
       "persistency": { "prefix": false, "results": { "key": false }}});
     },
+    /**
+     * Remove the selection pzrt of the query
+     * @param {String} queryString - The query
+     * @return {String} The query updated
+     */
     suppressAreaBbox(queryString) {
       queryString = queryString.replace(this.querySelectBbox, "");
       return queryString;
     },
+    /**
+     * Add the selection pzrt of the query
+     * @param {String} queryString - The query
+     * @return {String} The query updated
+     */
     addSelectAreaBbox(queryString) {
       this.querySelectBbox = 
       ` ?this geom:hasGeometry ?eGeom .
@@ -207,6 +235,11 @@ export default {
       queryString = queryString.replace(new RegExp('}$'), this.querySelectBbox);
       return queryString;
     },
+    /**
+     * Add the prefixes to the query
+     * @param {String} queryString - The query
+     * @return {String} The query updated
+     */
     prefixesPostProcess(queryString) {
       if(queryString.indexOf("rdf-schema#") == -1) {
           queryString = queryString.replace("SELECT ", 
@@ -219,24 +252,44 @@ export default {
       }       
       return queryString;
     },
+    /**
+     * Add the parameters to retrieve to the query
+     * @param {String} queryString - the query
+     * @return {String} The query updated
+     */
     selectorsPostProcess(queryString) {
         queryString = queryString.replace(
           "SELECT DISTINCT ?this",
           "SELECT DISTINCT ?this ?type ?category ?label ?description ?information ?wkt ?lat ?lng ?lumineux ?ouvrage ?page ?amer");
         return queryString;
     },
+    /**
+     * Add retrieval of the label to the query
+     * @param {String} queryString - The query
+     * @return {String} The query updated
+     */
     optionalLabelPostProcess(queryString) {
       queryString = queryString.replace(new RegExp('}$'), 
                 "OPTIONAL{?this rdfs:label ?label}.\n"+
                 "OPTIONAL{?this skos:prefLabel ?label}.\n}");
         return queryString;
     },
+    /**
+     * Add retrieval of the description/information to the query
+     * @param {String} queryString - The query
+     * @return {String} The query updated
+     */
     optionalDescriptionPostProcess(queryString) {
       queryString = queryString.replace(new RegExp('}$'), 
                 "OPTIONAL{?this nav:aPourTexteAssocie ?description}.\n"+
                 "OPTIONAL{?this nav:aPourInfo ?information}.\n}");
       return queryString;
     },
+    /**
+     * Add retrieval of the geometry to the query
+     * @param {String} queryString - The query
+     * @return {String} The query updated
+     */
     optionalGeomPostProcess(queryString) {
         queryString = queryString.replace(new RegExp('}$'), 
                 "OPTIONAL{?this nav:aPourLat ?lat}.\n"+
@@ -245,6 +298,11 @@ export default {
                 "OPTIONAL{?this geom:hasGeometry ?geom.\n ?geom gsp:asWKT ?wkt\n}\n}");
         return queryString;
     },
+    /**
+     * Add retrieval of the category/type to the query
+     * @param {String} queryString - The query
+     * @return {String} The query updated
+     */
     optionalClassPostProcess(queryString) {
       const entity = [...queryString.matchAll(new RegExp("this rdf:type ([<].*[>])", "gm"))];
       let qs = "OPTIONAL{" + entity[0][1] + " rdfs:label ?type}.\n"+
@@ -262,30 +320,59 @@ export default {
       queryString = queryString.replace(new RegExp('}$'), qs);
       return queryString;
     },
+    /**
+     * Handle an any query
+     * @param {String} queryString - The query
+     * @return {String} The query updated
+     */
     anyEntitiesPostProcess(queryString) {
       const entity = [...queryString.matchAll(new RegExp("([a-zA-Z]*_[0-9]).* WHERE", "gm"))];
       if(entity.length > 0) {
-        const exp = "this [<].*#([a-zA-Z]+)[>] ." + entity[0][1];
+        const exp = "this (<.*#|nav:)([a-zA-Z]+)>? ." + entity[0][1];
         const property = [...queryString.matchAll(new RegExp(exp, "gm"))];
-        queryString = queryString.replace(entity[0][1], property[0][1]);
+        if (property.length > 0) {
+          queryString = queryString.replace(entity[0][1], property[0][2]);
 
-        queryString = queryString.replace(new RegExp('}$'), 
-                "OPTIONAL{?" + entity[0][1] + " rdfs:label ?" + property[0][1] + "}.\n"+
-                "OPTIONAL{?" + entity[0][1] + " skos:prefLabel ?" + property[0][1] + "}\n}");
+          queryString = queryString.replace(new RegExp('}$'), 
+            "OPTIONAL{?" + entity[0][1] + " rdfs:label ?" + property[0][2] + "}.\n"+
+            "OPTIONAL{?" + entity[0][1] + " skos:prefLabel ?" + property[0][2] + "}\n}");
+        } else {
+          const regEx1 = [...queryString.matchAll(new RegExp(".this .* ." + entity[0][1] +".", "gm"))];
+          if (regEx1.length > 1) {
+            queryString = queryString.replace(regEx1[1][0], "");
+            const regEx2 = new RegExp("." + entity[0][1] + " .* .any.");
+            queryString = queryString.replace(regEx2, "");
+          }
+        }
       }
       return queryString;
     },
+    /**
+     * Add retrieval of the provenance to the query
+     * @param {String} queryString - The query
+     * @return {String} The query updated
+     */
     getChapterPostProcess(queryString){
       queryString = queryString.replace(new RegExp('}$'),
                 "<<?this nav:aPourProvenance ?provenance>> nav:aPourNumeroDePage ?page.\n"+
                 "?provenance rdf:type ?ouvrage FILTER(?ouvrage != nav:OuvrageIN) }");
       return queryString;
     },
+    /**
+     * Add semantic to the query
+     * @param {String} queryString - The query
+     * @return {String} The query updated
+     */
     semanticPostProcess(queryString) {
       queryString = this.prefixesPostProcess(queryString);
       queryString = this.sparnatural.expandSparql(queryString);
       return queryString;
     },
+    /**
+     * Handle the result of the research
+     * @param {Object} response - Response from Yasqe
+     * @emits myQueryResult
+     */
     emitResults (response) {
       let results = JSON.parse(response).results.bindings;
       
@@ -295,6 +382,11 @@ export default {
 
       this.$emit("myQueryResult", results);
     },
+    /**
+     * Group fields page and ouvrage in one element
+     * @param {Array} results - Results of the research
+     * @return {Array} results
+     */
     concatOuvragePage(results){
       results.forEach(element => {
         element["reference"] = {
@@ -306,6 +398,11 @@ export default {
       });
       return results;
     },
+    /**
+     * Build a config of expolded entities
+     * @param {Array} results - Results of the research
+     * @return {Object} config
+     */
     getStateOfResults(results) {
       const state = {};
       results.forEach((result, i) => {
@@ -317,6 +414,12 @@ export default {
       })
       return state;
     },
+    /**
+     * Group exploded entities into one
+     * @param {Object} config - Config of exploded entities
+     * @param {Array} data - Results of the research
+     * @return {Array} results
+     */
     synthesizeResults(config, data) {
       const results = [];
 

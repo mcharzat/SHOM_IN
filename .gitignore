@@ -116,3 +116,7 @@ dist
 *.njsproj
 *.sln
 *.sw?
+
+# Documentation
+devDocs/
+docs/
