@@ -250,7 +250,6 @@ export default {
           this.setupQueryLayers(query.name);
           this.displayResult(query.value, map);
         })
-          
       });
 
       this.$watch('layerToManaged', () => {
@@ -264,7 +263,7 @@ export default {
 
       this.$watch('stateDisplay', config => {
         this.handleDisplay(config, map);
-      }, {deep: true});
+      });
 
       this.$watch('removeTheQuery', name => {
         const index = this.selectQueryByName(name.name);

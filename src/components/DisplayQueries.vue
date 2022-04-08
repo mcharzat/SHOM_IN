@@ -289,6 +289,7 @@ export default {
          */
         conveyDisplayConfig() {
             this.$emit("stateDisplay", {
+                time: Date.now(),
                 layers: this.configDisplayLayer,
                 queries: this.configDisplayQueries
             })
@@ -484,10 +485,14 @@ export default {
 .history, .historyContent {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   align-content: center;
 
   margin-top: 7px;
+}
+
+.historyContent {
+  justify-content: space-between;
+  height: 100%;
 }
 
 .resize {
@@ -505,7 +510,7 @@ export default {
 .buttonsManage {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-self: space-between;
   align-self: center;
 
   margin-top: 15px;
