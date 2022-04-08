@@ -1,6 +1,6 @@
 <template>
-  <button :class="{researchManager: true, researchManagerOpen: widthResult}" @click="actionResearchPanel">
-    <img src="../assets/research.png" height ="35" width="35"/>
+  <button :class="{researchManager: true, researchManagerOpen: moveButton}" @click="actionResearchPanel">
+    <img src="../assets/research.png" title="Afficher/masquer l'outil de recherche" height ="35" width="35"/>
   </button>
   <div class="research" :hidden="!isDisplayed">
     <QuerySPARQL 
