@@ -1,5 +1,6 @@
 <template>
     <div class="container-fluid">
+      
       <div class="sparnatBackground">
         <button 
           v-for="(nameConfig,idx) in namesConfigs['buttonName']" 
@@ -51,7 +52,6 @@ export default {
   data () {
     return {
       namesConfigs: {
-        "fileName" : ["atlantis_config.ttl", "atlantis-sparnaconfig.ttl", "test.ttl"],
         "buttonName" : ["Config1", "Config2", "Config3"],
         "config" : [Config1, Config1, Config3]
       },
@@ -81,6 +81,14 @@ export default {
   },
   mounted() {
 
+    $.urlParam = function(name){
+        const results = new RegExp('[\\?&amp;]' + name + '=([^&amp;#]*)').exec(window.location.href);
+        if(results == null) { return null; }
+        return results[1] || 0;
+    }
+    this.lang = ($.urlParam('lang') != null)?$.urlParam('lang'):'fr';
+
+
     this.colorButton = new Array(this.namesConfigs['config'].length);
 
     this.clickConfig(this.namesConfigs['buttonName'][0]);
@@ -91,7 +99,6 @@ export default {
     },
     async clickConfig(name) {
 
-      console.log(name);
       this.isSparnatActive = false;
       await this.$forceUpdate();
       this.isSparnatActive = true;
@@ -110,15 +117,6 @@ export default {
 
     },
     sparnaturalConfiguration(configSparnatural) {
-
-      $.urlParam = function(name){
-        const results = new RegExp('[\\?&amp;]' + name + '=([^&amp;#]*)').exec(window.location.href);
-        if(results == null) { return null; }
-        return results[1] || 0;
-      }
-
-      this.lang = ($.urlParam('lang') != null)?$.urlParam('lang'):'fr';
-      const yasqe = this.constructYasqe();
 
       this.sparnatural = document.getElementById('ui-search').Sparnatural({
         config: configSparnatural,
@@ -160,14 +158,15 @@ export default {
         }
       });
 
-          const yasr = this.constructYasr(yasqe);
+      const yasqe = this.constructYasqe();
+      const yasr = this.constructYasr(yasqe);
 
-    // link yasqe and yasr
-    yasqe.on("queryResponse", (_yasqe, response, duration) => {
-      this.emitResults(response.text);
-      yasr.setResponse(response, duration);
-      this.sparnatural.disableLoading() ;
-    });
+      // link yasqe and yasr
+      yasqe.on("queryResponse", (_yasqe, response, duration) => {
+        this.emitResults(response.text);
+        yasr.setResponse(response, duration);
+        this.sparnatural.disableLoading() ;
+      });
     },
     filterQueryBySelection(yasqe) {
       let queryString = yasqe.getValue();
