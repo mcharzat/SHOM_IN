@@ -88,7 +88,7 @@
         &emsp;- Soundings : <br>
         &emsp;- Dangers : Les différents dangers en mer.<br>
         &emsp;- Restrictions : Différentes restrictions représentées sur la carte.<br>
-        &emsp;- Topography : <br>
+        &emsp;- Topography : Elements au sol près de la côte.<br>
         &emsp;- Aids to navigation : Les bouées et les phares le long de la côte.<br>
         &emsp;- Metadata : Les métadonnées liées aux zones.<br><br>
       </p>
