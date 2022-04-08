@@ -82,6 +82,11 @@ export default {
       tripleStoreLink: "http://172.31.58.17:7200/repositories/test_shom_lambert"
     }
   },
+  computed : {
+    displaySelect() {
+      return this.bboxState;
+    }
+  },
   watch: {
     coordsBboxArea: function (bbox) {
       this.bboxState = false;
@@ -99,8 +104,6 @@ export default {
         return results[1] || 0;
     }
     this.lang = ($.urlParam('lang') != null)?$.urlParam('lang'):'fr';
-
-
     this.colorButton = new Array(this.namesConfigs['config'].length);
 
     this.clickConfig(this.namesConfigs['buttonName'][0]);
@@ -277,7 +280,7 @@ export default {
     selectorsPostProcess(queryString) {
         queryString = queryString.replace(
           "SELECT DISTINCT ?this",
-          "SELECT DISTINCT ?this ?type ?category ?label ?description ?information ?wkt ?lat ?lng ?lumineux ?ouvrage ?page ?amer");
+          "SELECT DISTINCT ?this ?type ?category ?label ?description ?instruction ?instructions ?exception ?reglement ?wkt ?lat ?lng ?lumineux ?ouvrage ?page ?amer ?contact ?horairesVHF ?mail ?horairestelephone ?telephone ?information ?interdiction ?duree ?cible ?lieu");
         return queryString;
     },
     /**
@@ -300,6 +303,15 @@ export default {
       queryString = queryString.replace(new RegExp('}$'), 
                 "OPTIONAL{?this nav:aPourTexteAssocie ?description}.\n"+
                 "OPTIONAL{?this nav:aPourInfo ?information}.\n}");
+      return queryString;
+    },
+    optionalContactPostProcess(queryString) {
+      queryString = queryString.replace(new RegExp('}$'), 
+                "OPTIONAL{?this nav:aPourContact ?contact}.\n"+
+                "OPTIONAL{?this nav:aPourHorairesVHF ?horairesVHF}.\n"+
+                "OPTIONAL{?this nav:aPourAdresseMail ?mail}.\n"+
+                "OPTIONAL{?this nav:aPourHorairesTelephone ?horairestelephone}.\n"+
+                "OPTIONAL{?this nav:aPourNumeroDeTelephone ?telephone}.\n}");
       return queryString;
     },
     /**
