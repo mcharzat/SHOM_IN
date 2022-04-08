@@ -1,6 +1,6 @@
 <template>
     <button :class="{pdfManager: true, pdfManagerOpen: moveSidePanel}" @click="actionSidePanel">
-      <img src="../assets/pdf.png" height ="34" width="34"/>
+      <img src="../assets/pdf.png" title='Afficher le PDF' height ="34" width="34"/>
     </button>
     <div v-if="moveSidePanel" class="pdfSidepanelOpen">
 
