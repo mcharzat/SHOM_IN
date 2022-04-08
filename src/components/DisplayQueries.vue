@@ -35,6 +35,11 @@
             ></QueriesHistory>
           </div>
           <div class="buttonsManage">
+            <Download :download-data="queries"
+             file-type="json"
+             file-name="Nereus results"
+             class="save"
+             ButtonText="Sauvegarder"/>
             <button class="reset" @click="reset">
             <img src="../assets/x.png" height ="16" width="16"/>
             <div class="resetText">Tout supprimer</div>
@@ -70,6 +75,7 @@
  */
 import QueriesHistory from "./queryComponents/QueriesHistory.vue";
 import LayerControl from "./layerComponents/layerControl.vue";
+import Download from "json-data-convert-file/src/components/Download.vue"
 
 export default {
     name: 'displayQueries',
@@ -83,7 +89,8 @@ export default {
     ],
     components : {
     QueriesHistory,
-    LayerControl
+    LayerControl,
+    Download
 },
     props: {
         stateResult: {
@@ -377,16 +384,30 @@ export default {
 .buttonsManage {
   display: flex;
   flex-direction: row;
-  justify-self: center;
+  justify-content: space-between;
   align-self: center;
 
   margin-top: 15px;
-  max-width: 200px;
+  max-width: 90%;
 
 }
 
 .buttonsManage .reset {
   background-color: #f44336;
+  color: white;
+  font-size: 0.8em;
+  padding: 8px 22px 6px 22px;
+  margin-left: 3px;
+  border: 0px;
+  border-radius: 4px;
+
+  display: flex;
+  justify-content: space-between;
+}
+
+.buttonsManage .save {
+  min-height: 30px;
+  background-color: green;
   color: white;
   font-size: 0.8em;
   padding: 8px 22px 6px 22px;
