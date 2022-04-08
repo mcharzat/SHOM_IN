@@ -38,7 +38,7 @@ export default {
       querySelectBbox: "",
       bboxState: true,
       bboxArea: [],
-      tripleStoreLink: "http://172.31.58.17:7200/repositories/test_shom"
+      tripleStoreLink: "http://172.31.58.17:7200/repositories/test_shom_lambert"
     }
   },
   computed : {
@@ -82,8 +82,13 @@ export default {
       filterConfigOnEndpoint : false,
       onQueryUpdated: (queryString) =>  {
         queryString = this.semanticPostProcess(queryString);
-        queryString = this.labelDescriptionSelectionPostProcess(queryString);
-        queryString = this.optionalQueriesPostProcess(queryString);
+        queryString = this.SelectorsPostProcess(queryString);
+        queryString = this.optionalClassPostProcess(queryString);
+        queryString = this.optionalLabelPostProcess(queryString);
+        queryString = this.optionalDescriptionPostProcess(queryString);
+        queryString = this.getChapterPostProcess(queryString);
+        queryString = this.optionalGeomPostProcess(queryString);
+        queryString = this.anyEntitiesPostProcess(queryString);
         $('#sparql code').html(queryString.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"));
         yasqe.setValue(queryString);
       },
@@ -148,7 +153,7 @@ export default {
       this.querySelectBbox = 
       ` ?this geom:hasGeometry ?eGeom .
         ?eGeom gsp:asWKT ?wkt.
-        FILTER (geof:sfWithin(?wkt, '''<http://www.opengis.net/def/crs/EPSG/0/4326> Polygon ((${this.coordsBboxArea[0]} ${this.coordsBboxArea[1]},${this.coordsBboxArea[0]} ${this.coordsBboxArea[3]},${this.coordsBboxArea[2]} ${this.coordsBboxArea[3]},${this.coordsBboxArea[2]} ${this.coordsBboxArea[1]},${this.coordsBboxArea[0]} ${this.coordsBboxArea[1]}))'''^^gsp:wktLiteral))
+        FILTER (geof:sfWithin(?wkt, '''<http://data.ign.fr/id/ignf/crs/RGF93LAMB93> Polygon ((${this.coordsBboxArea[0]} ${this.coordsBboxArea[1]},${this.coordsBboxArea[0]} ${this.coordsBboxArea[3]},${this.coordsBboxArea[2]} ${this.coordsBboxArea[3]},${this.coordsBboxArea[2]} ${this.coordsBboxArea[1]},${this.coordsBboxArea[0]} ${this.coordsBboxArea[1]}))'''^^gsp:wktLiteral))
       }`;
       queryString = queryString.replace(new RegExp('}$'), this.querySelectBbox);
       return queryString;
@@ -159,29 +164,54 @@ export default {
                 "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> \n"+
                 "PREFIX nav: <http://data.shom.fr/def/navigation_cotiere#>\n"+
                 "PREFIX geom: <http://data.ign.fr/def/geometrie#>\n"+
-                "PREFIX skos: <http://www.w3.org/2004/02/skos/core#>"+
-                "PREFIX geof: <http://www.opengis.net/def/function/geosparql/>"+
+                "PREFIX skos: <http://www.w3.org/2004/02/skos/core#>\n"+
+                "PREFIX geof: <http://www.opengis.net/def/function/geosparql/>\n"+
                 "PREFIX gsp: <http://www.opengis.net/ont/geosparql#>\n SELECT ");
       }       
       return queryString;
     },
-    labelDescriptionSelectionPostProcess(queryString) {
+    SelectorsPostProcess(queryString) {
         queryString = queryString.replace(
           "SELECT DISTINCT ?this",
-          "SELECT DISTINCT ?this ?label ?description ?information ?wkt ?lat ?lng ?lumineux ?amer");
+          "SELECT DISTINCT ?this ?type ?category ?label ?description ?information ?wkt ?lat ?lng ?lumineux ?ouvrage ?page ?amer");
         return queryString;
     },
-    optionalQueriesPostProcess(queryString) {
-        queryString = queryString.replace(new RegExp('}$'), 
+    optionalLabelPostProcess(queryString) {
+      queryString = queryString.replace(new RegExp('}$'), 
                 "OPTIONAL{?this rdfs:label ?label}.\n"+
-                "OPTIONAL{?this skos:prefLabel ?label}.\n"+
+                "OPTIONAL{?this skos:prefLabel ?label}.\n}");
+        return queryString;
+    },
+    optionalDescriptionPostProcess(queryString) {
+      queryString = queryString.replace(new RegExp('}$'), 
                 "OPTIONAL{?this nav:aPourTexteAssocie ?description}.\n"+
-                "OPTIONAL{?this nav:aPourInfo ?information}.\n"+
+                "OPTIONAL{?this nav:aPourInfo ?information}.\n}");
+      return queryString;
+    },
+    optionalGeomPostProcess(queryString) {
+        queryString = queryString.replace(new RegExp('}$'), 
                 "OPTIONAL{?this nav:aPourLat ?lat}.\n"+
                 "OPTIONAL{?this nav:aPourLng ?lng}.\n"+
                 "OPTIONAL{?this nav:estUnRepereLumineux ?lumineux}.\n"+
                 "OPTIONAL{?this geom:hasGeometry ?geom.\n ?geom gsp:asWKT ?wkt\n}\n}");
         return queryString;
+    },
+    optionalClassPostProcess(queryString) {
+      const entity = [...queryString.matchAll(new RegExp("this rdf:type ([<].*[>])", "gm"))];
+      let qs = "OPTIONAL{" + entity[0][1] + " rdfs:label ?type}.\n"+
+              "OPTIONAL{" + entity[0][1] + " skos:prefLabel ?type}.\n"
+      const categories = [
+        "AideALaNavigation",
+        "ZoneDuDomaineMaritime",
+        "PhenomeneMeteorologiqueOuOceanographique"
+      ];
+      categories.forEach(category => {
+        qs += "OPTIONAL{" + entity[0][1] + " rdfs:subClassOf nav:" + category + ".\n"+
+              "BIND(<http://data.shom.fr/def/navigation_cotiere#" + category + "> AS ?category)}.\n"
+      })
+      qs += "OPTIONAL{BIND(" + entity[0][1] + " AS ?category)}.\n}"
+      queryString = queryString.replace(new RegExp('}$'), qs);
+      return queryString;
     },
     anyEntitiesPostProcess(queryString) {
       const entity = [...queryString.matchAll(new RegExp("([a-zA-Z]*_[0-9]).* WHERE", "gm"))];
@@ -196,6 +226,12 @@ export default {
       }
       return queryString;
     },
+    getChapterPostProcess(queryString){
+      queryString = queryString.replace(new RegExp('}$'),
+                "<<?this nav:aPourProvenance ?provenance>> nav:aPourNumeroDePage ?page.\n"+
+                "?provenance rdf:type ?ouvrage FILTER(?ouvrage != nav:OuvrageIN) }");
+      return queryString;
+    },
     semanticPostProcess(queryString) {
       queryString = this.prefixesPostProcess(queryString);
       queryString = this.sparnatural.expandSparql(queryString);
@@ -203,11 +239,23 @@ export default {
     },
     emitResults (response) {
       let results = JSON.parse(response).results.bindings;
-
+      
+      results = this.concatOuvragePage(results);
       const state = this.getStateOfResults(results);
       results = this.synthesizeResults(state, results);
 
       this.$emit("myQueryResult", results);
+    },
+    concatOuvragePage(results){
+      results.forEach(element => {
+        element["reference"] = {
+          type: "literal",
+          value: element["ouvrage"].value.split('#').slice(-1)[0] + " page " + element["page"].value
+        }
+        delete element["page"];
+        delete element["ouvrage"];
+      });
+      return results;
     },
     getStateOfResults(results) {
       const state = {};

@@ -1,11 +1,16 @@
 <template>
-    <button :class="{displayResearch: true, displayResearchOpen: moveSidePanel}" @click="actionSidePanel">
-      <img src="../assets/results.png" height ="35" width="35"/>
+  <div>
+    <button :class="{displayResearch: true, displayResearchOpen: moveSidePanel || stateHistory}"
+    @click="actionSidePanel">
+      <img src="../assets/results.png" height ="37" width="37"/>
     </button>
     <div v-if="moveSidePanel" class="resultSidepanelOpen">
-      <h1>Results</h1>
-      <EntityResult v-for="(result, i) in queryResult" :values="result" :key="i"></EntityResult>
+      <h2>Resultats</h2>
+      <EntityResult v-for="(result, i) in queryResult" :values="result" :key="i"
+        @pageOuvrage="conveyPageOuvrage">
+      </EntityResult>
     </div>
+  </div>
 </template>
 
 <script>
@@ -13,33 +18,49 @@ import EntityResult from "./queryComponents/EntityResult.vue";
 
 export default {
   name: 'DisplayResearch',
+  emits: ['resultOpenState','pageOuvrage'],
   components : { 
     EntityResult,
   },
   props: {
+    stateHistory: {
+      type: Boolean,
+      default: false
+    },
     queryResult:  {
       type: Array,
       default: () => []
     },
+    refresh:  {
+      type: Number,
+      default: 0
+    },
   },
   data() {
     return {
-      infSidePanel: false,
+      moveSidePanel: false,
     }
   },
   watch: {
+    refresh: function () {
+      this.moveSidePanel = true;
+    },
     queryResult: function () {
-      this.infSidePanel = true;
-    }
-  },
-  computed : {
-    moveSidePanel() {
-      return this.infSidePanel;
+      this.moveSidePanel = true;
+    },
+    moveSidePanel: function () {
+      this.$emit('resultOpenState', this.moveSidePanel);
+    },
+    stateHistory : function () {
+      this.moveSidePanel = this.stateHistory ? false : this.moveSidePanel;
     }
   },
   methods: {
     actionSidePanel() {
-      this.infSidePanel = !this.infSidePanel;
+      this.moveSidePanel = !this.moveSidePanel;
+    },
+    conveyPageOuvrage (pageOuvrage) {
+      this.$emit('pageOuvrage', pageOuvrage);
     }
   },
 }
@@ -51,7 +72,7 @@ export default {
     position: absolute;
     height: 50px;
     width: 50px;
-    top: 100px;
+    top: 155px;
     left: 5px;
     z-index: 30;
     
@@ -59,6 +80,7 @@ export default {
 
     border:solid;
     border-color: white;
+    border-radius: 10%;
 
     box-shadow: 0 0 5px rgba(0,0,0,0.19), 0 0 5px rgba(0,0,0,0.19)
 }
@@ -74,7 +96,7 @@ export default {
   left: 5px;
   width: 33%;
   height: 100%;
-  max-height: calc(100% - 160px);
+  max-height: calc(100% - 125px);
   top : 100px;
   overflow: scroll;
   z-index: 1000;

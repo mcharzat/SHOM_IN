@@ -1,9 +1,11 @@
 <template>
+  <div class="divMap">
     <div class="map" @mouseout.prevent="removeCoord" ref="Shom_IN"></div>
     <div class="mouseTracker">
         <p>{{ coordinate }}</p>
     </div>
     <EntityResult :values="dataEntity" v-show="false" ref="entity"></EntityResult>
+  </div>
 </template>
 
 <script>
@@ -11,12 +13,18 @@ import "leaflet/dist/leaflet.css";
 import "leaflet-draw/dist/leaflet.draw.css";
 import 'leaflet';
 import "leaflet-draw";
+import proj4 from 'proj4';
 
 import EntityResult from "./queryComponents/EntityResult.vue";
 
 export default {
   name: 'MapShom',
-  emits: ['bboxSelectionArea', 'suppressBboxSelectionArea'],
+  emits: [
+    'bboxSelectionArea',
+    'suppressBboxSelectionArea',
+    'layersToManage',
+    'layersLabel'
+  ],
   components: {
     EntityResult,
   },
@@ -24,6 +32,22 @@ export default {
     queryResultMap:  {
       type: Array,
       default: () => []
+    },
+    updateNameQuery:  {
+      type: Object,
+      default: () => {}
+    },
+    stateDisplay:  {
+      type: Object,
+      default: () => {}
+    },
+    removeTheQuery:  {
+      type: Object,
+      default: () => {}
+    },
+    demandReset:  {
+      type: Number,
+      default: 0
     },
   },
   data() {
@@ -51,40 +75,55 @@ export default {
         "Aids To Navigation",
         "Metadata"
       ],
-      tryDict: {
-        hydrography: 0,
-        soundings: 0,
-        dangers: 0,
-        restrictions: 0,
-        topo: 0,
-        aton: 0,
-        meta: 0
+      layerIndexes: {},
+      layerToManaged: {
+        content: "categories",
+        data: [],
+        extra: [],
       },
-      dataEntity: {},
+      layerLabels: {},
+      categoriesNames: {
+        amer: "Amers",
+        domaineMaritime: "Domaine maritime",
+        phenomenon: "Phénomènes naturels",
+        default: "Entités"
+      },
+      categoriesUrls: {
+        amer: [
+        "http://data.shom.fr/def/navigation_cotiere#Amer", 
+        "http://data.shom.fr/def/navigation_cotiere#AideALaNavigation"
+      ],
+        domaineMaritime: [
+        "http://data.shom.fr/def/navigation_cotiere#ZoneDuDomaineMaritime"],
+        phenomenon: [
+        "http://data.shom.fr/def/navigation_cotiere#PhenomeneMeteorologiqueOuOceanographique"],
+        default: []
+      },
+      categories: {},
+      dataEntity: [],
       userLocation: {},
       onMap: false,
       selectionArea: "",
       layerManager : L.control.layers(),
       layersManaged : L.layerGroup(),
       layerResearchedElements: L.featureGroup(),
-      layerDefaultElements: L.featureGroup(),
-      layerGeoElements: L.featureGroup(),
-      layerAdviceElements: L.featureGroup(),
+      layerByQuery: [],
     }
   },
   mounted() {
     // Leaflet
     const map = this.setupMap();
     this.setupControls(map);
+    this.setupCategories();
+
+    this.setupListeners(map);
+    this.setupWatchers(map);
+
     this.setupSelectArea(map);
     this.setupResults(map);
+    this.setupProj4();
 
-    this.$watch('queryResultMap', () => {
-      this.displayResult(map);
-    })
-
-    //Connexion à la fonction au déplacement de la souris
-    map.on('mousemove', this.getMousePosition, this);
+    this.setupEmits();
   },
   methods: {
     setupMap() {
@@ -109,9 +148,6 @@ export default {
       this.setupLayerControls(map);
     },
     setupLayerControls(map) {
-      this.layerManager.setPosition("bottomleft");
-      this.layerManager.addTo(map);
-
       this.wmsLayers.forEach((layerName, i) => {
         const layer = L.tileLayer.wms(
           this.getUrl,
@@ -124,14 +160,63 @@ export default {
           layer.addTo(map);
         }
         if (i > 0) {
-          this.layerManager.addOverlay(layer, this.wmsNames[i]);
           this.layersManaged.addLayer(layer);
-          this.tryDict[layerName] = this.layersManaged.getLayerId(layer);
+          this.layerIndexes[layerName] = this.layersManaged.getLayerId(layer);
+          this.layerLabels[layerName] = this.wmsNames[i];
         }
+      });
+    },
+    setupCategories() {
+      Object.keys(this.categoriesNames).forEach(category => {
+        const buildCategory = {
+          urls: this.categoriesUrls[category],
+          layer: L.featureGroup()
+        }
+        this.categories[category] = buildCategory;
+        this.layerLabels[category] = this.categoriesNames[category];
+      })
+    },
+    setupListeners(map) {
+      //Connexion à la fonction au déplacement de la souris
+      map.on('mousemove', this.getMousePosition, this);
+    },
+    setupWatchers(map) {
+      this.$watch('queryResultMap', () => {
+        this.displayResult(map);
+      });
+
+      this.$watch('layerToManaged', () => {
+        this.$emit("layersToManage", this.layerToManaged);
+      }, {deep: true});
+
+      this.$watch('updateNameQuery', names => {
+        const index = this.selectQueryByName(names.old);
+        this.layerByQuery[index].name = names.new;
+      });
+
+      this.$watch('stateDisplay', config => {
+        this.handleDisplay(config, map);
+      }, {deep: true});
+
+      this.$watch('removeTheQuery', name => {
+        const index = this.selectQueryByName(name.name);
+
+        Object.keys(this.categories).forEach(( category => {
+          this.handleDisplayQuery(name.name, category, false);
+        }))
+        this.layerByQuery = this.removeElementFromArray(this.layerByQuery, index);
+        this.cleanCategoriesLayers();
+      });
+
+      this.$watch('demandReset', () => {
+        this.clearResearchLayer();
+        this.layerByQuery = [];
       });
     },
     setupSelectArea(map) {
       const drawnItems = L.featureGroup().addTo(map);
+      this.layersManaged.addLayer(drawnItems);
+      this.layerIndexes["selection"] = this.layersManaged.getLayerId(drawnItems);
 
       L.drawLocal.draw.toolbar.buttons.rectangle = 'Select an area';
       map.addControl(new L.Control.Draw({
@@ -147,27 +232,57 @@ export default {
 
       map.on(L.Draw.Event.DRAWSTART, () => {
         drawnItems.clearLayers();
-        this.layerManager.removeLayer(drawnItems);
+        const index = this.layerToManaged.extra.indexOf("selection");
+        this.layerToManaged.extra = this.removeElementFromArray(this.layerToManaged.extra, index);
+        console.log(this.layerToManaged);
         this.$emit("suppressBboxSelectionArea", this.selectionArea);
       });
 
       map.on(L.Draw.Event.CREATED, (event) => {
         const layer = event.layer;
         this.selectionArea = layer.getBounds().toBBoxString();
-        this.$emit("bboxSelectionArea", this.selectionArea.split(','));
+        const coordWGS = this.selectionArea.split(',');
+        const coord1LAMB = this.convertWGSToLamb([parseFloat(coordWGS[0]), parseFloat(coordWGS[1])]);
+        const coord2LAMB = this.convertWGSToLamb([parseFloat(coordWGS[2]), parseFloat(coordWGS[3])]);
+        this.$emit("bboxSelectionArea", coord1LAMB.concat(coord2LAMB));
         drawnItems.addLayer(layer).addTo(map);
-        this.layerManager.addOverlay(drawnItems, "Selection");
+        this.layerToManaged.extra.push("selection");
       });
+      this.layerLabels["selection"] = "Sélection";
     },
     setupResults (map) {
-      this.layerResearchedElements.addLayer(this.layerDefaultElements);
-      this.layerResearchedElements.addLayer(this.layerGeoElements);
-      this.layerResearchedElements.addLayer(this.layerAdviceElements);
-
+      Object.keys(this.categories).forEach(category => {
+        this.layerResearchedElements.addLayer(this.categories[category].layer);
+      });
+      
       this.layerResearchedElements.addTo(map);
     },
+    setupQueryLayers() {
+      const newQuery = { name: "newQuery" };
+      Object.keys(this.categories).forEach(category => {
+        newQuery[category] = L.featureGroup();
+      });
+      this.layerByQuery.push(newQuery);
+    },
+    setupProj4() {
+      proj4.defs([
+      [
+        'EPSG:4326',
+        '+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees +no_defs'],
+      [
+        'EPSG:2154',
+        '+title=LAMB 93 +proj=lcc +lat_1=49 +lat_2=44 +lat_0=46.5 +lon_0=3 +x_0=700000 +y_0=6600000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs']
+      ]);
+    },
+    setupEmits() {
+      this.$emit("layersToManage", {
+        content: "base",
+        data: Object.keys(this.layerIndexes),
+      });
+      this.$emit("layersLabel", this.layerLabels);
+    },
     displayResult(map) { 
-      this.clearResearchLayer();
+      this.setupQueryLayers();
       this.queryResultMap.forEach(element => {
         const keys = Object.keys(element);
         if (keys.includes("wkt")
@@ -181,133 +296,133 @@ export default {
         }
       })
       this.checkFitBounds(map);
+      //this.$emit("layersToManage", this.layerToManaged);
     },
     displayResultGeo(element, map) {
+      const category = this.determineCategory(element.category.value);
       if (element.lat.value[0].includes("°")) {
         const lat = this.convertDegreeToLatlng(element.lat.value[0]);
         const lng = this.convertDegreeToLatlng(element.lng.value[0]);
-        this.displayElement([lat, lng], element, map);
+        this.displayElement([lat, lng], element, category, map);
       } else {
         this.displayElement(
           [parseFloat(element.lat.value[0]), parseFloat(element.lng.value[0])],
-          element, map);
+          element, category, map);
       }
     },
     displayResultWkt(element, map) {
       const upperCoord = element.wkt.value[0].toUpperCase();
       let coord = this.checkEPSGWkt(element.wkt.value[0]);
       if (coord) {
+        const category = this.determineCategory(element.category.value);
         if (upperCoord.includes("POINT")) {
-          const coords = this.extractCoordPointWkt(coord);
-          this.displayElement(coords, element, map);
+          const coords = this.extractCoordPointWkt(coord.value, coord.epsg);
+          this.displayElement(coords, element, category, map);
         } else if (upperCoord.includes("LINESTRING")) {
           let coords = [];
           if (upperCoord.includes("MULTILINESTRING")) {
-            coords = this.extractCoordMultiLineWkt(coord);
+            coords = this.extractCoordMultiLineWkt(coord.value, coord.epsg);
           } else {
-            coords = this.extractCoordLineWkt(coord);
+            coords = this.extractCoordLineWkt(coord.value, coord.epsg);
           }
-          this.displayLineElement(coords, element, map);
+          this.displayLineElement(coords, element, category, map);
         } else if (upperCoord.includes("POLYGON")) {
           let coords = [];
           if (upperCoord.includes("MULTIPOLYGON")) {
-            coords = this.extractCoordPolygonWkt(coord);
+            coords = this.extractCoordPolygonWkt(coord.value, coord.epsg);
           } else {
-            coords = this.extractCoordMultiLineWkt(coord);
+            coords = this.extractCoordMultiLineWkt(coord.value, coord.epsg);
           }
-          this.displayPolygonElement(coords, element, map);
+          this.displayPolygonElement(coords, element, category, map);
         }
       }
     },
-    extractCoordPointWkt(coord) {
+    extractCoordPointWkt(coord, epsg) {
       coord = coord.replace(/^ /i, "").replace(' (', "(").split(" ");
 
-      const lng = parseFloat(coord[0].split("(")[coord[0].includes("(") ? 1 : 0]);
-      const lat = parseFloat(coord[1].split(")")[0]);
+      let lng = parseFloat(coord[0].split("(")[coord[0].includes("(") ? 1 : 0]);
+      let lat = parseFloat(coord[1].split(")")[0]);
+
+      if (epsg == 2154) {
+        const coords = this.convertLambToWGS([lng, lat]);
+        lat = coords[1];
+        lng = coords[0];
+      }
+
       return [lat, lng];
     },
-    extractCoordLineWkt(coord, poly=false) {
+    extractCoordLineWkt(coord, epsg, poly=false) {
       coord = coord.split("(")[coord.includes("(") ? 1 : 0].split(")")[0].split(",");
       const listPoints = [];
       
       for (let k = 0; k < coord.length - (poly ? 1 : 0); k++) {    
-        listPoints.push(this.extractCoordPointWkt(coord[k]));
+        listPoints.push(this.extractCoordPointWkt(coord[k], epsg));
       }
       return listPoints;
     },
-    extractCoordMultiLineWkt(coord, poly=false) {
+    extractCoordMultiLineWkt(coord, epsg, poly=false) {
       coord = coord.split("((")[coord.includes("((") ? 1 : 0].split("))")[0].split("),(");
       const listCoords = [];
 
       for (let k = 0; k < coord.length; k++) {
-        listCoords.push(this.extractCoordLineWkt(coord[k], poly));
+        listCoords.push(this.extractCoordLineWkt(coord[k], epsg, poly));
       }
       return listCoords;
     },
-    extractCoordPolygonWkt(coord) {
+    extractCoordPolygonWkt(coord, epsg) {
       coord = coord.split("(((")[1].split(")))")[0].split(")),((");
       const listPoints = [];
 
       for (let k = 0; k < coord.length; k++) {
-        listPoints.push(this.extractCoordMultiLineWkt(coord[k], true));
+        listPoints.push(this.extractCoordMultiLineWkt(coord[k], epsg, true));
       }
       return listPoints;
     },
-    checkEPSGWkt(coord) {
-      coord = coord.split("> ");
-
-      if (coord.length > 1 && !coord[0].includes("4326")) {
-        return;
-      } else if (coord.length > 1) {
-        coord = coord[1];
-      } else {
-        coord = coord[0];
-      }
-      return coord;
-    },
-    displayElement(coord, element, map) {
-      const category = "toDo";
-      switch (category) {
-        case "geo":
+    displayElement(coord, element, category, map) {
+      switch (category.title) {
+        case "amer":
           this.createMarker(
-            coord, "geo", [38, 50],
-            element, this.layerGeoElements, "Geographic Entities", map
+            coord, "amer", [38, 50],
+            element, category, map
           );
           break;
-        case "advice":
+        case "domaineMaritime":
           this.createMarker(
-            coord, "advice", [40, 30],
-            element, this.layerAdviceElements, "Advice Entities", map
+            coord, "maritime", [40, 40],
+            element, category, map
+          );
+          break;
+        case "phenomenon":
+          this.createMarker(
+            coord, "phenomenon", [60, 30],
+            element, category, map
           );
           break;
         default:
           this.createMarker(
             coord, "default", [50, 40],
-            element, this.layerDefaultElements, "Research Elements", map
+            element, category, map
           );
       }
     },
-    createMarker(coord, iconName, iconSize, element, layer, layerName, map) {
+    createMarker(coord, iconName, iconSize, element, layers, map) {
       const icon = L.icon({iconUrl: "markerIcons/" + iconName + ".png", iconSize: iconSize});
       const marker = L.marker(coord, {icon: icon});
 
       this.createPopup(marker, element);
-      layer.addLayer(marker);
-      this.addResearchToLayerControl(layer, layerName, map);
+      this.handleLayers(layers, marker, map);
     },
-    displayLineElement(coords, element, map) {
+    displayLineElement(coords, element, layers, map) {
       const line = L.polyline(coords);
 
       this.createPopup(line, element);
-      this.layerGeoElements.addLayer(line);
-      this.addResearchToLayerControl(this.layerGeoElements, "Geographic Entities", map);
+      this.handleLayers(layers, line, map);
     },
-    displayPolygonElement(coords, element, map) {
+    displayPolygonElement(coords, element, layers, map) {
       const polygone = L.polygon(coords);
 
       this.createPopup(polygone, element);
-      this.layerGeoElements.addLayer(polygone);
-      this.addResearchToLayerControl(this.layerGeoElements, "Geographic Entities", map);
+      this.handleLayers(layers, polygone, map);
     },
     createPopup(symbol, element) {
       symbol.on("click", async () => {
@@ -318,11 +433,21 @@ export default {
         symbol.openPopup();
       })
     },
+    handleLayers(layers, symbol, map){
+      layers.layer.addLayer(symbol);
+      this.addQueryToGlobal(layers.globalLayer, layers.layer);
+      this.addResearchToLayerControl(layers.globalLayer, layers.title, map);
+    },
+    addQueryToGlobal(globalLayer, queryLayer) {
+      if (!globalLayer.hasLayer(queryLayer)) {
+        globalLayer.addLayer(queryLayer);
+      }
+    },
     addResearchToLayerControl(layer, name, map) {
       if (!this.layersManaged.hasLayer(layer)) {
         layer.addTo(map);
         this.layersManaged.addLayer(layer);
-        this.layerManager.addOverlay(layer, name);
+        this.layerToManaged.data.push(name);
       }
     },
     clearResearchLayer() {
@@ -330,9 +455,88 @@ export default {
         layer.clearLayers();
         if (this.layersManaged.hasLayer(layer)) {
           this.layersManaged.removeLayer(layer);
-          this.layerManager.removeLayer(layer);
+        }
+      });
+      Object.keys(this.categoriesNames).forEach(category => {
+        if (this.layerToManaged.data.includes(category)) {
+          const index = this.layerToManaged.data.indexOf(category);
+          this.layerToManaged.data = this.removeElementFromArray(this.layerToManaged.data, index);
+        }
+      });
+      this.queries = [];
+    },
+    cleanCategoriesLayers() {
+      this.layerToManaged.data.forEach( (category, index) => {
+        if (this.categories[category].layer.getLayers().length == 0) {
+          this.layerToManaged.data = this.removeElementFromArray(this.layerToManaged.data, index);
         }
       })
+    },
+    selectQueryByName(name) {
+      let index = null;
+      this.layerByQuery.forEach((query, i) => {
+        if (query.name == name) {
+          index = i;
+        }
+      });
+      return index;
+    },
+    removeElementFromArray(array, index) {
+      array.splice(index, 1);
+      return array;
+    },
+    handleDisplay(config, map) {
+      Object.keys(config.layers.baseLayers).forEach( layer => {
+        this.handleDisplayBaseLayer(layer, config.layers.baseLayers[layer], map);
+      })
+      Object.keys(config.layers.categoryLayers).forEach( category => {
+        this.handleDisplayCategoryLayer(
+          category,
+          config.layers.categoryLayers[category], 
+          config.queries,
+          map)
+      })
+    },
+    handleDisplayBaseLayer(layerAlias, state, map) {
+      const id = this.layerIndexes[layerAlias];
+      const layer = this.layersManaged.getLayer(id);
+      state ? layer.addTo(map) : layer.remove();
+    },
+    handleDisplayCategoryLayer(category, state, queries, map) {
+      if (state) {
+        this.categories[category].layer.addTo(map);
+        queries.forEach( query => {
+          this.handleDisplayQuery(query.name, category, query.state);
+        })
+      } else {
+        this.categories[category].layer.remove();
+      }
+    },
+    handleDisplayQuery(queryName, category, state) {
+      const index = this.selectQueryByName(queryName);
+      const query = this.layerByQuery[index];
+      state ? query[category].addTo(this.categories[category].layer) 
+            : this.categories[category].layer.removeLayer(query[category]);
+    },
+    determineCategory(categories) {
+      const selectedCategory = {
+        title: "default",
+        globalLayer: this.categories.default.layer,
+        layer: this.layerByQuery[this.lastQuery].default
+      };
+
+      Object.keys(this.categories).forEach(category => {
+        const categoryData = this.categories[category];
+        for (const url of categoryData.urls) {
+          if (categories.includes(url)) {
+            selectedCategory["title"] = category;
+            selectedCategory['globalLayer'] = categoryData.layer;
+            selectedCategory['layer'] = this.layerByQuery[this.lastQuery][category];
+            break;
+          }
+        }
+      });
+      return selectedCategory;
     },
     checkFitBounds(map) {
       this.layerResearchedElements.eachLayer((layer) => {
@@ -353,6 +557,24 @@ export default {
     removeCoord() {
       this.onMap=false;
     },
+    checkEPSGWkt(coord) {
+      const coordCrs = {};
+      coord = coord.split("> ");
+
+      if (coord[0].includes("4326") || coord[0].includes("WGS84")) {
+        coordCrs["epsg"] = 4326;
+        coordCrs["value"] = coord[1];
+      } else if (coord[0].includes("2154") || coord[0].includes("LAMB93")) {
+        coordCrs["epsg"] = 2154;
+        coordCrs["value"] = coord[1];
+      } else if (coord.length == 1) {
+        coordCrs["epsg"] = 2154;
+        coordCrs["value"] = coord[0];
+      } else {
+        return;
+      }
+      return coordCrs;
+    },
     convertDegreeToLatlng(coord) {
       const firstCut = coord.replace(" ", "").split("°");
       let latLng = parseFloat(firstCut[0]);
@@ -367,11 +589,26 @@ export default {
       
       latLng *= coord.includes('N') || coord.includes('E') ? 1 : -1;
       return latLng;
-    }
+    },
+    convertWGSToLamb(coord) {
+      
+      coord = proj4('EPSG:4326', 'EPSG:2154', coord);
+
+      return coord;
+    },
+    convertLambToWGS(coord) {
+      
+      coord = proj4('EPSG:2154', 'EPSG:4326', coord);
+
+      return coord;
+    },
   },
   computed: {
     getUrl () {
       return "https://" + this.login + ":" + this.pwd.replace("@", "%40") + "@" + this.url;
+    },
+    lastQuery () {
+      return this.layerByQuery.length - 1;
     },
     coordinate () {
       if (this.onMap){
@@ -384,7 +621,7 @@ export default {
 </script>
 
 <style>
-.map {
+.map , .divMap{
   height: 100%;
   width: 100%;
   z-index: 0;
