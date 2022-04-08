@@ -106,7 +106,7 @@ export default {
   },
   methods: {
     /**
-     * Return 
+     * Return permission to color button if selected
      * @param {String} index - The index of the button
      * @return {Boolean} the permission to used the selected color
      */
