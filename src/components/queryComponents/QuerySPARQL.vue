@@ -34,8 +34,11 @@
  * @vue-event {Array} myQueryResult - The result of the research
  * @vue-prop {Array} [coordsBboxArea=[]] - Bbox selected by the user
  * @vue-prop {String} [suppressBbox=""] - Selection is remove
- * @vue-data {String} [config=""] - File of configuration of sparnatural
+ * @vue-data {Array} [namesConfigs=[]] - File and button names of configuration of sparnatural
  * @vue-data sparnatural - Sparnatural element
+ * @vue-data {Boolean} [isSparnatActive=false] - Wether research is used
+ * @vue-data {Array} [colorButton=[]] - Change button config color when the config is used
+ * @vue-data {String} [lang=""] - Language of the ontology
  * @vue-data {String} [querySelectBbox=""] - Part of the query about the selection
  * @vue-data {Boolean} [bboxState=true] - Wether the selection is used
  * @vue-data {Array} [bboxArea=[]] - Bbox to filter
@@ -102,9 +105,18 @@ export default {
     this.clickConfig(this.namesConfigs['buttonName'][0]);
   },
   methods: {
+    /**
+     * Return 
+     * @param {String} index - The index of the button
+     * @return {Boolean} the permission to used the selected color
+     */
     getColorButton(index) {
       return this.colorButton[index];
     },
+    /**
+     * Change color button of sparnatural configuration
+     * @param {String} name - The name of the config
+     */
     async clickConfig(name) {
 
       this.isSparnatActive = false;
@@ -123,6 +135,10 @@ export default {
         }
       }
     },
+    /**
+     * Create sparnatural div for research
+     * @param {Array} configSparnatural - The configuration of the ontology
+     */
     sparnaturalConfiguration(configSparnatural) {
 
       this.sparnatural = document.getElementById('ui-search').Sparnatural({
@@ -213,7 +229,7 @@ export default {
       "persistency": { "prefix": false, "results": { "key": false }}});
     },
     /**
-     * Remove the selection pzrt of the query
+     * Remove the selection part of the query
      * @param {String} queryString - The query
      * @return {String} The query updated
      */
@@ -222,7 +238,7 @@ export default {
       return queryString;
     },
     /**
-     * Add the selection pzrt of the query
+     * Add the selection part of the query
      * @param {String} queryString - The query
      * @return {String} The query updated
      */
