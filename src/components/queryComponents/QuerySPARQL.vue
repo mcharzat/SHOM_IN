@@ -5,8 +5,9 @@
         <button 
           v-for="(nameConfig,idx) in namesConfigs['buttonName']" 
           :key="(nameConfig,idx)" 
+          :title= nameConfig
           :class="{buttonConfig:true, buttonClick:getColorButton(idx)}" 
-          @click="clickConfig(nameConfig)">
+          @click="clickConfig(nameConfig)" >
           {{ nameConfig }}
         </button>
       </div>
