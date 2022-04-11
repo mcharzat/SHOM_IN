@@ -39,8 +39,9 @@
              file-type="json"
              file-name="Nereus results"
              class="save"
-             ButtonText="Sauvegarder"/>
-            <button class="upload" @click="launchUpload">
+             ButtonText="Sauvegarder"
+             title="Sauvegarder vos requêtes dans un fichier"/>
+            <button class="upload" @click="launchUpload" title="Charger des requêtes depuis un fichier">
                 <input type="file" ref="inputFile" @change="uploadFile" hidden>
                 Charger
             </button>
@@ -456,6 +457,7 @@ export default {
 
     border:solid;
     border-color: white;
+    border-radius: 10%;
 
     box-shadow: 0 0 5px rgba(0,0,0,0.19), 0 0 5px rgba(0,0,0,0.19)
 }
@@ -478,7 +480,7 @@ export default {
   height: 100%;
   max-height: calc(100% - 125px);
   top : 100px;
-  overflow: scroll;
+  overflow-y: scroll;
   z-index: 1000;
 }
 
@@ -514,6 +516,7 @@ export default {
   align-self: center;
 
   margin-top: 15px;
+  margin-bottom: 7px;
   max-width: 96%;
 }
 

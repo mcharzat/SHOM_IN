@@ -115,7 +115,7 @@ export default {
   height: 100%;
   max-height: calc(100% - 125px);
   top : 100px;
-  overflow: scroll;
+  overflow-y: scroll;
   z-index: 1000;
 }
 </style>
