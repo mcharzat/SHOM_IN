@@ -270,6 +270,7 @@ export default {
 
         Object.keys(this.categories).forEach(( category => {
           this.handleDisplayQuery(name.name, category, false);
+          this.layersManaged.removeLayer(this.layerByQuery[index]);
         }))
         this.layerByQuery = this.removeElementFromArray(this.layerByQuery, index);
         this.cleanCategoriesLayers();
@@ -277,6 +278,7 @@ export default {
 
       this.$watch('demandReset', () => {
         this.clearResearchLayer();
+        this.cleanCategoriesLayers();
         this.layerByQuery = [];
       });
     },
@@ -651,6 +653,7 @@ export default {
     cleanCategoriesLayers() {
       this.layerToManaged.data.forEach( (category, index) => {
         if (this.categories[category].layer.getLayers().length == 0) {
+          this.layersManaged.removeLayer(this.categories[category].layer);
           this.layerToManaged.data = this.removeElementFromArray(this.layerToManaged.data, index);
         }
       })
@@ -732,9 +735,11 @@ export default {
      */
     handleDisplayQuery(queryName, category, state) {
       const index = this.selectQueryByName(queryName);
-      const query = this.layerByQuery[index];
-      state ? query[category].addTo(this.categories[category].layer) 
-            : this.categories[category].layer.removeLayer(query[category]);
+      if (index != null) {
+        const query = this.layerByQuery[index];
+        state ? query[category].addTo(this.categories[category].layer) 
+              : this.categories[category].layer.removeLayer(query[category]);
+      }
     },
     /**
      * Determine and setup the category of an entity.

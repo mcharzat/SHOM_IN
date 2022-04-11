@@ -323,7 +323,7 @@ export default {
         reset() {
             this.$emit('resetQueries');
             this.queries = [];
-            this.querconfigDisplayQueriesies = [];
+            this.configDisplayQueries = [];
         },
         /**
          * Open the file search dialog. 
