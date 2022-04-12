@@ -1,16 +1,31 @@
 <template>
     <div class="container-fluid">
-      <div id="ui-search">
-          <div v-if="!bboxState" id="displaySelect" class="displaySelect">
+
+      <div class="sparnatBackground">
+        <button 
+          v-for="(nameConfig,idx) in namesConfigs['buttonName']" 
+          :key="(nameConfig,idx)" 
+          :title= nameConfig
+          :class="{buttonConfig:true, buttonClick:getColorButton(idx)}" 
+          @click="clickConfig(nameConfig)" >
+          {{ nameConfig }}
+        </button>
+      </div>
+
+      <div v-if="isSparnatActive">
+        <div id="ui-search">
+          <div v-if="!bboxState" id="displaySelect" class="sparnatBackground">
             <div class="selection">
               <img src="../../assets/valide_selection.png" height ="20" width="20"/>
               Sélection activée
             </div>
           </div>
-      </div>
-      
-      <div id="yasqe" class="yasr_header"></div>
-      <div id="yasr" class="yasr_header"></div>
+        </div>
+        
+        <div id="yasqe" class="yasr_header"></div>
+        <div id="yasr" class="yasr_header"></div>
+      </div>                             
+
     </div>  
 </template>
 
@@ -20,15 +35,23 @@
  * @vue-event {Array} myQueryResult - The result of the research
  * @vue-prop {Array} [coordsBboxArea=[]] - Bbox selected by the user
  * @vue-prop {String} [suppressBbox=""] - Selection is remove
- * @vue-data {String} [config=""] - File of configuration of sparnatural
+ * @vue-data {Array} [namesConfigs=[]] - File and button names of configuration of sparnatural
  * @vue-data sparnatural - Sparnatural element
+ * @vue-data {Boolean} [isSparnatActive=false] - Wether research is used
+ * @vue-data {Array} [colorButton=[]] - Change button config color when the config is used
+ * @vue-data {String} [lang=""] - Language of the ontology
  * @vue-data {String} [querySelectBbox=""] - Part of the query about the selection
  * @vue-data {Boolean} [bboxState=true] - Wether the selection is used
  * @vue-data {Array} [bboxArea=[]] - Bbox to filter
  * @vue-data {String} [tripleStoreLink=""] - Url of the database
  */
-import data from '../../assets/sparnatural_config/atlantis-config.ttl'
+
 import {Yasr,Yasqe} from '@triply/yasgui'
+
+// ----- Import config sparnatural data ----- //
+import Config1 from '../../assets/sparnatural_config/atlantis-config.ttl';
+import Config3 from '../../assets/sparnatural_config/test.ttl'
+
 
 export default {
   name: 'QuerySPARQL',
@@ -41,12 +64,18 @@ export default {
     suppressBbox: {
       type: String,
       default: ""
-    }
+    },
   },
   data () {
     return {
-      config: data,
+      namesConfigs: {
+        "buttonName" : ["Config1", "Config2", "Config3"],
+        "config" : [Config1, Config1, Config3]
+      },
       sparnatural: {},
+      isSparnatActive: false,
+      colorButton: [],
+      lang: null,
       querySelectBbox: "",
       bboxState: true,
       bboxArea: [],
@@ -62,70 +91,107 @@ export default {
       this.bboxState = true;
     }
   },
-  mounted() {         
+  mounted() {
+
     $.urlParam = function(name){
         const results = new RegExp('[\\?&amp;]' + name + '=([^&amp;#]*)').exec(window.location.href);
         if(results == null) { return null; }
         return results[1] || 0;
-      }
+    }
+    this.lang = ($.urlParam('lang') != null)?$.urlParam('lang'):'fr';
 
-    const lang = ($.urlParam('lang') != null)?$.urlParam('lang'):'fr';
 
-    this.sparnatural = document.getElementById('ui-search').Sparnatural({
-      config: this.config ,
-      maxDepth: 4,
-      addDistinct: true,
-      language: lang,
-      noTypeCriteriaForObjects: ["http://dbpedia.org/ontology/Artwork"],
-      sendQueryOnFirstClassSelected: true,
-      backgroundBaseColor: '2,184,117',
-      autocomplete : null,
-      list : null,
-      defaultEndpoint: this.tripleStoreLink,
-      sparqlPrefixes : {
-        "dbpedia" : "http://dbpedia.org/ontology/"
-      },
-      localCacheDataTtl: 1000 * 60 * 60 * 24, // 24 hours in miiseconds
-      filterConfigOnEndpoint : false,
-      onQueryUpdated: (queryString) =>  {
-        queryString = this.semanticPostProcess(queryString);
-        queryString = this.SelectorsPostProcess(queryString);
-        queryString = this.optionalClassPostProcess(queryString);
-        queryString = this.optionalLabelPostProcess(queryString);
-        queryString = this.optionalDescriptionPostProcess(queryString);
-        queryString = this.getChapterPostProcess(queryString);
-        queryString = this.optionalGeomPostProcess(queryString);
-        queryString = this.anyEntitiesPostProcess(queryString);
-        $('#sparql code').html(queryString.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"));
-        yasqe.setValue(queryString);
-      },
-      tooltipConfig : {
-        delay: [800, 100],
-        duration: [100, 100],
-      },
-      // triggered when "play" button is clicked
-      onSubmit: (form) => {
+    this.colorButton = new Array(this.namesConfigs['config'].length);
 
-        this.filterQueryBySelection(yasqe);
-
-        // enable loader on button
-        form.sparnatural.enableLoading() ; 
-        // trigger the query from YasQE
-        yasqe.query();
-      }
-    });
-
-    const yasqe = this.constructYasqe();
-    const yasr = this.constructYasr(yasqe);
-
-    // link yasqe and yasr
-    yasqe.on("queryResponse", (_yasqe, response, duration) => {
-      this.emitResults(response.text);
-      yasr.setResponse(response, duration);
-      this.sparnatural.disableLoading() ;
-    });
+    this.clickConfig(this.namesConfigs['buttonName'][0]);
   },
   methods: {
+    /**
+     * Return permission to color button if selected
+     * @param {String} index - The index of the button
+     * @return {Boolean} the permission to used the selected color
+     */
+    getColorButton(index) {
+      return this.colorButton[index];
+    },
+    /**
+     * Change color button of sparnatural configuration
+     * @param {String} name - The name of the config
+     */
+    async clickConfig(name) {
+
+      this.isSparnatActive = false;
+      await this.$forceUpdate();
+      this.isSparnatActive = true;
+      await this.$forceUpdate();
+
+      for (let i=0; i < this.namesConfigs['buttonName'].length; i++) {
+      
+        if (name == this.namesConfigs['buttonName'][i]) {
+          this.colorButton[i] = true;
+          this.getColorButton(i);
+          this.sparnaturalConfiguration(this.namesConfigs['config'][i]); 
+        } else {
+          this.colorButton[i] = false;
+        }
+      }
+    },
+    /**
+     * Create sparnatural div for research
+     * @param {Array} configSparnatural - The configuration of the ontology
+     */
+    sparnaturalConfiguration(configSparnatural) {
+
+      this.sparnatural = document.getElementById('ui-search').Sparnatural({
+        config: configSparnatural,
+        maxDepth: 4,
+        addDistinct: true,
+        language: this.lang,
+        sendQueryOnFirstClassSelected: true,
+        backgroundBaseColor: '2,184,117',
+        autocomplete : null,
+        list : null,
+        defaultEndpoint: this.tripleStoreLink,
+        localCacheDataTtl: 1000 * 60 * 60 * 24, // 24 hours in miiseconds
+        filterConfigOnEndpoint : false,
+        onQueryUpdated: (queryString) =>  {
+          queryString = this.semanticPostProcess(queryString);
+          queryString = this.selectorsPostProcess(queryString);
+          queryString = this.optionalClassPostProcess(queryString);
+          queryString = this.optionalLabelPostProcess(queryString);
+          queryString = this.optionalDescriptionPostProcess(queryString);
+          queryString = this.getChapterPostProcess(queryString);
+          queryString = this.optionalGeomPostProcess(queryString);
+          queryString = this.anyEntitiesPostProcess(queryString);
+          $('#sparql code').html(queryString.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"));
+          yasqe.setValue(queryString);
+        },
+        tooltipConfig : {
+          delay: [800, 100],
+          duration: [100, 100],
+        },
+        // triggered when "play" button is clicked
+        onSubmit: (form) => {
+
+          this.filterQueryBySelection(yasqe);
+
+          // enable loader on button
+          form.sparnatural.enableLoading() ; 
+          // trigger the query from YasQE
+          yasqe.query();
+        }
+      });
+
+      const yasqe = this.constructYasqe();
+      const yasr = this.constructYasr(yasqe);
+
+      // link yasqe and yasr
+      yasqe.on("queryResponse", (_yasqe, response, duration) => {
+        this.emitResults(response.text);
+        yasr.setResponse(response, duration);
+        this.sparnatural.disableLoading() ;
+      });
+    },
     /**
      * Setup the selection
      * @param {*} yasqe 
@@ -164,7 +230,7 @@ export default {
       "persistency": { "prefix": false, "results": { "key": false }}});
     },
     /**
-     * Remove the selection pzrt of the query
+     * Remove the selection part of the query
      * @param {String} queryString - The query
      * @return {String} The query updated
      */
@@ -173,7 +239,7 @@ export default {
       return queryString;
     },
     /**
-     * Add the selection pzrt of the query
+     * Add the selection part of the query
      * @param {String} queryString - The query
      * @return {String} The query updated
      */
@@ -208,7 +274,7 @@ export default {
      * @param {String} queryString - the query
      * @return {String} The query updated
      */
-    SelectorsPostProcess(queryString) {
+    selectorsPostProcess(queryString) {
         queryString = queryString.replace(
           "SELECT DISTINCT ?this",
           "SELECT DISTINCT ?this ?type ?category ?label ?description ?information ?wkt ?lat ?lng ?lumineux ?ouvrage ?page ?amer");
@@ -416,18 +482,36 @@ export default {
   .bg-wrapper {
     padding: 0;
   }
-  .displaySelect {
-    padding-top: 12px;
-    background: rgba(0, 0, 0, 0) linear-gradient(rgba(2, 184, 117, 0.1) 0px, rgba(2, 184, 117, 0.1) 116px)
+  .sparnatBackground {
+    display: flex;
+    justify-content: stretch;
+    width: 100%;
+    background: rgba(0, 0, 0, 0) linear-gradient(rgba(2, 184, 117, 0.1) 0px, rgba(2, 184, 117, 0.1) 96px) repeat scroll 0% 0%;
   }
   .selection {
     margin-left: 42px;
     padding: 2px;
-    background: rgba(2,184,117);
+    margin-top: 8px;
+    background: #81a9c7;
     width: 20%;
     font-size: 0.8em;
     border-radius: 3px;
     color: white;
     font-weight: bold;
+  }
+  .buttonConfig {
+    flex-grow: 1;
+    padding: 5px;
+    background: rgba(2,184,117);
+    font-size: 0.8em;
+    border-radius: 3px 3px 0px 0px;
+    border: 0px;
+    color: white;
+    font-weight: bold;
+    box-shadow: 0 0 5px rgba(0,0,0,0.19), 0 0 5px rgba(0,0,0,0.19)
+  }
+  .buttonConfig:hover, .buttonClick {
+    background: rgba(0, 0, 0, 0) linear-gradient(rgba(2, 184, 117, 0.1) 0px, rgba(2, 184, 117, 0.1) 96px) repeat scroll 0% 0%;
+    color: black;
   }
 </style>
