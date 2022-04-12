@@ -257,8 +257,9 @@ export default {
       }, {deep: true});
 
       this.$watch('updateNameQuery', names => {
-        const index = this.selectQueryByName(names.old);
+        const index = this.handleLayersFromOldQuery(names.old);
         this.layerByQuery[index].name = names.new;
+        this.handleLayersFromOldQuery(names.new, true);
       });
 
       this.$watch('stateDisplay', config => {
@@ -266,12 +267,7 @@ export default {
       });
 
       this.$watch('removeTheQuery', name => {
-        const index = this.selectQueryByName(name.name);
-
-        Object.keys(this.categories).forEach(( category => {
-          this.handleDisplayQuery(name.name, category, false);
-          this.layersManaged.removeLayer(this.layerByQuery[index]);
-        }))
+        const index = this.handleLayersFromOldQuery(name.name)
         this.layerByQuery = this.removeElementFromArray(this.layerByQuery, index);
         this.cleanCategoriesLayers();
       });
@@ -659,6 +655,20 @@ export default {
       })
     },
     /**
+     * Remove the old queries from layers
+     * @param {String} name - Name of the query
+     * @param {Boolean} [state=false] - State of the display for the query
+     * @return {Number} Index of the query
+     */
+    handleLayersFromOldQuery(name, state = false) {
+      const index = this.selectQueryByName(name);
+
+      Object.values(this.layerToManaged.data).forEach( category => {
+        this.handleDisplayQuery(name, category, state);
+      })
+      return index;
+    },
+    /**
      * retrieve the index of a query with the name.
      * @param {String} name - Name of the query
      * @return {Number} Index of the query in layerByQuery
@@ -737,8 +747,10 @@ export default {
       const index = this.selectQueryByName(queryName);
       if (index != null) {
         const query = this.layerByQuery[index];
-        state ? query[category].addTo(this.categories[category].layer) 
-              : this.categories[category].layer.removeLayer(query[category]);
+        if (query[category].getLayers().length) {
+          state ? query[category].addTo(this.categories[category].layer) 
+                : this.categories[category].layer.removeLayer(query[category]);
+        }
       }
     },
     /**
