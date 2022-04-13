@@ -214,7 +214,6 @@ export default {
   .navBarButton:hover {
     background-color: white;
     color : #076e8c;
-    border-color:rgb(11, 73, 94);
   }
 
 
