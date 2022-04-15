@@ -2,7 +2,7 @@
 
 This git aims to install the server part of the Nereus project in order to query the ATLANTIS knowledge base of nautical instructions (IN).
 
-Installation done under **Linux** and **Windows** 10 using **GraphDB** 9.11.1 and **Visual Studio Code** 1.64.
+Local installation done under **Linux** and **Windows** 10/11 using **GraphDB** 9.11.1.
 
 <br>
 
@@ -18,9 +18,9 @@ It requires a triplestore, GraphDB in our case, to store this database. The web 
 
 ### GraphDB
 
-Install graphDB and create a repository called test_shom.
+Install graphDB and create a repository called atlantis.
 
-### Configuration for development 
+### Configuration 
 
 Import the owl ontology file and the ttls knowledge base file into
 a named graph.
@@ -38,7 +38,7 @@ Reload graphDB
 
 The ontology configuration files can be found in the following folder: src/assets/doc/sparnatural_config. 
 
-The files supported by sparnatural are turtle (ttle) or json. For more details, you can refer to the sparnatural github: https://docs.sparnatural.eu/index.html
+The files supported by sparnatural are turtle (ttl) or json. For more details, you can refer to the sparnatural github: https://docs.sparnatural.eu/index.html
 
 To change or modify a configuration, after adding the file, go to src/components/queryComponents/QuerySPARQL.vue and modify the lines ... to import the file. Also modify the lines ... for the name of the buttons and the imported configurations.
 
@@ -54,7 +54,8 @@ This folder also contains a file named 'pdfFilesNames' with all names of pdf loc
 
 ## IV. Using app
 
-Open the folder project in Visual Studio Code. Then, open a new terminal and use the different command lines. 
+Open a new terminal in the folder project and use the different command lines. 
+To lunch the  project, run the first two commands.
 
 ### Project setup
 ```
@@ -69,6 +70,11 @@ npm run serve
 ### Compiles and run the tests
 ```
 npm run tests
+```
+
+### Developer documentation
+```
+npm run doc
 ```
 
 ### Compiles and minifies for production
