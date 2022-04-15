@@ -48,8 +48,9 @@
 import {Yasr,Yasqe} from '@triply/yasgui'
 
 // ----- Import config sparnatural data ----- //
-import Config1 from '../../assets/sparnatural_config/atlantis-config.ttl';
-import Config3 from '../../assets/sparnatural_config/test.ttl'
+import Config1 from '../../assets/sparnatural_config/ConfigInformations.ttl'
+import Config2 from '../../assets/sparnatural_config/ConfigAmers.ttl'
+import Config3 from '../../assets/sparnatural_config/ConfigAdmin.ttl';
 
 export default {
   name: 'QuerySPARQL',
@@ -67,8 +68,8 @@ export default {
   data () {
     return {
       namesConfigs: {
-        "buttonName" : ["Config1", "Config2", "Config3"],
-        "config" : [Config1, Config1, Config3]
+        "buttonName" : ["Informations diverses", "Amers et autres entités", "Informations administratives"],
+        "config" : [Config1, Config2, Config3]
       },
       sparnatural: {},
       isSparnatActive: false,
@@ -161,6 +162,7 @@ export default {
           queryString = this.optionalClassPostProcess(queryString);
           queryString = this.optionalLabelPostProcess(queryString);
           queryString = this.optionalDescriptionPostProcess(queryString);
+          queryString = this.optionalContactPostProcess(queryString);
           queryString = this.getChapterPostProcess(queryString);
           queryString = this.optionalGeomPostProcess(queryString);
           queryString = this.anyEntitiesPostProcess(queryString);
@@ -266,6 +268,7 @@ export default {
                 "PREFIX geom: <http://data.ign.fr/def/geometrie#>\n"+
                 "PREFIX skos: <http://www.w3.org/2004/02/skos/core#>\n"+
                 "PREFIX geof: <http://www.opengis.net/def/function/geosparql/>\n"+
+                "PREFIX teg: <http://data.shom.fr/id/codes/nav/typedentitegeographique/>\n"+
                 "PREFIX gsp: <http://www.opengis.net/ont/geosparql#>\n SELECT ");
       }       
       return queryString;
@@ -487,6 +490,7 @@ export default {
   .yasqe .CodeMirror { font-size: 0.8em; height: 380px; }
 
   .yasr_header {
+    display: none;
   }
   .bg-wrapper {
     padding: 0;

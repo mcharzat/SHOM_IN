@@ -17,7 +17,7 @@
 :Contact a owl:ObjectProperty ;
 	rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
 	rdfs:domain :Renseignement;
-	rdfs:range :Ville ;
+	rdfs:range :Ville;
 	<http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "nav:aPourLieuDEffet" ;
 	<http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :labelVille ;
     rdfs:label "Contact"@fr .
@@ -29,62 +29,8 @@
 # Renseignement
 :Renseignement a owl:Class ;
 	rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
-	<http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<http://data.shom.fr/def/navigation_cotiere#Renseignement>.\n?this nav:aPourLieuDEffet ?lieuDEffet" ;
+	<http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<http://data.shom.fr/def/navigation_cotiere#Renseignement>" ;
 	rdfs:label "Renseignement"@fr .
-
-# Chenal
-:Chenal a owl:Class ;
-	rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
-	<http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<http://data.shom.fr/def/navigation_cotiere#Chenal>" ;
-    rdfs:label "Chenal"@fr .
-
-# Large
-:Large a owl:Class ;
-	rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
-	<http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<http://data.shom.fr/def/navigation_cotiere#Large>" ;
-    rdfs:label "Large"@fr .
-
-# Littoral
-:Littoral a owl:Class ;
-	rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
-	<http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<http://data.shom.fr/def/navigation_cotiere#Littoral>" ;
-    rdfs:label "Littoral"@fr .
-
-# Secteur
-:Secteur a owl:Class ;
-	rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
-	<http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<http://data.shom.fr/def/navigation_cotiere#Secteur>" ;
-    rdfs:label "Secteur"@fr .
-
-# Zone de pilotage
-:ZoneDePilotage a owl:Class ;
-	rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
-	<http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<http://data.shom.fr/def/navigation_cotiere#ZoneDePilotage>" ;
-    rdfs:label "Zone de pilotage"@fr .
-
-# Terre
-:Terre a owl:Class ;
-	rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
-	<http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<http://data.shom.fr/def/navigation_cotiere#Terre>" ;
-    rdfs:label "Terre"@fr .
-
-# Interieur des terres
-:InterieurDesTerres a owl:Class ;
-	rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
-	<http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<http://data.shom.fr/def/navigation_cotiere#InterieurDesTerres>" ;
-    rdfs:label "InterieurDesTerres"@fr .
-
-# Côte
-:Cote a owl:Class ;
-	rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
-	<http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<http://data.shom.fr/def/navigation_cotiere#Cote>" ;
-    rdfs:label "Cote"@fr .
-
-# Lieu de Stationnement
-:LieuDeStationnement a owl:Class ;
-	rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
-	<http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<http://data.shom.fr/def/navigation_cotiere#EntiteGeographique>.\n?this nav:aPourNature ?nature.\n?nature a nav:TypeDeLieuDeStationnement" ;
-    rdfs:label "LieuDeStationnement"@fr .
 
 # Ville
 :Ville a owl:Class ;
