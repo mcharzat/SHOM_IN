@@ -45,13 +45,12 @@
  * @vue-data {Array} [bboxArea=[]] - Bbox to filter
  * @vue-data {String} [tripleStoreLink=""] - Url of the database
  */
-
 import {Yasr,Yasqe} from '@triply/yasgui'
 
 // ----- Import config sparnatural data ----- //
-import Config1 from '../../assets/sparnatural_config/atlantis-config.ttl';
-import Config3 from '../../assets/sparnatural_config/test.ttl'
-
+import Config1 from '../../assets/sparnatural_config/ConfigInformations.ttl'
+import Config2 from '../../assets/sparnatural_config/ConfigAmers.ttl'
+import Config3 from '../../assets/sparnatural_config/ConfigAdmin.ttl';
 
 export default {
   name: 'QuerySPARQL',
@@ -69,8 +68,8 @@ export default {
   data () {
     return {
       namesConfigs: {
-        "buttonName" : ["Config1", "Config2", "Config3"],
-        "config" : [Config1, Config1, Config3]
+        "buttonName" : ["Informations diverses", "Amers et autres entités", "Informations administratives"],
+        "config" : [Config1, Config2, Config3]
       },
       sparnatural: {},
       isSparnatActive: false,
@@ -79,7 +78,12 @@ export default {
       querySelectBbox: "",
       bboxState: true,
       bboxArea: [],
-      tripleStoreLink: "http://172.31.58.17:7200/repositories/test_shom_lambert"
+      tripleStoreLink: "http://localhost:7200/repositories/test_shom_lambert"
+    }
+  },
+  computed : {
+    displaySelect() {
+      return this.bboxState;
     }
   },
   watch: {
@@ -99,8 +103,6 @@ export default {
         return results[1] || 0;
     }
     this.lang = ($.urlParam('lang') != null)?$.urlParam('lang'):'fr';
-
-
     this.colorButton = new Array(this.namesConfigs['config'].length);
 
     this.clickConfig(this.namesConfigs['buttonName'][0]);
@@ -160,6 +162,7 @@ export default {
           queryString = this.optionalClassPostProcess(queryString);
           queryString = this.optionalLabelPostProcess(queryString);
           queryString = this.optionalDescriptionPostProcess(queryString);
+          queryString = this.optionalContactPostProcess(queryString);
           queryString = this.getChapterPostProcess(queryString);
           queryString = this.optionalGeomPostProcess(queryString);
           queryString = this.anyEntitiesPostProcess(queryString);
@@ -265,6 +268,7 @@ export default {
                 "PREFIX geom: <http://data.ign.fr/def/geometrie#>\n"+
                 "PREFIX skos: <http://www.w3.org/2004/02/skos/core#>\n"+
                 "PREFIX geof: <http://www.opengis.net/def/function/geosparql/>\n"+
+                "PREFIX teg: <http://data.shom.fr/id/codes/nav/typedentitegeographique/>\n"+
                 "PREFIX gsp: <http://www.opengis.net/ont/geosparql#>\n SELECT ");
       }       
       return queryString;
@@ -277,7 +281,7 @@ export default {
     selectorsPostProcess(queryString) {
         queryString = queryString.replace(
           "SELECT DISTINCT ?this",
-          "SELECT DISTINCT ?this ?type ?category ?label ?description ?information ?wkt ?lat ?lng ?lumineux ?ouvrage ?page ?amer");
+          "SELECT DISTINCT ?this ?type ?category ?label ?description ?instruction ?instructions ?exception ?reglement ?wkt ?lat ?lng ?lumineux ?ouvrage ?page ?amer ?contact ?horairesVHF ?mail ?horairestelephone ?telephone ?information ?interdiction ?duree ?cible ?lieu");
         return queryString;
     },
     /**
@@ -300,6 +304,15 @@ export default {
       queryString = queryString.replace(new RegExp('}$'), 
                 "OPTIONAL{?this nav:aPourTexteAssocie ?description}.\n"+
                 "OPTIONAL{?this nav:aPourInfo ?information}.\n}");
+      return queryString;
+    },
+    optionalContactPostProcess(queryString) {
+      queryString = queryString.replace(new RegExp('}$'), 
+                "OPTIONAL{?this nav:aPourContact ?contact}.\n"+
+                "OPTIONAL{?this nav:aPourHorairesVHF ?horairesVHF}.\n"+
+                "OPTIONAL{?this nav:aPourAdresseMail ?mail}.\n"+
+                "OPTIONAL{?this nav:aPourHorairesTelephone ?horairestelephone}.\n"+
+                "OPTIONAL{?this nav:aPourNumeroDeTelephone ?telephone}.\n}");
       return queryString;
     },
     /**
