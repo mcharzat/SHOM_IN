@@ -165,7 +165,3 @@
     rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
     <http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<http://data.shom.fr/def/navigation_cotiere#EntiteGeographique>.\n?this nav:aPourNature teg:Ile" ;
     rdfs:label "Ile"@fr.
-
-#################################################################
-#    List
-#################################################################
