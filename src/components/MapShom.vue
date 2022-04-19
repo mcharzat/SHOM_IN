@@ -104,7 +104,7 @@ export default {
         "meta"
       ],
       wmsNames: [
-        "Couche originel",
+        "Fond de carte",
         "Hydrographie",
         "Sondages",
         "Dangers",
