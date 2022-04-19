@@ -5,7 +5,7 @@
     </button>
     <div v-if="moveSidePanel" class="historySidepanelOpen">
       <div class="manager">
-        <h2 class="title" @dblclick="displayManager = !displayManager">
+        <h2 class="title" :title='tooltipTitle(displayManager)' @dblclick="displayManager = !displayManager">
           Gestion des couches
         </h2>
         <div v-if="displayManager">
@@ -19,7 +19,7 @@
         <div v-else>...</div>
       </div>
       <div :class="{history: true, resize: displayHistory}">
-        <h2 class="title" @dblclick="displayHistory = !displayHistory">
+        <h2 class="title" :title='tooltipTitle(displayHistory)' @dblclick="displayHistory = !displayHistory">
           Requêtes
         </h2>
         <div class="historyContent" v-if="displayHistory">
@@ -35,7 +35,7 @@
             ></QueriesHistory>
           </div>
           <div class="buttonsManage">
-            <button class="reset" @click="reset">
+            <button class="reset" title="Supprimer toutes les requêtes" @click="reset">
             <img src="../assets/x.png" height ="16" width="16"/>
             <div class="resetText">Tout supprimer</div>
             </button>
@@ -67,6 +67,7 @@
  * @vue-data {Boolean} [moveSidePanel=false] - Wether the content of the component is displayed
  * @vue-data {Boolean} [displayManager=true] - Wether the content of the manager is displayed
  * @vue-data {Boolean} [displayHistory=true] - Wether the content of the history is displayed
+ * @vue-computed {String} tooltipTitle - Content of the tooltip of the titles
  */
 import QueriesHistory from "./queryComponents/QueriesHistory.vue";
 import LayerControl from "./layerComponents/layerControl.vue";
@@ -137,6 +138,11 @@ export default {
                 }
             },
             deep: true
+        }
+    },
+    computed: {
+        tooltipTitle () {
+            return element => 'Double-click pour ' + (element ? 'réduire' : 'agrandir');
         }
     },
     methods: {

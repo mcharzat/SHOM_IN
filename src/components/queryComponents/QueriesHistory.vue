@@ -1,6 +1,7 @@
 <template>
   <div class="myQuery">
-    <div :class="{name: true, selected: displayed}" @click="updateDisplay">
+    <div :class="{name: true, selected: displayed}"
+      title="Double-click pour renommer" @click="updateDisplay">
       <div v-if="!stateNameEdition" @dblclick="editionMode">
         {{ nameQuery }}
       </div>
@@ -11,10 +12,10 @@
       </div>
     </div>
     <div class="buttons">
-      <button @click="displayResult">
+      <button title="Afficher les résultats" @click="displayResult">
         <img src="../../assets/results.png" height ="25" width="25"/>
       </button>
-      <button @click="removeQuery">
+      <button title="Supprimer" @click="removeQuery">
         <img src="../../assets/trash.png" height ="25" width="25"/>
       </button>
     </div>
