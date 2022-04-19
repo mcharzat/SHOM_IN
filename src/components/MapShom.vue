@@ -276,7 +276,11 @@ export default {
       this.layersManaged.addLayer(drawnItems);
       this.layerIndexes["selection"] = this.layersManaged.getLayerId(drawnItems);
 
-      L.drawLocal.draw.toolbar.buttons.rectangle = 'Select an area';
+      L.drawLocal.draw.toolbar.buttons.rectangle = 'Sélectionne une emprise';
+      L.drawLocal.draw.toolbar.actions.title = 'Annuler la sélection';
+      L.drawLocal.draw.toolbar.actions.text = 'Annuler';
+      L.drawLocal.draw.handlers.rectangle.tooltip.start = "Click et drag pour dessiner l'emprise";
+      L.drawLocal.draw.handlers.rectangle.tooltip.release = "Click et drag pour dessiner l'emprise";
       map.addControl(new L.Control.Draw({
         position: "bottomright",
         draw: {
@@ -855,7 +859,7 @@ export default {
       if (this.onMap){
         return "Lat : "+this.userLocation.lat+"\xa0\xa0\xa0 Lng : "+this.userLocation.lng;
       }
-      return "Mouse is not over map";
+      return "La souris n'est pas sur la carte";
     }
   },
 }
