@@ -18,7 +18,7 @@
 
 
     <div id=part1>
-      <h5>1- Barre de navigation :</h5>
+      <h4>1- Barre de navigation :</h4>
       <br>
       <img src="../assets/doc/NavBar.png" style="height: 75px;">
       <br><br>
@@ -47,7 +47,7 @@
     </div>
 
     <div id=part2>
-      <h5>2- Gestion de la carte</h5>
+      <h4>2- Gestion de la carte</h4>
       <br>
       <img src="../assets/doc/Gestion_carte.png" style="height: 100px;">
       <br><br>
@@ -67,11 +67,11 @@
     </div>
 
     <div id=part3>
-      <h5>3- Requêtes et affichage des résultats</h5>
+      <h4>3- Requêtes et affichage des résultats</h4>
       <br>
       <img src="../assets/doc/Sparnatural.png" style="height: 200px;">
       <br><br>
-      <h6>&emsp;• Boutons et fonctionnalités</h6>
+      <h5>&emsp;• Boutons et fonctionnalités</h5>
       <p>
         Le bouton <img src="../assets/doc/Sparnatural_sparql_btn.png" style="height: 50px;"> permet d'afficher ou de masquer la zone de requête, et ainsi
         avoir une meilleure vue sur la carte.
@@ -92,14 +92,46 @@
         &emsp;- Aids to navigation : Les bouées et les phares le long de la côte.<br>
         &emsp;- Metadata : Les métadonnées liées aux zones.<br><br>
       </p>
-      <h6>&emsp;• Exemple de requêtes</h6>
+      <h5>&emsp;• Exemple de requêtes</h5>
+
+      <h6>&emsp; &emsp;• Informations diverses</h6>
       <p>
-        Explication sur la div Sparnatural et exemples de requêtes.
+         Si vous voulez des informations générales sur un endroit en particulier, 
+         sélectionnez l'onglet <strong>Informations diverses</strong>. Vous pouvez ensuite formuler votre requête.
+         <br>
+         Par exemple, si vous voulez des informations sur l'île de Batz, exécutez la requête suivante :
       </p>
+      <img src="../assets/doc/Sparnatural_info_div_ile.png" style="height: 150px;">
+      <br><br>
+      <h6>&emsp; &emsp;• Amers et autres entités</h6>
+      <p>
+         Si vous voulez des informations générales sur un amer en particulier, ou sur une entité quelconque,
+         sélectionnez l'onglet <strong>Amers et autres entités</strong>. Vous pouvez ensuite formuler votre requête.
+         <br>
+         Par exemple, si vous voulez des informations sur les amers liés à l'île de Batz, exécutez la requête suivante :
+      </p>
+      <img src="../assets/doc/Sparnatural_amers.png" style="height: 220px;">
+      <br><br>
+      <h6>&emsp; &emsp;• Informations administratives</h6>
+      <p>
+        Si vous voulez des informations administratives sur une ville en particulier, selectionnez l'onglet 
+        <strong>Informations administratives</strong>. Vous pouvez ensuite formuler votre requête de la manière 
+        suivante : 
+        <br><br>
+        <center>"Renseignement" <i>relié(e) à</i> "Ville"</center>
+        <br>
+        Puis sélectionnez la ville qui vous intéresse dans le menu déroulant.<br>
+        Par exemple, si on veut récupérer les informations administratives pour la ville de Saint-Valéry-sur-Somme,
+        la requête à exécuter sera la suivante :
+      </p>
+      <img src="../assets/doc/Sparnatural_info_admin.png" style="height: 150px;">
+
+
     </div>
 
     <div id=part4>
-      <h5>4- Affichage des IN en pdf</h5>
+      <br>
+      <h4>4- Affichage des IN en pdf</h4>
       <p>
         Enfin, on retrouve à droite de l'écran le bouton <img src="../assets/doc/Pdf.png" style="height: 50px;"> qui permet
         d'accéder aux pdf des Instructions Nautiques du SHOM.<br>
@@ -119,9 +151,13 @@
 </script>
 
 <style scoped>
-  h5{
+  h4{
     text-align: left;
     padding: 0px 20px;
+  }
+  h5{
+    text-align: left;
+    padding: 0px 10px;
   }
   h6{
     text-align: left;
