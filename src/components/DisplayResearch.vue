@@ -5,7 +5,7 @@
       <img src="../assets/results.png" title='Résultats' height ="37" width="37"/>
     </button>
     <div v-if="moveSidePanel" class="resultSidepanelOpen">
-      <h2>Resultats</h2>
+      <h2>Résultats</h2>
       <EntityResult v-for="(result, i) in queryResult" :values="result" :key="i"
         @pageOuvrage="conveyPageOuvrage">
       </EntityResult>

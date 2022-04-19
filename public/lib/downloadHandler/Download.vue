@@ -93,7 +93,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .download-button {
   display: flex;
   min-width: 46px;

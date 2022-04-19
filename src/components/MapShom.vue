@@ -104,14 +104,14 @@ export default {
         "meta"
       ],
       wmsNames: [
-        "Base Layer",
-        "Hydrography",
-        "Soundings",
+        "Fond de carte",
+        "Hydrographie",
+        "Sondages",
         "Dangers",
         "Restrictions",
-        "Topography",
-        "Aids To Navigation",
-        "Metadata"
+        "Topographie",
+        "Aides à la navigation",
+        "Metadonnées"
       ],
       layerIndexes: {},
       layerToManaged: {
@@ -287,7 +287,11 @@ export default {
       this.layersManaged.addLayer(drawnItems);
       this.layerIndexes["selection"] = this.layersManaged.getLayerId(drawnItems);
 
-      L.drawLocal.draw.toolbar.buttons.rectangle = 'Select an area';
+      L.drawLocal.draw.toolbar.buttons.rectangle = 'Sélectionner une emprise';
+      L.drawLocal.draw.toolbar.actions.title = 'Annuler la sélection';
+      L.drawLocal.draw.toolbar.actions.text = 'Annuler';
+      L.drawLocal.draw.handlers.rectangle.tooltip.start = "Click et drag pour dessiner l'emprise";
+      L.drawLocal.draw.handlers.simpleshape.tooltip.end = "Relâcher pour terminer la sélection";
       map.addControl(new L.Control.Draw({
         position: "bottomright",
         draw: {
@@ -885,7 +889,7 @@ export default {
       if (this.onMap){
         return "Lat : "+this.userLocation.lat+"\xa0\xa0\xa0 Lng : "+this.userLocation.lng;
       }
-      return "Mouse is not over map";
+      return "La souris n'est pas sur la carte";
     }
   },
 }
