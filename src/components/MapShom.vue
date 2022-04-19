@@ -99,14 +99,14 @@ export default {
         "meta"
       ],
       wmsNames: [
-        "Base Layer",
-        "Hydrography",
-        "Soundings",
+        "Couche originel",
+        "Hydrographie",
+        "Sondages",
         "Dangers",
         "Restrictions",
-        "Topography",
-        "Aids To Navigation",
-        "Metadata"
+        "Topographie",
+        "Aides à la navigation",
+        "Metadonnées"
       ],
       layerIndexes: {},
       layerToManaged: {
