@@ -276,11 +276,11 @@ export default {
       this.layersManaged.addLayer(drawnItems);
       this.layerIndexes["selection"] = this.layersManaged.getLayerId(drawnItems);
 
-      L.drawLocal.draw.toolbar.buttons.rectangle = 'Sélectionne une emprise';
+      L.drawLocal.draw.toolbar.buttons.rectangle = 'Sélectionner une emprise';
       L.drawLocal.draw.toolbar.actions.title = 'Annuler la sélection';
       L.drawLocal.draw.toolbar.actions.text = 'Annuler';
       L.drawLocal.draw.handlers.rectangle.tooltip.start = "Click et drag pour dessiner l'emprise";
-      L.drawLocal.draw.handlers.rectangle.tooltip.release = "Click et drag pour dessiner l'emprise";
+      L.drawLocal.draw.handlers.simpleshape.tooltip.end = "Relâcher pour terminer la sélection";
       map.addControl(new L.Control.Draw({
         position: "bottomright",
         draw: {
