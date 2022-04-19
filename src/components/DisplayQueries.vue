@@ -142,7 +142,7 @@ export default {
     },
     computed: {
         tooltipTitle () {
-            return element => 'Double-click pour ' + (element ? 'réduire' : 'agrandir');
+            return element => 'Double-click pour ' + (element ? 'réduire' : 'développer');
         }
     },
     methods: {
