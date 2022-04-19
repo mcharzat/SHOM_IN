@@ -7,6 +7,7 @@
       :stateDisplay="stateDisplay"
       :removeTheQuery="queryToRemove"
       :demandReset="resetSignal"
+      :uploadedQueries="uploadedQueries"
       @bboxSelectionArea="conveyBbox"
       @suppressBboxSelectionArea="conveyStateBbox"
       @layersToManage="conveyToManage"
@@ -47,6 +48,7 @@
       @refreshDisplayResult="conveyRefreshResult"
       @removeQuery="conveyRemoveQuery"
       @resetQueries="conveyReset"
+      @uploadedQueries="conveyUploadedQueries"
     />
   </div>
 </template>
@@ -79,6 +81,7 @@ export default {
       buttonMenu: false,
       queryToRemove: {},
       resetSignal: 0,
+      uploadedQueries: {},
       toManaged: {},
       labels: {},
     }
@@ -127,6 +130,9 @@ export default {
     conveyReset() {
       this.resetSignal = Date.now();
     },
+    conveyUploadedQueries(queries) {
+      this.uploadedQueries = queries;
+    },
     conveyToManage(layers) {
       this.toManaged = layers;
     },
@@ -150,7 +156,6 @@ export default {
   #app {
     font-family: Avenir, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: #2c3e50;
     /*margin-top: 60px;*/

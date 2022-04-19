@@ -35,6 +35,16 @@
             ></QueriesHistory>
           </div>
           <div class="buttonsManage">
+            <Download :download-data="queries"
+             file-type="json"
+             file-name="Nereus results"
+             class="save"
+             ButtonText="Sauvegarder"
+             title="Sauvegarder vos requêtes dans un fichier"/>
+            <button class="upload" title="Charger des requêtes depuis un fichier" @click="launchUpload">
+                <input type="file" ref="inputFile" @change="uploadFile" hidden>
+                Charger
+            </button>
             <button class="reset" title="Supprimer toutes les requêtes" @click="reset">
             <img src="../assets/x.png" height ="16" width="16"/>
             <div class="resetText">Tout supprimer</div>
@@ -56,6 +66,7 @@
  * @vue-event {Object} refreshDisplayResult - Refresh oh the display of result is demanded
  * @vue-event {Object} removeQuery - Query to be remove
  * @vue-event resetQueries - Clear the queries
+ * @vue-event {Object} uploadedQueries - Queries that have been uploaded
  * @vue-prop {Boolean} [stateResult=false] - State of the display of result component
  * @vue-prop {Array} [queryResult=[]] - New query
  * @vue-prop {Object} [layersList={}] - Layers to handle the display on the map
@@ -71,6 +82,7 @@
  */
 import QueriesHistory from "./queryComponents/QueriesHistory.vue";
 import LayerControl from "./layerComponents/layerControl.vue";
+import Download from "../../public/lib/downloadHandler/Download.vue"
 
 export default {
     name: 'displayQueries',
@@ -80,11 +92,13 @@ export default {
         'stateDisplay',
         'refreshDisplayResult',
         'removeQuery',
-        'resetQueries'
+        'resetQueries',
+        'uploadedQueries'
     ],
     components : {
     QueriesHistory,
-    LayerControl
+    LayerControl,
+    Download
 },
     props: {
         stateResult: {
@@ -282,6 +296,7 @@ export default {
          */
         conveyDisplayConfig() {
             this.$emit("stateDisplay", {
+                time: Date.now(),
                 layers: this.configDisplayLayer,
                 queries: this.configDisplayQueries
             })
@@ -314,8 +329,123 @@ export default {
         reset() {
             this.$emit('resetQueries');
             this.queries = [];
-            this.querconfigDisplayQueriesies = [];
+            this.configDisplayQueries = [];
         },
+        /**
+         * Open the file search dialog. 
+         */
+        launchUpload() {
+            this.$refs['inputFile'].click();
+        },
+        /**
+         * Retrieve the file.
+         */
+        uploadFile() {
+            const files = this.$refs['inputFile'].files;
+            if (files.length <= 0) {
+                return false;
+            }
+            const fr = new FileReader();
+            let result = {};
+            fr.onload = e => {
+                try {
+                    result = JSON.parse(e.target.result);
+                    this.checkUploadedData(result);
+                } catch (error) {
+                    this.$swal({
+                        titleText: "Error !!!\n Couldn't load the file",
+                        showCloseButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        width: 400,
+                        html: error
+                    });
+                    return;
+                }
+                this.addUploadedQueries(result);
+            }
+            fr.readAsText(files.item(0));
+        },
+        /**
+         * Check the conformity of the file
+         * @param {Array} data - File uploaded
+         * @throws {InvalidFormat}
+         * @throws {NamenotAvailable}
+         */
+        checkUploadedData(data) {
+            if (this.checkIsWrongFormat(data)) {
+                throw 'File data are not in the good format';
+            }
+            const nameNotAvailable = this.checkIsQueriesNameTaken(data);
+            if (nameNotAvailable) {
+                throw 'The name "' + nameNotAvailable + '" of a query in the file is already taken';
+            }
+        },
+        /**
+         * Handle the queries uploaded.
+         * @param {Array} data - File uploaded
+         * @emits uploadedQueries
+         */
+        addUploadedQueries(data) {
+            this.$emit("uploadedQueries", {
+                time: Date.now(),
+                queries: data});
+            this.queries = this.queries.concat(data);
+            data.forEach( query => {
+                this.configDisplayQueries.push({
+                    name: query.name,
+                    state: true
+                });
+            })
+        },
+        /**
+         * Check the format of the file.
+         * @param {Array} data - File uploaded
+         * @return {Boolean} Wether the format is correct
+         */
+        checkIsWrongFormat(data) {
+            if (!Array.isArray(data)) {
+                return true;
+            }
+            const datafilter = data.filter( query => {
+                if (!Object.keys(query).includes("name")
+                    || !Object.keys(query).includes("value")
+                    || !Array.isArray(query.value)) {
+                    return false;
+                }
+                return query.value.every( entity => {
+                    return Object.keys(entity).every(field => {
+                        if (!Object.keys(entity[field]).includes("type")
+                            || !Object.keys(entity[field]).includes("value")
+                            || !Array.isArray(entity[field].value)) {
+                            return false;
+                        } 
+                        return true;
+                    })
+                })
+            })
+            if (datafilter.length != data.length) {
+                return true;
+            }
+            return false;
+        },
+        /**
+         * Check the availability of the name of the queries.
+         * @param {Array} data - File uploaded
+         * @return {String} Name not available or empty
+         */
+        checkIsQueriesNameTaken(data) {
+            const newQueriesName = [];
+            let nameTaken = "";
+            data.forEach( query => {
+                if (!this.checkName(query.name)
+                    || newQueriesName.includes(query.name)) {
+                    nameTaken = query.name;
+                }
+                newQueriesName.push(query.name);
+            })
+            return nameTaken;
+        }
     },
 }
 </script>
@@ -333,6 +463,7 @@ export default {
 
     border:solid;
     border-color: white;
+    border-radius: 10%;
 
     box-shadow: 0 0 5px rgba(0,0,0,0.19), 0 0 5px rgba(0,0,0,0.19)
 }
@@ -355,17 +486,21 @@ export default {
   height: 100%;
   max-height: calc(100% - 125px);
   top : 100px;
-  overflow: scroll;
+  overflow-y: scroll;
   z-index: 1000;
 }
 
 .history, .historyContent {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   align-content: center;
 
   margin-top: 7px;
+}
+
+.historyContent {
+  justify-content: space-between;
+  height: 100%;
 }
 
 .resize {
@@ -383,19 +518,34 @@ export default {
 .buttonsManage {
   display: flex;
   flex-direction: row;
-  justify-self: center;
+  justify-self: space-between;
   align-self: center;
 
   margin-top: 15px;
-  max-width: 200px;
+  margin-bottom: 7px;
+  max-width: 96%;
+}
 
+.buttonsManage .save {
+    background-color: green;
+}
+
+.buttonsManage .upload {
+    background-color: orange;
 }
 
 .buttonsManage .reset {
-  background-color: #f44336;
+    background-color: #f44336;
+}
+
+.buttonsManage .save,
+.buttonsManage .upload,
+.buttonsManage .reset {
+  min-height: 30px;
   color: white;
   font-size: 0.8em;
-  padding: 8px 22px 6px 22px;
+  padding: 8px 20px 6px 20px;
+  margin-left: 3px;
   border: 0px;
   border-radius: 4px;
 

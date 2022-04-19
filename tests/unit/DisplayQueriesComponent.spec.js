@@ -40,9 +40,11 @@ describe("DisplayQueries.vue", () => {
     });
 
     it("checkName valid", () => {
-        const name = "maRequete";
+        const correctName = "maRequete";
+        const incorrectName = "Requête 1";
 
-        expect(wrapper.vm.checkName(name)).toBeTruthy();
+        expect(wrapper.vm.checkName(correctName)).toBeTruthy();
+        expect(wrapper.vm.checkName(incorrectName)).toBeFalsy();
     });
 
     it("rename valid", async () => {
@@ -75,5 +77,61 @@ describe("DisplayQueries.vue", () => {
 
         expect(queries[0].name).toMatch(newName);
         expect(queries[1].name).toMatch("Requête 3");
+    });
+
+    it("check format valid", async () => {
+        const correctDataFile = [{
+            name: "validation",
+            value: [{
+                field: {
+                    type: "type",
+                    value: ["Good"]
+                }
+            }]
+        }];
+        const bad1DataFile = [{
+            field: {
+                type: "type",
+                value: ["Good"]
+            }
+        }];
+        const bad2DataFile = [{
+            name: "validation",
+            value: [{
+                field: {
+                    type: "type",
+                    value: "Good"
+                }
+            }]
+        }];
+
+        expect(wrapper.vm.checkIsWrongFormat(correctDataFile)).toBeFalsy();
+        expect(wrapper.vm.checkIsWrongFormat(bad1DataFile)).toBeTruthy();
+        expect(wrapper.vm.checkIsWrongFormat(bad2DataFile)).toBeTruthy();
+    });
+
+    it("check uploaded name available valid", async () => {
+        const correctDataFile = [{
+            name: "validation"
+        },
+        {
+            name: "validation2"
+        }];
+        const bad1DataFile = [{
+            name: "maRequete"
+        },
+        {
+            name: "validation2"
+        }];
+        const bad2DataFile = [{
+            name: "validation"
+        },
+        {
+            name: "validation"
+        }];
+
+        expect(wrapper.vm.checkIsQueriesNameTaken(correctDataFile)).toBeFalsy();
+        expect(wrapper.vm.checkIsQueriesNameTaken(bad1DataFile)).toMatch("maRequete");
+        expect(wrapper.vm.checkIsQueriesNameTaken(bad2DataFile)).toMatch("validation");
     });
 });

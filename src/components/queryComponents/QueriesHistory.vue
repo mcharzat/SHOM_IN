@@ -76,7 +76,7 @@ export default {
          * Reset the edition mode and cancel the rename.
          */
         cancelRename() {
-            this.stateNameEdition = true;
+            this.stateNameEdition = false;
         },
         /**
          * @emits displayQueryMap

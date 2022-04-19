@@ -15,7 +15,8 @@
  * @vue-event {String} suppressBboxSelectionArea - Suppression of the selection is demanded
  * @vue-event {Object} layersToManage - Layers to handle the display on the map
  * @vue-event {Object} layersLabel - Labels of the layers
- * @vue-prop {Array} [queryResultMap=[]] - results of the research
+ * @vue-prop {Array} [queryResultMap=[]] - Results of the research
+ * @vue-prop {Object} [uploadedQueries={}] - Queries uploaded
  * @vue-prop {Object} [updateNameQuery={}] - Name of a query to be updated
  * @vue-prop {Object} [stateDisplay={}] - Configuration of the display of layers on map
  * @vue-prop {Object} [removeTheQuery={}] - Remove a query
@@ -65,6 +66,10 @@ export default {
     queryResultMap:  {
       type: Array,
       default: () => []
+    },
+    uploadedQueries:  {
+      type: Object,
+      default: () => {}
     },
     updateNameQuery:  {
       type: Object,
@@ -236,7 +241,15 @@ export default {
      */
     setupWatchers(map) {
       this.$watch('queryResultMap', () => {
-        this.displayResult(map);
+        this.setupQueryLayers();
+        this.displayResult(this.queryResultMap, map);
+      });
+
+      this.$watch('uploadedQueries', () => {
+        this.uploadedQueries.queries.forEach(query => {
+          this.setupQueryLayers(query.name);
+          this.displayResult(query.value, map);
+        })
       });
 
       this.$watch('layerToManaged', () => {
@@ -244,26 +257,24 @@ export default {
       }, {deep: true});
 
       this.$watch('updateNameQuery', names => {
-        const index = this.selectQueryByName(names.old);
+        const index = this.handleLayersFromOldQuery(names.old);
         this.layerByQuery[index].name = names.new;
+        this.handleLayersFromOldQuery(names.new, true);
       });
 
       this.$watch('stateDisplay', config => {
         this.handleDisplay(config, map);
-      }, {deep: true});
+      });
 
       this.$watch('removeTheQuery', name => {
-        const index = this.selectQueryByName(name.name);
-
-        Object.keys(this.categories).forEach(( category => {
-          this.handleDisplayQuery(name.name, category, false);
-        }))
+        const index = this.handleLayersFromOldQuery(name.name)
         this.layerByQuery = this.removeElementFromArray(this.layerByQuery, index);
         this.cleanCategoriesLayers();
       });
 
       this.$watch('demandReset', () => {
         this.clearResearchLayer();
+        this.cleanCategoriesLayers();
         this.layerByQuery = [];
       });
     },
@@ -296,7 +307,6 @@ export default {
         drawnItems.clearLayers();
         const index = this.layerToManaged.extra.indexOf("selection");
         this.layerToManaged.extra = this.removeElementFromArray(this.layerToManaged.extra, index);
-        console.log(this.layerToManaged);
         this.$emit("suppressBboxSelectionArea", this.selectionArea);
       });
 
@@ -326,9 +336,10 @@ export default {
 
     /**
      * Setup the new query.
+     * @param {String} [queryName=newQuery] - The name of the query
      */
-    setupQueryLayers() {
-      const newQuery = { name: "newQuery" };
+    setupQueryLayers(queryName = "newQuery") {
+      const newQuery = { name: queryName };
       Object.keys(this.categories).forEach(category => {
         newQuery[category] = L.featureGroup();
       });
@@ -361,11 +372,11 @@ export default {
     },
     /**
      * Check the presence of coordinates field.
+     * @param {Array} query - Result of a query
      * @param {L.map} map - The map
      */
-    displayResult(map) { 
-      this.setupQueryLayers();
-      this.queryResultMap.forEach(element => {
+    displayResult(query, map) { 
+      query.forEach(element => {
         const keys = Object.keys(element);
         if (keys.includes("wkt")
             && element.wkt.type == "literal") {
@@ -642,9 +653,24 @@ export default {
     cleanCategoriesLayers() {
       this.layerToManaged.data.forEach( (category, index) => {
         if (this.categories[category].layer.getLayers().length == 0) {
+          this.layersManaged.removeLayer(this.categories[category].layer);
           this.layerToManaged.data = this.removeElementFromArray(this.layerToManaged.data, index);
         }
       })
+    },
+    /**
+     * Remove the old queries from layers
+     * @param {String} name - Name of the query
+     * @param {Boolean} [state=false] - State of the display for the query
+     * @return {Number} Index of the query
+     */
+    handleLayersFromOldQuery(name, state = false) {
+      const index = this.selectQueryByName(name);
+
+      Object.values(this.layerToManaged.data).forEach( category => {
+        this.handleDisplayQuery(name, category, state);
+      })
+      return index;
     },
     /**
      * retrieve the index of a query with the name.
@@ -723,9 +749,13 @@ export default {
      */
     handleDisplayQuery(queryName, category, state) {
       const index = this.selectQueryByName(queryName);
-      const query = this.layerByQuery[index];
-      state ? query[category].addTo(this.categories[category].layer) 
-            : this.categories[category].layer.removeLayer(query[category]);
+      if (index != null) {
+        const query = this.layerByQuery[index];
+        if (query[category].getLayers().length) {
+          state ? query[category].addTo(this.categories[category].layer) 
+                : this.categories[category].layer.removeLayer(query[category]);
+        }
+      }
     },
     /**
      * Determine and setup the category of an entity.

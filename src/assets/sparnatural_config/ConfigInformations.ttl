@@ -1,0 +1,167 @@
+@prefix : <http://www.semanticweb.org/formation/ontologies/2022/2/untitled-ontology-20#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@base <http://www.semanticweb.org/formation/ontologies/2022/2/untitled-ontology-20> .
+
+<http://www.semanticweb.org/formation/ontologies/2022/2/untitled-ontology-20> rdf:type owl:Ontology ;
+	owl:imports <http://data.sparna.fr/ontologies/sparnatural-config-core> , <http://data.sparna.fr/ontologies/sparnatural-config-datasources> .
+
+
+#################################################################
+#    Object Properties
+#################################################################
+
+:ZoneRecherche a owl:ObjectProperty ;
+	rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SearchProperty> ;
+	rdfs:domain [ rdf:type owl:Class ;
+                        owl:unionOf ( :Secteur
+                                      :Cote
+                                      :LieuDeStationnement
+                                      :Chenal
+                                      :Large
+                                      :Littoral
+                                      :ZoneDePilotage
+                                      :Ile
+                                    )
+                        ] ;
+	rdfs:range :Recherche ;
+	<http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "rdfs:label|skos:prefLabel" ;
+	<http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :labelVille ;
+    rdfs:label "Recherche"@fr .
+
+:InstructionsZone a owl:ObjectProperty ;
+    rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#NonSelectableProperty> ;
+	rdfs:domain [ rdf:type owl:Class ;
+                        owl:unionOf ( :Secteur
+                                      :Cote
+                                      :LieuDeStationnement
+                                      :Chenal
+                                      :Large
+                                      :Littoral
+                                      :ZoneDePilotage
+                                      :Ile
+                                    )
+                        ] ;
+    rdfs:range :Instruction ;
+    <http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "a ?any.\n{?this nav:aUneRelationSpatialeAvec/rdf:_1 ?entities.}\nUNION\n{?this nav:aUneRelationSpatialeAvec/rdf:_2 ?entities.}\nUNION\n{?this nav:aUneRelationSpatialeAvec ?entities FILTER NOT EXISTS {?entities rdf:type rdfs:Container}}\n?instruction a nav:Instruction.\n{?instruction ?p ?entities}\nUNION\n{?instruction ?p ?this}\nUNION\n{?instruction ?p ?link. ?link rdf:_1 ?entities}\nUNION\n{?instruction ?p ?link. ?link rdf:_2 ?entities}UNION\n{?instruction ?p ?link. ?link rdf:_3 ?entities}\nOPTIONAL{?instruction nav:aPourTexteAssocie|nav:aPourContexte ?instructions}\nOPTIONAL{?instruction nav:aPourAction ?a. ?a skos:prefLabel ?action}\nOPTIONAL{?instruction nav:estASensUnique ?sensunique}\nOPTIONAL{?instruction nav:aPourCible ?cible}.#" ;
+    rdfs:label "possède des"@fr .
+
+:InterdictionsZone a owl:ObjectProperty ;
+    rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#NonSelectableProperty> ;
+	rdfs:domain [ rdf:type owl:Class ;
+                        owl:unionOf ( :Secteur
+                                      :Cote
+                                      :LieuDeStationnement
+                                      :Chenal
+                                      :Large
+                                      :Littoral
+                                      :ZoneDePilotage
+                                      :Ile
+                                    )
+                        ] ;
+    rdfs:range :Interdiction ;
+    <http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "a ?any.\n{?this nav:aUneRelationSpatialeAvec/rdf:_1 ?entities.}\nUNION\n{?this nav:aUneRelationSpatialeAvec/rdf:_2 ?entities.}\nUNION\n{?this nav:aUneRelationSpatialeAvec ?entities FILTER NOT EXISTS {?entities rdf:type rdfs:Container}}\n?interdiction a nav:Interdiction.\n{?interdiction ?p ?entities}\nUNION\n{?interdiction ?p ?this}\nUNION\n{?interdiction ?p ?link. ?link rdf:_1 ?entities}\nUNION\n{?interdiction ?p ?link. ?link rdf:_2 ?entities}\nOPTIONAL{?interdiction nav:aPourAction ?a. ?a skos:prefLabel ?action}\nOPTIONAL{?interdiction nav:aPourCible ?c. ?c skos:prefLabel ?cible}\nOPTIONAL{?interdiction nav:aPourException ?exception}\nOPTIONAL{?interdiction nav:aPourLieuDEffet ?l. ?l rdfs:label ?lieu}\nOPTIONAL{?interdiction nav:aPourTemporalite ?duree}.#";
+    rdfs:label "possède des"@fr .
+
+:InformationsZone a owl:ObjectProperty ;
+    rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#NonSelectableProperty>;
+	rdfs:domain [ rdf:type owl:Class ;
+                        owl:unionOf ( :Secteur
+                                      :Cote
+                                      :LieuDeStationnement
+                                      :Chenal
+                                      :Large
+                                      :Littoral
+                                      :ZoneDePilotage
+                                      :Ile
+                                    )
+                        ] ;
+    rdfs:range :Information ;
+    <http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "a ?any.\n{?this nav:aUneRelationSpatialeAvec/rdf:_1 ?entities.}\nUNION\n{?this nav:aUneRelationSpatialeAvec/rdf:_2 ?entities}\nUNION\n{?this nav:aUneRelationSpatialeAvec ?entities FILTER NOT EXISTS {?entities rdf:type rdfs:Container}}\n?information a nav:Information.\n{?information ?p ?entities}\nUNION\n{?information ?p ?this}\nUNION\n{?information ?p ?link. ?link rdf:_1 ?entities}\nUNION\n{?information ?p ?link. ?link rdf:_2 ?entities}\nOPTIONAL{ ?information nav:aPourCible ?c. ?c nav:aPourInfo ?cible.}\nOPTIONAL{?information nav:aPourLieuDEffet|nav:aPourEntiteImpliquee ?l. ?l rdfs:label|nav:aPourTexteAssocie ?lieu.OPTIONAL{?lieu geom:hasGeometry|nav:estSitueDans/geom:hasGeometry ?geom. ?geom gsp:asWKT ?lieuwkt}}\nOPTIONAL{?information nav:aPourInfo|nav:stipule ?infos.}\nOPTIONAL{?information nav:aPourAction ?a. ?a skos:prefLabel ?action}.#"; 
+    rdfs:label "possède des"@fr .
+
+#################################################################
+#    Classes
+#################################################################
+
+:Recherche a owl:Class ;
+	rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+	<http://data.sparna.fr/ontologies/sparnatural-config-core#faIcon> "fas fa-search" ;
+	<http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "?any" ;
+
+	rdfs:label "Rechercher"@fr , "Search"@en .
+
+#Information
+:Information a owl:Class ;
+	rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+	<http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<http://data.shom.fr/def/navigation_cotiere#Information>" ;
+	rdfs:label "Information"@fr .
+
+# Instruction
+:Instruction a owl:Class ;
+	rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+	<http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<http://data.shom.fr/def/navigation_cotiere#Instruction>" ;
+	rdfs:label "Instruction"@fr .
+
+# Interdiction
+:Interdiction a owl:Class ;
+	rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+	<http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<http://data.shom.fr/def/navigation_cotiere#Interdiction>" ;
+	rdfs:label "Interdiction"@fr .
+
+# Reglement
+:Reglement a owl:Class ;
+	rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+	<http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<http://data.shom.fr/def/navigation_cotiere#Reglement>" ;
+	rdfs:label "Reglement"@fr .
+
+# Chenal
+:Chenal a owl:Class ;
+	rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+	<http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<http://data.shom.fr/def/navigation_cotiere#Chenal>" ;
+    rdfs:label "Chenal"@fr .
+
+# Large
+:Large a owl:Class ;
+	rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+	<http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<http://data.shom.fr/def/navigation_cotiere#Large>" ;
+    rdfs:label "Large"@fr .
+
+# Littoral
+:Littoral a owl:Class ;
+	rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+	<http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<http://data.shom.fr/def/navigation_cotiere#Littoral>" ;
+    rdfs:label "Littoral"@fr .
+
+# Secteur
+:Secteur a owl:Class ;
+	rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+	<http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<http://data.shom.fr/def/navigation_cotiere#Secteur>" ;
+    rdfs:label "Secteur"@fr .
+
+# Zone de pilotage
+:ZoneDePilotage a owl:Class ;
+	rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+	<http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<http://data.shom.fr/def/navigation_cotiere#ZoneDePilotage>" ;
+    rdfs:label "Zone de pilotage"@fr .
+
+# Côte
+:Cote a owl:Class ;
+	rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+	<http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<http://data.shom.fr/def/navigation_cotiere#Cote>" ;
+    rdfs:label "Cote"@fr .
+
+# Lieu de Stationnement
+:LieuDeStationnement a owl:Class ;
+	rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+	<http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<http://data.shom.fr/def/navigation_cotiere#EntiteGeographique>.\n?this nav:aPourNature nav:TypeDeLieuDeStationnement" ;
+    rdfs:label "LieuDeStationnement"@fr .
+
+#Ile 
+:Ile a owl:Class;
+    rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+    <http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<http://data.shom.fr/def/navigation_cotiere#EntiteGeographique>.\n?this nav:aPourNature teg:Ile" ;
+    rdfs:label "Ile"@fr.
