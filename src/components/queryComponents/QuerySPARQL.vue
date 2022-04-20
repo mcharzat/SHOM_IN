@@ -78,7 +78,10 @@ export default {
       querySelectBbox: "",
       bboxState: true,
       bboxArea: [],
-      tripleStoreLink: "http://localhost:7200/repositories/test_shom_lambert"
+      tripleStoreLink: "http://172.31.58.17:7200/repositories/test_shom_lambert",
+      queryResult: [],
+      secondClass: false,
+      isResultReceived: false
     }
   },
   computed : {
@@ -190,7 +193,7 @@ export default {
 
       // link yasqe and yasr
       yasqe.on("queryResponse", (_yasqe, response, duration) => {
-        this.emitResults(response.text);
+        this.emitResults(response.text, _yasqe);
         yasr.setResponse(response, duration);
         this.sparnatural.disableLoading() ;
       });
@@ -281,7 +284,7 @@ export default {
     selectorsPostProcess(queryString) {
         queryString = queryString.replace(
           "SELECT DISTINCT ?this",
-          "SELECT DISTINCT ?this ?type ?category ?label ?description ?instruction ?instructions ?exception ?reglement ?wkt ?lat ?lng ?lumineux ?ouvrage ?page ?amer ?contact ?horairesVHF ?mail ?horairestelephone ?telephone ?information ?interdiction ?duree ?cible ?lieu");
+          "SELECT DISTINCT ?this ?type ?category ?label ?description ?instruction ?instructions ?exception ?reglement ?wkt ?lat ?lng ?lumineux ?ouvrage ?page ?amer ?aide ?a ?contact ?horairesVHF ?mail ?horairestelephone ?telephone ?information ?interdiction ?duree ?cible ?lieu");
         return queryString;
     },
     /**
@@ -403,14 +406,24 @@ export default {
      * @param {Object} response - Response from Yasqe
      * @emits myQueryResult
      */
-    emitResults (response) {
+    async emitResults (response, yasqe) {
       let results = JSON.parse(response).results.bindings;
       
-      results = this.concatOuvragePage(results);
-      const state = this.getStateOfResults(results);
-      results = this.synthesizeResults(state, results);
+      if (!this.secondClass) {
+        results = this.concatOuvragePage(results);
+        const state = this.getStateOfResults(results);
+        this.queryResult = this.synthesizeResults(state, results);
 
-      this.$emit("myQueryResult", results);
+        for (const entity of this.queryResult) {
+          await this.retrieveSecondClassEntities(entity, "a", yasqe);
+        }
+
+        this.$emit("myQueryResult", this.queryResult);
+      } else {
+        const result = this.transformProperties(results);
+        this.queryResult.push(result[0]);
+        this.isResultReceived = true;
+      }
     },
     /**
      * Group fields page and ouvrage in one element
@@ -479,6 +492,61 @@ export default {
         results.push(result);
       }
       return results;
+    },
+    async retrieveSecondClassEntities(data, elements, yasqe) {
+      if (Object.keys(data).includes(elements)) {
+        this.secondClass = true;
+        for (const element of data[elements].value) {
+          this.isResultReceived = false;
+          const query = "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> \n" +
+              "PREFIX skos: <http://www.w3.org/2004/02/skos/core#>\n" +
+              "PREFIX nav: <http://data.shom.fr/def/navigation_cotiere#>\n" +
+              "PREFIX geom: <http://data.ign.fr/def/geometrie#>\n" +
+              "PREFIX gsp: <http://www.opengis.net/ont/geosparql#>\n" +
+              "SELECT DISTINCT ?p ?o ?label ?wkt WHERE {\n" + 
+              "<" + element + "> ?p ?o.\n" +
+              "OPTIONAL{?o rdfs:label|skos:prefLabel ?label}\n" +
+              "OPTIONAL{<" + element + "> geom:hasGeometry ?geom.\n" +
+              "?geom gsp:asWKT ?wkt\n}}";
+          yasqe.setValue(query);
+          await yasqe.query();
+          while (!this.isResultReceived) {this.secondClass = true}
+        }
+        this.secondClass = false;
+      }
+    },
+    transformProperties(data) {
+      const config = {secondClass: [0]};
+      const results = [{
+        category: {
+          type: "uri",
+          value: "http://data.shom.fr/def/navigation_cotiere#AideALaNavigation"
+        },
+        wkt: {
+          type: "literal",
+          value: data[0].wkt.value
+        }
+      }];
+      data.forEach( element => {
+        if (!element.p.value.includes("type")
+            && !element.p.value.includes("topObjectProperty")
+            && !element.p.value.includes("aUneRelationSpatialeAvec")) {
+          const property = [...element.p.value.matchAll(new RegExp(".*#([a-zA-Z]+)", "gm"))];
+          const objectProperty = {};
+          objectProperty[property[0][1]] = {type: "literal"};
+          if (element.o.type == "literal") {
+            objectProperty[property[0][1]].value = element.o.value;
+          } else if (Object.keys(element).includes("label")) {
+            objectProperty[property[0][1]].value = element.label.value;
+          } else {
+            return;
+          }
+          results.push(objectProperty);
+          config.secondClass.push(config.secondClass.length);
+        }
+      })
+      const result = this.synthesizeResults(config, results);
+      return result;
     }
   }
 }
