@@ -44,6 +44,9 @@
  * @vue-data {Boolean} [bboxState=true] - Wether the selection is used
  * @vue-data {Array} [bboxArea=[]] - Bbox to filter
  * @vue-data {String} [tripleStoreLink=""] - Url of the database
+ * @vue-data {Array} [queryResult=[]] - Result of the query
+ * @vue-data {Boolean} [secondClass=false] - Wether the result is for a second class
+ * @vue-data {Boolean} [isResultReceived=false] - Wether the result has been received
  */
 import {Yasr,Yasqe} from '@triply/yasgui'
 
@@ -493,6 +496,12 @@ export default {
       }
       return results;
     },
+    /**
+     * Retrieve all details from the second classes
+     * @param {Object} data - Entity of response
+     * @param {String} elements - Name of the attribute of the list of second classes
+     * @param {Yasqe} yasqe - API to request
+     */
     async retrieveSecondClassEntities(data, elements, yasqe) {
       if (Object.keys(data).includes(elements)) {
         this.secondClass = true;
@@ -515,6 +524,11 @@ export default {
         this.secondClass = false;
       }
     },
+    /**
+     * Transform results of all properties into a result of meaningfull named properties
+     * @param {Array} data - Results of a second class
+     * @return {Array} Synthetize result for the second class
+     */
     transformProperties(data) {
       const config = {secondClass: [0]};
       const results = [{
