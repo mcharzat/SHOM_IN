@@ -101,7 +101,7 @@
          <br>
          Par exemple, si vous voulez des informations sur l'île de Batz, exécutez la requête suivante :
       </p>
-      <img src="../assets/doc/Sparnatural_info_div_ile.png" style="height: 150px;">
+      <img src="../assets/doc/Sparnatural_info_div_ile.png" style="height: 220px;">
       <br><br>
       <h6>&emsp; &emsp;• Amers et autres entités</h6>
       <p>
