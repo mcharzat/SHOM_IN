@@ -92,7 +92,7 @@
         &emsp;- Aids to navigation : Les bouées et les phares le long de la côte.<br>
         &emsp;- Metadata : Les métadonnées liées aux zones.<br><br>
       </p>
-      <h5>&emsp;• Exemple de requêtes</h5>
+      <h5>&emsp;• Exemples de requêtes</h5>
 
       <h6>&emsp; &emsp;• Informations diverses</h6>
       <p>
@@ -101,7 +101,7 @@
          <br>
          Par exemple, si vous voulez des informations sur l'île de Batz, exécutez la requête suivante :
       </p>
-      <img src="../assets/doc/Sparnatural_info_div_ile.png" style="height: 150px;">
+      <img src="../assets/doc/Sparnatural_info_div_ile.png" style="height: 220px;">
       <br><br>
       <h6>&emsp; &emsp;• Amers et autres entités</h6>
       <p>
