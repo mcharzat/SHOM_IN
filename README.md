@@ -14,7 +14,11 @@ It requires a triplestore, GraphDB in our case, to store this database. The web 
 
 <br>
 
-## I. Triplestore for base of knowledge
+## I. Global arborescence of the project
+
+![Texte alternatif](/public/arborescence.png)
+
+## II. Triplestore for base of knowledge
 
 ### GraphDB
 
@@ -34,7 +38,7 @@ Reload graphDB
 
 <br>
 
-## II. Sparnatural configuration
+## III. Sparnatural configuration
 
 The ontology configuration files can be found in the following folder: src/assets/doc/sparnatural_config. 
 
@@ -44,7 +48,7 @@ To change or modify a configuration, after adding the file, go to src/components
 
 <br>
 
-## III. PDF Files
+## IV. PDF Files
 
 All pdfs are located in the following folder: public/lib/pdfloader/web/pdfFiles.
 
@@ -52,7 +56,7 @@ This folder also contains a file named 'pdfFilesNames' with all names of pdf loc
 
 <br>
 
-## IV. Using app
+## V. Using app
 
 Open a new terminal in the folder project and use the different command lines. 
 To launch the  project, run the first two commands.
