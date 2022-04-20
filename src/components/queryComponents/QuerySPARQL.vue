@@ -81,7 +81,7 @@ export default {
       querySelectBbox: "",
       bboxState: true,
       bboxArea: [],
-      tripleStoreLink: "http://172.31.58.17:7200/repositories/test_shom_lambert",
+      tripleStoreLink: "http://localhost:7200/repositories/atlantis",
       queryResult: [],
       secondClass: false,
       isResultReceived: false
