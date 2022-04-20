@@ -92,7 +92,7 @@
         &emsp;- Aids to navigation : Les bouées et les phares le long de la côte.<br>
         &emsp;- Metadata : Les métadonnées liées aux zones.<br><br>
       </p>
-      <h5>&emsp;• Exemple de requêtes</h5>
+      <h5>&emsp;• Exemples de requêtes</h5>
 
       <h6>&emsp; &emsp;• Informations diverses</h6>
       <p>
