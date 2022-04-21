@@ -10,7 +10,7 @@ Local installation done under **Linux** 20.0.4 and **Windows** 10/11 using **Gra
 
 Nereus is a web application which aims to query the geo-referenced knowledge base of nautical instructions for users who do not know the SPARQL language. A navigator preparing a sea trip must be able to visualise the results of his queries in the form of synthetic text, cartographic observations and be able to consult the full text of the INs at any time. 
 
-It requires a triplestore, GraphDB in our case, to store this database. The web interface was built using Vue-cli which uses HTML/CSS and JavaScript with a cartographic interface developed with Leaflet.
+It requires a triplestore, GraphDB in our case, to store this knowledge base. The web interface was built using Vue-cli which uses HTML/CSS and JavaScript with a cartographic interface developed with Leaflet.
 
 <br>
 
@@ -22,12 +22,17 @@ It requires a triplestore, GraphDB in our case, to store this database. The web 
 
 ### GraphDB
 
-Install graphDB and create a repository called atlantis.
+Install graphDB and create a repository called atlantis with a OWL2-RL(Optimized) ruleset.
 
 ### Configuration 
 
+Retrieve the ATLANTIS ontology on the github: 
+```
+https://github.com/umrlastig/atlantis-ontology
+```
+
 Import the owl ontology file and the ttls knowledge base file into
-a named graph.
+the repository.
 
 In the graphDB settings (of the software not the web interface) set:<br>
 - graphdb.workbench.cors.enable true <br>
@@ -52,7 +57,7 @@ To change or modify a configuration, after adding the file, go to src/components
 
 All pdfs are located in the following folder: public/lib/pdfloader/web/pdfFiles.
 
-This folder also contains a file named 'pdfFilesNames' with all names of pdf located in this folder. Don't forget to update them when you will add or update a pdf file.
+This folder also contains a file named 'pdfFilesNames' with all names of pdf located in this folder. Don't forget to update them when you add or update a pdf file.
 
 <br>
 
