@@ -33,6 +33,7 @@
  * @vue-computed {String} messageLogger - Message for a logged user
  */
 import { createApp } from 'vue';
+import 'animate.css';
 import SwalDocumentationVue from './SwalDocumentation.vue';
 import OtherShomWebsiteVue from './OtherShomWebsites.vue';
 
@@ -72,6 +73,9 @@ export default {
 
       this.$swal({
         titleText: this.title,
+        showClass: {
+          popup: 'animate__animated animate__zoomIn animate__fast'
+        },
         showCloseButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
@@ -88,6 +92,9 @@ export default {
 
       this.$swal({
         titleText: "Voir les sites du SHOM",
+        showClass: {
+          popup: 'animate__animated animate__zoomIn animate__faster'
+        },
         showCloseButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
