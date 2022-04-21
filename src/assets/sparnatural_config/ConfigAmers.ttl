@@ -66,6 +66,20 @@
     <http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "geom:hasGeometry ?thisgeom.\n?thisgeom gsp:asWKT ?thisWKT.\n{?aideouamer a nav:Amer}\nUNION\n{?aideouamer nav:aPourNature ?nature.\n?nature a nav:TypeDAmer}\n?aideouamer geom:hasGeometry ?entitygeom.\n?entitygeom gsp:asWKT ?entityWKT.\nFILTER(geof:sfContains(?thisWKT,?entityWKT) && !sameTerm(?thisgeom,?entitygeom)).\nOPTIONAL{?aideouamer rdfs:label ?amer}#";
     rdfs:label "possède des"@fr .
 
+:AmersBbox a owl:ObjectProperty ;
+    rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#NonSelectableProperty>;
+    rdfs:domain :Amer;
+    rdfs:range :Recherche;
+    <http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "rdfs:label|skos:prefLabel" ;
+    rdfs:label "Recherche"@fr .
+    
+:AidesBbox a owl:ObjectProperty ;
+    rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#NonSelectableProperty>;
+    rdfs:domain :AideALaNavigation;
+    rdfs:range :Recherche;
+    <http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "rdfs:label|skos:prefLabel" ;
+    rdfs:label "Recherche"@fr .
+
 #################################################################
 #    Classes
 #################################################################
