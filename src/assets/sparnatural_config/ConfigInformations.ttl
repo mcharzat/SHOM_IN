@@ -25,6 +25,8 @@
                                       :Littoral
                                       :ZoneDePilotage
                                       :Ile
+                                      :Port
+                                      :Rade
                                     )
                         ] ;
 	rdfs:range :Recherche ;
@@ -43,6 +45,8 @@
                                       :Littoral
                                       :ZoneDePilotage
                                       :Ile
+                                      :Port
+                                      :Rade
                                     )
                         ] ;
     rdfs:range :Instruction ;
@@ -60,6 +64,8 @@
                                       :Littoral
                                       :ZoneDePilotage
                                       :Ile
+                                      :Port
+                                      :Rade
                                     )
                         ] ;
     rdfs:range :Interdiction ;
@@ -77,6 +83,8 @@
                                       :Littoral
                                       :ZoneDePilotage
                                       :Ile
+                                      :Port
+                                      :Rade
                                     )
                         ] ;
     rdfs:range :Information ;
@@ -145,7 +153,7 @@
 # Zone de pilotage
 :ZoneDePilotage a owl:Class ;
 	rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
-	<http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<http://data.shom.fr/def/navigation_cotiere#ZoneDePilotage>" ;
+	<http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<http://data.shom.fr/def/navigation_cotiere#EntiteGeographique.\n?this nav:aPourNature teg:ZoneDePilotage>" ;
     rdfs:label "Zone de pilotage"@fr .
 
 # Côte
@@ -165,3 +173,15 @@
     rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
     <http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<http://data.shom.fr/def/navigation_cotiere#EntiteGeographique>.\n?this nav:aPourNature teg:Ile" ;
     rdfs:label "Ile"@fr.
+
+#Port 
+:Port a owl:Class;
+    rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+    <http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<http://data.shom.fr/def/navigation_cotiere#EntiteGeographique>.\n?this nav:aPourNature teg:Port" ;
+    rdfs:label "Port"@fr.
+
+#Rade 
+:Rade a owl:Class;
+    rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+    <http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<http://data.shom.fr/def/navigation_cotiere#EntiteGeographique>.\n?this nav:aPourNature teg:Rade" ;
+    rdfs:label "Rade"@fr.
