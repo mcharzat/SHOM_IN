@@ -7,7 +7,7 @@ describe("MapShom.vue", () => {
     it("default coord display", () => {
         const coord = wrapper.find(".mouseTracker p");
 
-        expect(coord.text()).toMatch("Mouse is not over map");
+        expect(coord.text()).toMatch("La souris n'est pas sur la carte");
     });
 
     it("coord display", async () => {
@@ -27,7 +27,7 @@ describe("MapShom.vue", () => {
         await map.trigger('mousemove');
         await map.trigger('mouseout');        
 
-        expect(coord.text()).toMatch("Mouse is not over map");
+        expect(coord.text()).toMatch("La souris n'est pas sur la carte");
     });
 
     it("select an area", async () => {
