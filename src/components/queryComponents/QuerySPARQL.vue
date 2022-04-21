@@ -84,6 +84,7 @@ export default {
       tripleStoreLink: "http://localhost:7200/repositories/atlantis",
       queryResult: [],
       secondClass: false,
+      activeConfig: 1,
       isResultReceived: false
     }
   },
@@ -136,6 +137,7 @@ export default {
       for (let i=0; i < this.namesConfigs['buttonName'].length; i++) {
       
         if (name == this.namesConfigs['buttonName'][i]) {
+          this.activeConfig = i;
           this.colorButton[i] = true;
           this.getColorButton(i);
           this.sparnaturalConfiguration(this.namesConfigs['config'][i]); 
@@ -168,9 +170,15 @@ export default {
           queryString = this.optionalClassPostProcess(queryString);
           queryString = this.optionalLabelPostProcess(queryString);
           queryString = this.optionalDescriptionPostProcess(queryString);
-          queryString = this.optionalContactPostProcess(queryString);
+
+          if (this.activeConfig == 2){
+            queryString = this.optionalGeomPostProcess(queryString);
+          }
+
+          if (this.activeConfig == 3){
+            queryString = this.optionalContactPostProcess(queryString);
+          }
           queryString = this.getChapterPostProcess(queryString);
-          queryString = this.optionalGeomPostProcess(queryString);
           queryString = this.anyEntitiesPostProcess(queryString);
           $('#sparql code').html(queryString.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"));
           yasqe.setValue(queryString);
@@ -391,7 +399,7 @@ export default {
     getChapterPostProcess(queryString){
       queryString = queryString.replace(new RegExp('}$'),
                 "<<?this nav:aPourProvenance ?provenance>> nav:aPourNumeroDePage ?page.\n"+
-                "?provenance rdf:type ?ouvrage FILTER(?ouvrage != nav:OuvrageIN) }");
+                "?provenance rdf:type ?ouvrage FILTER(?ouvrage != nav:OuvrageIN && ?ouvrage != owl:Thing) }");
       return queryString;
     },
     /**
