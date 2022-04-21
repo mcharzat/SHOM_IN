@@ -411,9 +411,9 @@ export default {
      */
     async emitResults (response, yasqe) {
       let results = JSON.parse(response).results.bindings;
-      
+
+      results = this.concatOuvragePage(results);
       if (!this.secondClass) {
-        results = this.concatOuvragePage(results);
         const state = this.getStateOfResults(results);
         this.queryResult = this.synthesizeResults(state, results);
 
@@ -512,9 +512,11 @@ export default {
               "PREFIX nav: <http://data.shom.fr/def/navigation_cotiere#>\n" +
               "PREFIX geom: <http://data.ign.fr/def/geometrie#>\n" +
               "PREFIX gsp: <http://www.opengis.net/ont/geosparql#>\n" +
-              "SELECT DISTINCT ?p ?o ?label ?wkt WHERE {\n" + 
+              "SELECT DISTINCT ?p ?o ?label ?ouvrage ?page ?wkt WHERE {\n" + 
               "<" + element + "> ?p ?o.\n" +
               "OPTIONAL{?o rdfs:label|skos:prefLabel ?label}\n" +
+              "<<<" + element + "> nav:aPourProvenance ?provenance>> nav:aPourNumeroDePage ?page.\n" +
+                "?provenance rdf:type ?ouvrage FILTER(?ouvrage != nav:OuvrageIN  && ?ouvrage != owl:Thing)\n" +
               "OPTIONAL{<" + element + "> geom:hasGeometry ?geom.\n" +
               "?geom gsp:asWKT ?wkt\n}}";
           yasqe.setValue(query);
@@ -544,6 +546,7 @@ export default {
       data.forEach( element => {
         if (!element.p.value.includes("type")
             && !element.p.value.includes("topObjectProperty")
+            && !element.p.value.includes("sameAs")
             && !element.p.value.includes("aUneRelationSpatialeAvec")) {
           const property = [...element.p.value.matchAll(new RegExp(".*#([a-zA-Z]+)", "gm"))];
           const objectProperty = {};
@@ -565,6 +568,13 @@ export default {
           config.secondClass.push(config.secondClass.length);
         }
       })
+      results.push({
+        reference: {
+          type: "literal",
+          value: data[0].reference.value
+        }
+      })
+      config.secondClass.push(config.secondClass.length);
       const result = this.synthesizeResults(config, results);
       return result;
     }
