@@ -80,9 +80,10 @@
  * @vue-data {Boolean} [displayHistory=true] - Wether the content of the history is displayed
  * @vue-computed {String} tooltipTitle - Content of the tooltip of the titles
  */
+import "animate.css";
 import QueriesHistory from "./queryComponents/QueriesHistory.vue";
 import LayerControl from "./layerComponents/layerControl.vue";
-import Download from "../../public/lib/downloadHandler/Download.vue"
+import Download from "../../public/lib/downloadHandler/Download.vue";
 
 export default {
     name: 'displayQueries',
@@ -354,6 +355,9 @@ export default {
                 } catch (error) {
                     this.$swal({
                         titleText: "Erreur !!!\n Le fichier n'a pas pu être chargé",
+                        showClass: {
+                            popup: 'animate__animated animate__zoomIn animate__faster'
+                        },
                         showCloseButton: true,
                         confirmButtonColor: '#3085d6',
                         cancelButtonColor: '#d33',
