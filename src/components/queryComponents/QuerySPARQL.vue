@@ -295,7 +295,7 @@ export default {
     selectorsPostProcess(queryString) {
         queryString = queryString.replace(
           "SELECT DISTINCT ?this",
-          "SELECT DISTINCT ?this ?type ?category ?label ?description ?instruction ?instructions ?exception ?reglement ?wkt ?lat ?lng ?lumineux ?ouvrage ?page ?amer ?aide ?a ?contact ?horairesVHF ?mail ?horairestelephone ?telephone ?information ?interdiction ?duree ?cible ?lieu");
+          "SELECT DISTINCT ?this ?type ?category ?label ?description ?instruction ?instructions ?exception ?reglement ?wkt ?lat ?lng ?lumineux ?ouvrage ?page ?amer ?aide ?aideouamer ?contact ?horairesVHF ?mail ?horairestelephone ?telephone ?information ?interdiction ?duree ?cible ?lieu");
         return queryString;
     },
     /**
@@ -418,22 +418,31 @@ export default {
      * @emits myQueryResult
      */
     async emitResults (response, yasqe) {
+      this.isResultReceived = true;
       let results = JSON.parse(response).results.bindings;
 
-      results = this.concatOuvragePage(results);
-      if (!this.secondClass) {
-        const state = this.getStateOfResults(results);
-        this.queryResult = this.synthesizeResults(state, results);
+      if (results.length){
+        results = this.concatOuvragePage(results);
+        if (!this.secondClass) {
+          const state = this.getStateOfResults(results);
+          this.queryResult = this.synthesizeResults(state, results);
 
-        for (const entity of this.queryResult) {
-          await this.retrieveSecondClassEntities(entity, "a", yasqe);
+          for (const entity of this.queryResult) {
+            await this.retrieveSecondClassEntities(entity, "aideouamer", yasqe);
+          }
+          this.$emit("myQueryResult", this.queryResult);
+        } else {
+          const result = this.transformProperties(results);
+          this.queryResult.push(result[0]);
         }
-
-        this.$emit("myQueryResult", this.queryResult);
-      } else {
-        const result = this.transformProperties(results);
-        this.queryResult.push(result[0]);
-        this.isResultReceived = true;
+      }else {
+        this.$swal({
+          titleText: "Erreur !!!\n Aucune donnée disponible",
+          showCloseButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          width: 400
+        });
       }
     },
     /**
@@ -557,18 +566,23 @@ export default {
             && !element.p.value.includes("sameAs")
             && !element.p.value.includes("aUneRelationSpatialeAvec")) {
           const property = [...element.p.value.matchAll(new RegExp(".*#([a-zA-Z]+)", "gm"))];
+          let propertyName = property[0][1].split(/(?=[A-Z])/);
+          propertyName.forEach((element,index) => {
+            propertyName[index] = element.toLowerCase();
+          })
+          propertyName = propertyName.join(" ");
           const objectProperty = {};
-          objectProperty[property[0][1]] = {type: "literal"};
+          objectProperty[propertyName] = {type: "literal"};
           if (element.o.type == "literal") {
             if (Object.keys(element.o).includes("xml:lang")) {
-              objectProperty[property[0][1]]["xml:lang"] = element.o["xml:lang"];
+              objectProperty[propertyName]["xml:lang"] = element.o["xml:lang"];
             }
-            objectProperty[property[0][1]].value = element.o.value;
+            objectProperty[propertyName].value = element.o.value;
           } else if (Object.keys(element).includes("label")) {
             if (Object.keys(element.label).includes("xml:lang")) {
-              objectProperty[property[0][1]]["xml:lang"] = element.label["xml:lang"];
+              objectProperty[propertyName]["xml:lang"] = element.label["xml:lang"];
             }
-            objectProperty[property[0][1]].value = element.label.value;
+            objectProperty[propertyName].value = element.label.value;
           } else {
             return;
           }
