@@ -4,7 +4,7 @@
       <div class="logo"><img src="../assets/logo_shom_white.png"></div>
       <div class="name">Nereus</div>
     </div>
-    <div v-if="!isLog" class="navBarMiddle notLogged"> 
+    <div v-if="!clientLog" class="navBarMiddle notLogged"> 
         <label for="login">Login:</label>
         <input type=text name=login v-model="login">
         <label for="pwd">Mdp:</label>
@@ -13,7 +13,7 @@
       </div>
       <div v-else class="navBarMiddle logged">
         <p> {{ messageLogger }}</p>
-        <input class="navBarButton menuButton" type="submit" @click.prevent="deconnect" value="Déconnexion">
+        <input class="navBarButton menuButton" type="submit"  @click.prevent="deconnect" value="Déconnexion">
     </div>
     <div class=navBarRight>
         <button class="navBarButton menuButton" title='Sites du SHOM' @click.prevent="displayShom">Le SHOM</button>
@@ -23,7 +23,17 @@
 </template>
 
 <script>
+/**
+ * @module navBar
+ * @vue-data {String} [login=""] - Login of the user
+ * @vue-data {String} [pwd=""] - Password of the user
+ * @vue-data {Boolean} [clientLog=false] - Wether the user is logged
+ * @vue-data {String} [title=Documentation titre] - Title of the documentation
+ * @vue-data {String} [doc="Documentation"] - Documentation content
+ * @vue-computed {String} messageLogger - Message for a logged user
+ */
 import { createApp } from 'vue';
+import 'animate.css';
 import SwalDocumentationVue from './SwalDocumentation.vue';
 import OtherShomWebsiteVue from './OtherShomWebsites.vue';
 
@@ -41,19 +51,31 @@ export default {
   mounted() {
   },
   methods: {
+    /**
+     * Set clientLog to true.
+     */
     getAuth: function () {
       this.clientLog = true;
     },
+    /**
+     * Reset login.
+     */
     deconnect: function () {
       this.login = "login";
       this.pwd = "pwd";
       this.clientLog = false;
     },
+    /**
+     * Display the documentation over the page.
+     */
     displayHelp: function () {
       const doc = createApp(SwalDocumentationVue);
 
       this.$swal({
         titleText: this.title,
+        showClass: {
+          popup: 'animate__animated animate__zoomIn animate__fast'
+        },
         showCloseButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
@@ -62,11 +84,17 @@ export default {
       })
       doc.mount("#modal");
     },
+    /**
+     * Display links of SHOM sites.
+     */
     displayShom: function () {
       const doc = createApp(OtherShomWebsiteVue);
 
       this.$swal({
         titleText: "Voir les sites du SHOM",
+        showClass: {
+          popup: 'animate__animated animate__zoomIn animate__faster'
+        },
         showCloseButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
@@ -80,9 +108,6 @@ export default {
     messageLogger () {
       return "Connecté en tant que : " + this.login;
     },
-    isLog () {
-      return this.clientLog;
-    }
   }
 }
 </script>
@@ -189,14 +214,11 @@ export default {
     border-color:white;
 
     font-size: 1.15em;
-
-    box-shadow: 1px;
   }
 
   .navBarButton:hover {
     background-color: white;
     color : #076e8c;
-    border-color:rgb(11, 73, 94);
   }
 
 

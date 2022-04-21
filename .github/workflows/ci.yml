@@ -22,11 +22,11 @@ jobs:
       - run: npm run build
       - uses: montudor/action-zip@v1
         with:
-          args: zip -qq -r interface.zip dist
+          args: zip -qq -r nereus.zip dist
       - uses: actions/upload-artifact@v2
         with:
-          name: interface.zip
-          path: ./interface.zip
+          name: nereus.zip
+          path: ./nereus.zip
 
   tests_unitaires:
     runs-on: ubuntu-20.04
@@ -48,8 +48,26 @@ jobs:
       - run: npm install
       - run: npm run tests:integration
 
+  doc:
+    runs-on: ubuntu-20.04
+    if: github.repository == 'mcharzat/SHOM_IN' && contains(github.ref, 'refs/tags/')
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16.x'
+      - run: npm install
+      - run: npm run docs
+      - uses: montudor/action-zip@v1
+        with:
+          args: zip -qq -r developerDocumentation.zip devDocs
+      - uses: actions/upload-artifact@v2
+        with:
+          name: developerDocumentation.zip
+          path: ./developerDocumentation.zip
+
   release:
-    needs: [ build, tests_unitaires, tests_integration ]
+    needs: [ build, tests_unitaires, tests_integration, doc ]
 
     runs-on: ubuntu-20.04
     if: github.repository == 'mcharzat/SHOM_IN' && contains(github.ref, 'refs/tags/')
@@ -59,7 +77,11 @@ jobs:
 
       - uses: actions/download-artifact@v2
         with:
-          name: interface.zip
+          name: nereus.zip
+          path: ./
+      - uses: actions/download-artifact@v2
+        with:
+          name: developerDocumentation.zip
           path: ./
 
       - name: Create Release
@@ -72,14 +94,25 @@ jobs:
           release_name: Release ${{ github.ref }}
           draft: false
           prerelease: false
-      - name: Upload Release Asset
-        id: upload-release-asset
+      - name: Upload Release Asset - Application
+        id: upload-release-asset-application
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./interface.zip
-          asset_name: interface.zip
+          asset_path: ./nereus.zip
+          asset_name: nereus.zip
+          asset_content_type: application/zip
+
+      - name: Upload Release Asset - Documentation
+        id: upload-release-asset-documentation
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./developerDocumentation.zip
+          asset_name: developerDocumentation.zip
           asset_content_type: application/zip
       
