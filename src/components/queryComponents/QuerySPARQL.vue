@@ -137,7 +137,7 @@ export default {
       for (let i=0; i < this.namesConfigs['buttonName'].length; i++) {
       
         if (name == this.namesConfigs['buttonName'][i]) {
-          this.activeConfig = i;
+          this.activeConfig = i+1;
           this.colorButton[i] = true;
           this.getColorButton(i);
           this.sparnaturalConfiguration(this.namesConfigs['config'][i]); 
@@ -610,7 +610,7 @@ export default {
   .yasqe .CodeMirror { font-size: 0.8em; height: 380px; }
 
   .yasr_header {
-    display: none;
+    display:none;
   }
   .bg-wrapper {
     padding: 0;
