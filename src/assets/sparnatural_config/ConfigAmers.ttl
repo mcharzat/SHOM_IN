@@ -46,7 +46,7 @@
                                     )
                         ] ;
     rdfs:range :AideALaNavigation ;
-    <http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "geom:hasGeometry ?thisgeom.\n?thisgeom gsp:asWKT ?thisWKT.\n?aide a nav:AideALaNavigation.\n?aide geom:hasGeometry ?entitygeom.\n?entitygeom gsp:asWKT ?entityWKT.\nFILTER(geof:sfContains(?thisWKT,?entityWKT) && !sameTerm(?thisgeom,?entitygeom))#";
+    <http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "geom:hasGeometry ?thisgeom.\n?thisgeom gsp:asWKT ?thisWKT.\n?aideouamer a nav:AideALaNavigation.\n?aideouamer geom:hasGeometry ?entitygeom.\n?entitygeom gsp:asWKT ?entityWKT.\nFILTER(geof:sfContains(?thisWKT,?entityWKT) && !sameTerm(?thisgeom,?entitygeom)).\nOPTIONAL{?aideouamer rdfs:label ?aide}#";
     rdfs:label "possède des"@fr .
 
 :AmersZone a owl:ObjectProperty ;
@@ -63,7 +63,7 @@
                                     )
                         ] ;
     rdfs:range :Amer ;
-    <http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "geom:hasGeometry ?thisgeom.\n?thisgeom gsp:asWKT ?thisWKT.\n{?amer a nav:Amer}\nUNION\n{?amer nav:aPourNature ?nature.\n?nature a nav:TypeDAmer}\n?amer geom:hasGeometry ?entitygeom.\n?entitygeom gsp:asWKT ?entityWKT.\nFILTER(geof:sfContains(?thisWKT,?entityWKT) && !sameTerm(?thisgeom,?entitygeom))#";
+    <http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "geom:hasGeometry ?thisgeom.\n?thisgeom gsp:asWKT ?thisWKT.\n{?aideouamer a nav:Amer}\nUNION\n{?aideouamer nav:aPourNature ?nature.\n?nature a nav:TypeDAmer}\n?aideouamer geom:hasGeometry ?entitygeom.\n?entitygeom gsp:asWKT ?entityWKT.\nFILTER(geof:sfContains(?thisWKT,?entityWKT) && !sameTerm(?thisgeom,?entitygeom)).\nOPTIONAL{?aideouamer rdfs:label ?amer}#";
     rdfs:label "possède des"@fr .
 
 #################################################################

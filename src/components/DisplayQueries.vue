@@ -353,7 +353,7 @@ export default {
                     this.checkUploadedData(result);
                 } catch (error) {
                     this.$swal({
-                        titleText: "Error !!!\n Couldn't load the file",
+                        titleText: "Erreur !!!\n Le fichier n'a pas pu être chargé",
                         showCloseButton: true,
                         confirmButtonColor: '#3085d6',
                         cancelButtonColor: '#d33',
@@ -374,11 +374,11 @@ export default {
          */
         checkUploadedData(data) {
             if (this.checkIsWrongFormat(data)) {
-                throw 'File data are not in the good format';
+                throw "Le fichier n'est pas au bon format";
             }
             const nameNotAvailable = this.checkIsQueriesNameTaken(data);
             if (nameNotAvailable) {
-                throw 'The name "' + nameNotAvailable + '" of a query in the file is already taken';
+                throw 'Le nom "' + nameNotAvailable + '" de la requête est déjà pris';
             }
         },
         /**

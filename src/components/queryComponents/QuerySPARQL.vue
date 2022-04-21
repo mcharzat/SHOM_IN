@@ -44,6 +44,9 @@
  * @vue-data {Boolean} [bboxState=true] - Wether the selection is used
  * @vue-data {Array} [bboxArea=[]] - Bbox to filter
  * @vue-data {String} [tripleStoreLink=""] - Url of the database
+ * @vue-data {Array} [queryResult=[]] - Result of the query
+ * @vue-data {Boolean} [secondClass=false] - Wether the result is for a second class
+ * @vue-data {Boolean} [isResultReceived=false] - Wether the result has been received
  */
 import {Yasr,Yasqe} from '@triply/yasgui'
 
@@ -78,7 +81,11 @@ export default {
       querySelectBbox: "",
       bboxState: true,
       bboxArea: [],
-      tripleStoreLink: "http://localhost:7200/repositories/test_shom_lambert"
+      tripleStoreLink: "http://localhost:7200/repositories/atlantis",
+      queryResult: [],
+      secondClass: false,
+      activeConfig: 1,
+      isResultReceived: false
     }
   },
   computed : {
@@ -130,6 +137,7 @@ export default {
       for (let i=0; i < this.namesConfigs['buttonName'].length; i++) {
       
         if (name == this.namesConfigs['buttonName'][i]) {
+          this.activeConfig = i;
           this.colorButton[i] = true;
           this.getColorButton(i);
           this.sparnaturalConfiguration(this.namesConfigs['config'][i]); 
@@ -162,9 +170,15 @@ export default {
           queryString = this.optionalClassPostProcess(queryString);
           queryString = this.optionalLabelPostProcess(queryString);
           queryString = this.optionalDescriptionPostProcess(queryString);
-          queryString = this.optionalContactPostProcess(queryString);
+
+          if (this.activeConfig == 2){
+            queryString = this.optionalGeomPostProcess(queryString);
+          }
+
+          if (this.activeConfig == 3){
+            queryString = this.optionalContactPostProcess(queryString);
+          }
           queryString = this.getChapterPostProcess(queryString);
-          queryString = this.optionalGeomPostProcess(queryString);
           queryString = this.anyEntitiesPostProcess(queryString);
           $('#sparql code').html(queryString.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"));
           yasqe.setValue(queryString);
@@ -190,7 +204,7 @@ export default {
 
       // link yasqe and yasr
       yasqe.on("queryResponse", (_yasqe, response, duration) => {
-        this.emitResults(response.text);
+        this.emitResults(response.text, _yasqe);
         yasr.setResponse(response, duration);
         this.sparnatural.disableLoading() ;
       });
@@ -281,7 +295,7 @@ export default {
     selectorsPostProcess(queryString) {
         queryString = queryString.replace(
           "SELECT DISTINCT ?this",
-          "SELECT DISTINCT ?this ?type ?category ?label ?description ?instruction ?instructions ?exception ?reglement ?wkt ?lat ?lng ?lumineux ?ouvrage ?page ?amer ?contact ?horairesVHF ?mail ?horairestelephone ?telephone ?information ?interdiction ?duree ?cible ?lieu");
+          "SELECT DISTINCT ?this ?type ?category ?label ?description ?instruction ?instructions ?exception ?reglement ?wkt ?lat ?lng ?lumineux ?ouvrage ?page ?amer ?aide ?aideouamer ?contact ?horairesVHF ?mail ?horairestelephone ?telephone ?information ?interdiction ?duree ?cible ?lieu");
         return queryString;
     },
     /**
@@ -385,7 +399,7 @@ export default {
     getChapterPostProcess(queryString){
       queryString = queryString.replace(new RegExp('}$'),
                 "<<?this nav:aPourProvenance ?provenance>> nav:aPourNumeroDePage ?page.\n"+
-                "?provenance rdf:type ?ouvrage FILTER(?ouvrage != nav:OuvrageIN) }");
+                "?provenance rdf:type ?ouvrage FILTER(?ouvrage != nav:OuvrageIN && ?ouvrage != owl:Thing) }");
       return queryString;
     },
     /**
@@ -403,14 +417,33 @@ export default {
      * @param {Object} response - Response from Yasqe
      * @emits myQueryResult
      */
-    emitResults (response) {
+    async emitResults (response, yasqe) {
+      this.isResultReceived = true;
       let results = JSON.parse(response).results.bindings;
-      
-      results = this.concatOuvragePage(results);
-      const state = this.getStateOfResults(results);
-      results = this.synthesizeResults(state, results);
 
-      this.$emit("myQueryResult", results);
+      if (results.length){
+        results = this.concatOuvragePage(results);
+        if (!this.secondClass) {
+          const state = this.getStateOfResults(results);
+          this.queryResult = this.synthesizeResults(state, results);
+
+          for (const entity of this.queryResult) {
+            await this.retrieveSecondClassEntities(entity, "aideouamer", yasqe);
+          }
+          this.$emit("myQueryResult", this.queryResult);
+        } else {
+          const result = this.transformProperties(results);
+          this.queryResult.push(result[0]);
+        }
+      }else {
+        this.$swal({
+          titleText: "Erreur !!!\n Aucune donnée disponible",
+          showCloseButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          width: 400
+        });
+      }
     },
     /**
      * Group fields page and ouvrage in one element
@@ -479,6 +512,93 @@ export default {
         results.push(result);
       }
       return results;
+    },
+    /**
+     * Retrieve all details from the second classes
+     * @param {Object} data - Entity of response
+     * @param {String} elements - Name of the attribute of the list of second classes
+     * @param {Yasqe} yasqe - API to request
+     */
+    async retrieveSecondClassEntities(data, elements, yasqe) {
+      if (Object.keys(data).includes(elements)) {
+        this.secondClass = true;
+        for (const element of data[elements].value) {
+          this.isResultReceived = false;
+          const query = "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> \n" +
+              "PREFIX skos: <http://www.w3.org/2004/02/skos/core#>\n" +
+              "PREFIX nav: <http://data.shom.fr/def/navigation_cotiere#>\n" +
+              "PREFIX geom: <http://data.ign.fr/def/geometrie#>\n" +
+              "PREFIX gsp: <http://www.opengis.net/ont/geosparql#>\n" +
+              "SELECT DISTINCT ?p ?o ?label ?ouvrage ?page ?wkt WHERE {\n" + 
+              "<" + element + "> ?p ?o.\n" +
+              "OPTIONAL{?o rdfs:label|skos:prefLabel ?label}\n" +
+              "<<<" + element + "> nav:aPourProvenance ?provenance>> nav:aPourNumeroDePage ?page.\n" +
+                "?provenance rdf:type ?ouvrage FILTER(?ouvrage != nav:OuvrageIN  && ?ouvrage != owl:Thing)\n" +
+              "OPTIONAL{<" + element + "> geom:hasGeometry ?geom.\n" +
+              "?geom gsp:asWKT ?wkt\n}}";
+          yasqe.setValue(query);
+          await yasqe.query();
+          while (!this.isResultReceived) {this.secondClass = true}
+        }
+        this.secondClass = false;
+      }
+    },
+    /**
+     * Transform results of all properties into a result of meaningfull named properties
+     * @param {Array} data - Results of a second class
+     * @return {Array} Synthetize result for the second class
+     */
+    transformProperties(data) {
+      const config = {secondClass: [0]};
+      const results = [{
+        category: {
+          type: "uri",
+          value: "http://data.shom.fr/def/navigation_cotiere#AideALaNavigation"
+        },
+        wkt: {
+          type: "literal",
+          value: data[0].wkt.value
+        }
+      }];
+      data.forEach( element => {
+        if (!element.p.value.includes("type")
+            && !element.p.value.includes("topObjectProperty")
+            && !element.p.value.includes("sameAs")
+            && !element.p.value.includes("aUneRelationSpatialeAvec")) {
+          const property = [...element.p.value.matchAll(new RegExp(".*#([a-zA-Z]+)", "gm"))];
+          let propertyName = property[0][1].split(/(?=[A-Z])/);
+          propertyName.forEach((element,index) => {
+            propertyName[index] = element.toLowerCase();
+          })
+          propertyName = propertyName.join(" ");
+          const objectProperty = {};
+          objectProperty[propertyName] = {type: "literal"};
+          if (element.o.type == "literal") {
+            if (Object.keys(element.o).includes("xml:lang")) {
+              objectProperty[propertyName]["xml:lang"] = element.o["xml:lang"];
+            }
+            objectProperty[propertyName].value = element.o.value;
+          } else if (Object.keys(element).includes("label")) {
+            if (Object.keys(element.label).includes("xml:lang")) {
+              objectProperty[propertyName]["xml:lang"] = element.label["xml:lang"];
+            }
+            objectProperty[propertyName].value = element.label.value;
+          } else {
+            return;
+          }
+          results.push(objectProperty);
+          config.secondClass.push(config.secondClass.length);
+        }
+      })
+      results.push({
+        reference: {
+          type: "literal",
+          value: data[0].reference.value
+        }
+      })
+      config.secondClass.push(config.secondClass.length);
+      const result = this.synthesizeResults(config, results);
+      return result;
     }
   }
 }
