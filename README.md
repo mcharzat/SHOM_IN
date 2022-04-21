@@ -44,7 +44,7 @@ The ontology configuration files can be found in the following folder: src/asset
 
 The files supported by sparnatural are turtle (ttl) or json. For more details, you can refer to the sparnatural github: https://docs.sparnatural.eu/index.html
 
-To change or modify a configuration, after adding the file, go to src/components/queryComponents/QuerySPARQL.vue and modify the lines ... to import the file. Also modify the lines ... for the name of the buttons and the imported configurations.
+To change or modify a configuration, after adding the file, go to src/components/queryComponents/QuerySPARQL.vue and modify the lines 54 to 56 to import the file. Also modify the lines 74 and 75 for the name of the buttons and the imported configurations.
 
 <br>
 
@@ -84,4 +84,28 @@ npm run doc
 ### Compiles and minifies for production
 ```
 npm run build
+```
+
+<br>
+
+## VI. Deployment on a Virtual Machine
+
+1.Connect to the VM.
+
+2.Zip the .graphdb folder
+
+3.In another terminal, copy the .graphdb.zip folder in the VM with the following line:
+
+```
+scp /folder_way/.graphdb.zip ubuntu@TSI_Vm:~/.graphdb.zip
+```
+
+4.In th VM terminal, launch:
+
+```
+unzip .graphdb.zip
+```
+
+```
+rm .graphdb.zip
 ```
