@@ -549,8 +549,14 @@ export default {
           const objectProperty = {};
           objectProperty[property[0][1]] = {type: "literal"};
           if (element.o.type == "literal") {
+            if (Object.keys(element.o).includes("xml:lang")) {
+              objectProperty[property[0][1]]["xml:lang"] = element.o["xml:lang"];
+            }
             objectProperty[property[0][1]].value = element.o.value;
           } else if (Object.keys(element).includes("label")) {
+            if (Object.keys(element.label).includes("xml:lang")) {
+              objectProperty[property[0][1]]["xml:lang"] = element.label["xml:lang"];
+            }
             objectProperty[property[0][1]].value = element.label.value;
           } else {
             return;
