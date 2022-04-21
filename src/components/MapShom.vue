@@ -651,11 +651,15 @@ export default {
      * Clean the categories layer of layerToManaged.
      */
     cleanCategoriesLayers() {
+      const indexes = [];
       this.layerToManaged.data.forEach( (category, index) => {
         if (this.categories[category].layer.getLayers().length == 0) {
           this.layersManaged.removeLayer(this.categories[category].layer);
-          this.layerToManaged.data = this.removeElementFromArray(this.layerToManaged.data, index);
+          indexes.push(index);
         }
+      })
+      indexes.forEach( (index, numIndex) => {
+        this.layerToManaged.data = this.removeElementFromArray(this.layerToManaged.data, index - numIndex);
       })
     },
     /**
